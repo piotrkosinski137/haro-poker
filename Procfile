@@ -1,1 +1,2 @@
-web: java -cp backend/target/classes:backend/target/dependency/* Main
+web: java $JAVA_OPTS -jar backend/target/backend-1.0-SNAPSHOT-jar-with-dependencies.jar.jar
+
