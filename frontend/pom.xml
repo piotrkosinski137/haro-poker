@@ -46,13 +46,6 @@
           </execution>
         </executions>
       </plugin>
-<!--      <plugin>-->
-<!--        <artifactId>maven-war-plugin</artifactId>-->
-<!--        <configuration>-->
-<!--          <warSourceDirectory>./src/main/web/dist/frontend</warSourceDirectory>-->
-<!--          <failOnMissingWebXml>false</failOnMissingWebXml>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
     </plugins>
     <resources>
       <resource>
@@ -61,5 +54,4 @@
       </resource>
     </resources>
   </build>
-
 </project>

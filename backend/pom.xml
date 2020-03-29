@@ -68,31 +68,6 @@
           </execution>
         </executions>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-war-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <goals>-->
-<!--              <goal>war</goal>-->
-<!--            </goals>-->
-<!--            <phase>package</phase>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--        <configuration>-->
-<!--          <archive>-->
-<!--            <manifest>-->
-<!--              <addClasspath>true</addClasspath>-->
-<!--            </manifest>-->
-<!--          </archive>-->
-<!--          <failOnMissingWebXml>false</failOnMissingWebXml>-->
-<!--          <webResources>-->
-<!--            <resource>-->
-<!--              <directory>${project.basedir}/src/main/resources/static</directory>-->
-<!--            </resource>-->
-<!--          </webResources>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
