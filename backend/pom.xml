@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>backend</artifactId>
-  <packaging>war</packaging>
+<!--  <packaging>war</packaging>-->
 
   <dependencies>
     <dependency>
@@ -36,6 +36,26 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.basedir}/src/main/resources/static</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.parent.basedir}/frontend/src/main/web/dist/frontend/</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
@@ -48,31 +68,31 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>war</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-        </executions>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-            </manifest>
-          </archive>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-          <webResources>
-            <resource>
-              <directory>${project.basedir}/src/main/webapp</directory>
-            </resource>
-          </webResources>
-        </configuration>
-      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-war-plugin</artifactId>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <goals>-->
+<!--              <goal>war</goal>-->
+<!--            </goals>-->
+<!--            <phase>package</phase>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--        <configuration>-->
+<!--          <archive>-->
+<!--            <manifest>-->
+<!--              <addClasspath>true</addClasspath>-->
+<!--            </manifest>-->
+<!--          </archive>-->
+<!--          <failOnMissingWebXml>false</failOnMissingWebXml>-->
+<!--          <webResources>-->
+<!--            <resource>-->
+<!--              <directory>${project.basedir}/src/main/resources/static</directory>-->
+<!--            </resource>-->
+<!--          </webResources>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>

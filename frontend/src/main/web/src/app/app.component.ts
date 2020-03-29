@@ -1,24 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HelloService} from "./api/hello.service";
-import {Subscription} from "rxjs";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  greeting: string;
-  subscription: Subscription;
-
-  constructor(private helloService: HelloService) {
-  }
-
+export class AppComponent implements OnInit {
   ngOnInit(): void {
-    this.subscription = this.helloService.getGreeting().subscribe(result => this.greeting = result.content);
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
 }

@@ -44,18 +44,22 @@
               <arguments>run build</arguments>
             </configuration>
           </execution>
-          <execution>
-            <id>prod</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>run-script build</arguments>
-            </configuration>
-            <phase>generate-resources</phase>
-          </execution>
         </executions>
       </plugin>
+<!--      <plugin>-->
+<!--        <artifactId>maven-war-plugin</artifactId>-->
+<!--        <configuration>-->
+<!--          <warSourceDirectory>./src/main/web/dist/frontend</warSourceDirectory>-->
+<!--          <failOnMissingWebXml>false</failOnMissingWebXml>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
     </plugins>
+    <resources>
+      <resource>
+        <directory>./src/main/web/dist/frontend</directory>
+        <targetPath>static</targetPath>
+      </resource>
+    </resources>
   </build>
+
 </project>
