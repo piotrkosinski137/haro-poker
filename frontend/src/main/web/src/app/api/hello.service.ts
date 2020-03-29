@@ -7,11 +7,9 @@ import {Observable} from "rxjs";
 })
 export class HelloService {
 
-  API_PATH = 'http://localhost:8080';
-
   constructor(private http: HttpClient) { }
 
   getGreeting(): Observable<any> {
-    return this.http.get(this.API_PATH +'/hello');
+    return this.http.get('/api/hello');
   }
 }
