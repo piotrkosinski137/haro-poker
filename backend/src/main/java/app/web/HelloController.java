@@ -10,6 +10,11 @@ public class HelloController {
   public Message sayHello() {
     return new Message("Hello from backend!");
   }
+
+  @GetMapping("/api/hello")
+  public Message sayHello2() {
+    return new Message("Hello from backend2!");
+  }
 }
 
 class Message {
