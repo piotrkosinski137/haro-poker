@@ -60,6 +60,11 @@
           </execution>
         </executions>
         <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
           <failOnMissingWebXml>false</failOnMissingWebXml>
           <webResources>
             <resource>
