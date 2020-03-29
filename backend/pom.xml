@@ -42,7 +42,9 @@
           <execution>
             <id>copy-dependencies</id>
             <phase>package</phase>
-            <goals><goal>copy-dependencies</goal></goals>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -65,39 +67,6 @@
             </resource>
           </webResources>
         </configuration>
-      </plugin>
-<!--      <plugin>-->
-<!--        <artifactId>maven-resources-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>copy-resources</id>-->
-<!--            <phase>validate</phase>-->
-<!--            <goals>-->
-<!--              <goal>copy-resources</goal>-->
-<!--            </goals>-->
-<!--            <configuration>-->
-<!--              <outputDirectory>${project.build.directory}/classes/static</outputDirectory>-->
-<!--              <resources>-->
-<!--                <resource>-->
-<!--                  <directory>${project.parent.basedir}/frontend/src/main/web/dist/frontend/-->
-<!--                  </directory>-->
-<!--                </resource>-->
-<!--              </resources>-->
-<!--            </configuration>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
