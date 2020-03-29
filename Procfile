@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp backend/target/classes:backend/target/dependency/* app.Main
+web: java -jar ./backend/target/backend-1.0-SNAPSHOT.war
