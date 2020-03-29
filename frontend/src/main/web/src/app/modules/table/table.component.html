@@ -1,2 +1,8 @@
-<h1>TABLE 1</h1>
-<p>{{greeting}}</p>
+<div class="table-container">
+  <div class="cards">
+    <ng-container *ngFor="let card of cards">
+      <div class="card" [style.backgroundImage]="'url(/assets/cards/' + card + '.jpg)'"></div>
+    </ng-container>
+  </div>
+</div>
+<h4>{{greeting}}</h4>

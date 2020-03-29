@@ -1,0 +1,22 @@
+.table-container {
+  background-image: url('../../../assets/poker-table.png');
+  background-repeat: no-repeat;
+  height: 95vh;
+  background-position: center;
+
+  .cards {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    display: flex;
+    width: 500px;
+    height: 250px;
+    .card {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+}
