@@ -58,17 +58,12 @@
           </execution>
         </executions>
         <configuration>
-          <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
           <failOnMissingWebXml>false</failOnMissingWebXml>
-          <warSourceDirectory>target/classes/static/</warSourceDirectory>
-<!--          <webResources>-->
-<!--            <resource>-->
-<!--              <directory>${project.build.directory}/classes/static</directory>-->
-<!--              <includes>-->
-<!--                <include>WEB-INF/**</include>-->
-<!--              </includes>-->
-<!--            </resource>-->
-<!--          </webResources>-->
+          <webResources>
+            <resource>
+              <directory>${project.basedir}/src/main/webapp</directory>
+            </resource>
+          </webResources>
         </configuration>
       </plugin>
 <!--      <plugin>-->
