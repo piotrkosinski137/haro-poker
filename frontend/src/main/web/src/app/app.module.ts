@@ -7,11 +7,13 @@ import {HttpClientModule} from "@angular/common/http";
 import { TableComponent } from './modules/table/table.component';
 import {NgbModal, NgbModalConfig, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule} from "@angular/forms";
+import { LoginModalComponent } from './modules/login-modal/login-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TableComponent
+    TableComponent,
+    LoginModalComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +23,7 @@ import {FormsModule} from "@angular/forms";
     FormsModule
   ],
   providers: [NgbModalConfig, NgbModal],
-  entryComponents: [],
+  entryComponents: [LoginModalComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
