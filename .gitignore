@@ -64,6 +64,7 @@ yarn-error.log
 .springBeans
 /build
 /code
+/resources/static
 MANIFEST.MF
 _site/
 activemq-data

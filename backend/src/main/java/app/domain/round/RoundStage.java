@@ -1,6 +1,6 @@
-package app.domain;
+package app.domain.round;
 
-public enum RoundStage {
+enum RoundStage {
   INIT(0), FLOP(3), TURN(1), RIVER(1);
 
   private final int cardAmount;

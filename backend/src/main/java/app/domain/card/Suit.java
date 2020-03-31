@@ -1,4 +1,4 @@
-package app.domain;
+package app.domain.card;
 
 enum Suit {
   DIAMONDS(1),

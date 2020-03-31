@@ -1,10 +1,10 @@
-package app.domain;
+package app.domain.player;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Player {
+class Player {
 
   private UUID id;
   private String name;
@@ -30,11 +30,6 @@ public class Player {
 
   public String getName() {
     return name;
-  }
-
-  public void addNumberToName() {
-    int randomNumber = (int) (Math.random() * 1000);
-    name += randomNumber;
   }
 
   @Override

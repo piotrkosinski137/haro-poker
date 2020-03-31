@@ -1,4 +1,4 @@
-package app.domain;
+package app.domain.card;
 
 public class Card {
 
