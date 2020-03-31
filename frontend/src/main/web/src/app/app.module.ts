@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import { TableComponent } from './modules/table/table.component';
+import {NgbModal, NgbModalConfig, NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -14,9 +16,12 @@ import { TableComponent } from './modules/table/table.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [NgbModalConfig, NgbModal],
+  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

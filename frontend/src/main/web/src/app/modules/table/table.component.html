@@ -1,8 +1,36 @@
 <div class="table-container">
+  <div *ngFor="let playerName of playerNames">
+    <p>{{playerName}}</p>
+  </div>
   <div class="cards">
     <ng-container *ngFor="let card of cards">
-      <div class="card" [style.backgroundImage]="'url(/assets/cards/' + card + '.jpg)'"></div>
+      <img alt="card" class="card-item m-1" [src]='"assets/cards/"+ card +".jpg"'/>
     </ng-container>
   </div>
 </div>
 <h4>{{greeting}}</h4>
+
+<ng-template #loginModal let-modal>
+  <form #loginForm="ngForm" class="m-5" (ngSubmit)="modal.close(playerName.value)">
+    <div class="modal-header pt-0">
+      <h4 class="modal-title welcome-text">Welcome to HaroPoker!!</h4>
+    </div>
+    <div class="modal-body p-0">
+      <div class="mt-2 mb-0 form-group row">
+        <div class="col-sm-10">
+          <input type="text"
+                 class="form-control"
+                 name="user"
+                 placeholder="Your nickname..."
+                 #playerName
+                 ngModel required>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="mt-2 btn btn-success btn-block" type="submit" [disabled]="loginForm.invalid">
+        Start!
+      </button>
+    </div>
+  </form>
+</ng-template>
