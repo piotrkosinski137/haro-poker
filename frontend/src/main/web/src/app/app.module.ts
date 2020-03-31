@@ -8,12 +8,14 @@ import { TableComponent } from './modules/table/table.component';
 import {NgbModal, NgbModalConfig, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule} from "@angular/forms";
 import { LoginModalComponent } from './modules/login-modal/login-modal.component';
+import { BetDashboardComponent } from './modules/table/bet-dashboard/bet-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
-    LoginModalComponent
+    LoginModalComponent,
+    BetDashboardComponent
   ],
   imports: [
     BrowserModule,

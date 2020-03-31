@@ -1,0 +1,24 @@
+<div class="card card-container container m-2">
+  <div class="card-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-7">
+          <label for="range">Place bet:</label>
+          <input type="range" class="custom-range" id="range" step="100"
+                 min="0" [max]="playerBalance" [value]="inputCurrentBet"
+                 (input)="betSliderValueChanged($event)">
+        </div>
+        <div class="col-2">
+          <input class="form-control" type="number" [value]="sliderCurrentBet"
+                 [max]="playerBalance" step="100"
+                 (input)="betInputValueChanged($event)">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <button type="button" class="btn btn-success m-1 col-3">Bet</button>
+    <button type="button" class="btn btn-primary m-1 col-3">Check</button>
+    <button type="button" class="btn btn-danger m-1 col-3">Fold</button>
+  </div>
+</div>
