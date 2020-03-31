@@ -64,7 +64,6 @@ yarn-error.log
 .springBeans
 /build
 /code
-/resources/static
 MANIFEST.MF
 _site/
 activemq-data
@@ -83,3 +82,4 @@ transaction-logs
 .flattened-pom.xml
 secrets.yml
 .gradletasknamecache
+/backend/src/main/resources/static/
