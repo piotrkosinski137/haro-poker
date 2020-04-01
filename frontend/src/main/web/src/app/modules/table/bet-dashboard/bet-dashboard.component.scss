@@ -1,7 +1,41 @@
 .card-container {
-  width: 400px;
-  background-image: linear-gradient(to right, #7ed56f, #28b485);
+  height: 62px;
+  width: 1200px;
+  display: inline-block;
+  background-image: linear-gradient(to right, #41463e, #5a6156);
   opacity: 0.9;
-  position: absolute;
-  bottom: 0;
+
+  .bet-range {
+    background-color: white;
+    border-radius: 6px 0 0 6px;
+  }
+
+  .bet-input {
+    border-radius: 0 0 0 0 !important;
+    box-sizing: border-box;
+    height: 100%
+  }
+
+  .bet-button {
+    border-radius: 0 6px 6px 0 !important;
+    height: 100%;
+    width: 100%;
+    border: none;
+
+    &:active {
+      box-shadow: 0 2px #666;
+      transform: translateY(1px);
+    }
+  }
+
+  .action-button {
+    height: 100%;
+    width: 100%;
+    border: none;
+
+    &:active {
+      box-shadow: 0 2px #666;
+      transform: translateY(1px);
+    }
+  }
 }
