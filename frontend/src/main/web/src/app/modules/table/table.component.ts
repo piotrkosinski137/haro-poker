@@ -24,7 +24,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // this.openModal();
+    this.openModal();
   }
 
   openModal() {
