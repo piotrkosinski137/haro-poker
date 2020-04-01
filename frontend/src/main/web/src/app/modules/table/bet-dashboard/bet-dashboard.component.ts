@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-bet-dashboard',
@@ -8,19 +8,19 @@ import { Component, OnInit } from '@angular/core';
 export class BetDashboardComponent implements OnInit {
 
   playerBalance = 5000;
-  sliderCurrentBet = 0;
-  inputCurrentBet = 0;
+  currentBet = 0;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  betSliderValueChanged($event: any) {
-    this.sliderCurrentBet = $event.target.value
+  betValueChanged($event: any) {
+    this.currentBet = $event.target.value
   }
 
-  betInputValueChanged($event: any) {
-    this.inputCurrentBet = $event.target.value
+  hasNotBet() {
+    return this.currentBet == 0;
   }
 }

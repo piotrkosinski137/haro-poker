@@ -26,6 +26,10 @@
       box-shadow: 0 2px #666;
       transform: translateY(1px);
     }
+
+    &:disabled {
+      background-color: #5a6156;
+    }
   }
 
   .action-button {

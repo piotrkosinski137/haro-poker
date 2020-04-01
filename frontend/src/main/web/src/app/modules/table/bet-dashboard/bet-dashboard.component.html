@@ -5,16 +5,16 @@
         <div class="col-3 bet-range">
           <label for="range">Place bet:</label>
           <input type="range" class="custom-range" id="range" step="100"
-                 min="0" [max]="playerBalance" [value]="inputCurrentBet"
-                 (input)="betSliderValueChanged($event)">
+                 min="0" [max]="playerBalance" [value]="currentBet"
+                 (input)="betValueChanged($event)">
         </div>
         <div class="col-1 p-0">
-          <input class="form-control bet-input pr-1" type="number" [value]="sliderCurrentBet"
-                 [max]="playerBalance" step="100"
-                 (input)="betInputValueChanged($event)">
+          <input class="form-control bet-input pr-1" type="number" [value]="currentBet"
+                 [max]="playerBalance" step="100" min="0"
+                 (input)="betValueChanged($event)">
         </div>
         <div class="col-1 pr-1 pl-0">
-          <button type="button" class="btn btn-success bet-button p-0">Bet</button>
+          <button type="button" class="btn btn-success bet-button p-0" [disabled]="hasNotBet()">Bet</button>
         </div>
         <div class="col"></div>
         <div class="col-1 pr-1 pl-0">
