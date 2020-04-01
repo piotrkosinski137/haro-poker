@@ -1,3 +1,4 @@
+/*
 package app.domain;
 
 import app.domain.player.PlayerCommandService;
@@ -6,9 +7,11 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
+*/
 /*
  * Will have trend to grow, need to split it
- * */
+ * *//*
+
 @Service
 public class GameFacade {
 
@@ -34,19 +37,24 @@ public class GameFacade {
   public void fold(UUID playerId) {
   }
 
-  /*
+  */
+/*
    * Adds player to playerRepo
    * Adds player to round. Round holds info, which player has folded and which is still playing
-   * */
+   * *//*
+
   public void addPlayer(String name) {
     roundService.addPlayer(playerCommandService.addPlayer(name));
   }
 
-  /*
+  */
+/*
    * When player doesn't have money
-   * */
+   * *//*
+
   public void removePlayer(UUID playerId) {
     playerCommandService.remove(playerId);
     roundService.removePlayer(playerId);
   }
 }
+*/

@@ -7,7 +7,6 @@ import static app.domain.round.RoundStage.INIT;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
-import app.domain.card.Card;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import app.domain.card.Card;
 
 class Round {
 
