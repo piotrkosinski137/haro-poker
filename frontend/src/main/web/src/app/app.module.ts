@@ -9,13 +9,15 @@ import {NgbModal, NgbModalConfig, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule} from "@angular/forms";
 import { LoginModalComponent } from './modules/login-modal/login-modal.component';
 import { BetDashboardComponent } from './modules/table/bet-dashboard/bet-dashboard.component';
+import { PlayerGameDashboardComponent } from './modules/player-chair-placeholder/player-game-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
     LoginModalComponent,
-    BetDashboardComponent
+    BetDashboardComponent,
+    PlayerGameDashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,48 @@
   margin: 0 auto;
   position: relative;
 
+  .player-1-dashboard {
+    position: absolute;
+    left: 120px;
+    top: 30px
+  }
+
+  .player-2-dashboard {
+    position: absolute;
+    right: 120px;
+    top: 30px
+  }
+
+  .player-3-dashboard {
+    position: absolute;
+    right: 60px;
+    top: 250px
+  }
+
+  .player-4-dashboard {
+    position: absolute;
+    right: 120px;
+    bottom: 40px
+  }
+
+  .player-5-dashboard {
+    position: absolute;
+    left: 515px;
+    bottom: 5px
+  }
+
+  .player-6-dashboard {
+    position: absolute;
+    left: 120px;
+    bottom: 40px
+  }
+
+  .player-7-dashboard {
+    position: absolute;
+    left: 60px;
+    top: 250px
+  }
+
   .cards {
     display: flex;
     margin: auto;

@@ -9,6 +9,7 @@ import {LoginModalComponent} from "../login-modal/login-modal.component";
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
+
 export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   greeting: string;
