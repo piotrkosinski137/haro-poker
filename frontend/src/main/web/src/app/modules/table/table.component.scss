@@ -1,7 +1,7 @@
 .table-container {
-  background-image: url('../../../assets/poker-table.png');
+  background-image: url('src/assets/poker-table.png');
   background-repeat: no-repeat;
-  height: 600px;
+  height: 630px;
   width: 1200px;
   background-position: center;
   margin: 0 auto;
@@ -11,11 +11,12 @@
     display: flex;
     margin: auto;
     position: absolute;
-    top: 0; left: -40%; bottom: 0; right: 0;
+    top: -5%; left: -36%; bottom: 0; right: 0;
 
-    width: 115px;
-    height: 145px;
+    width: 92px;
+    height: 120px;
     .card-item {
+      border-radius: 5px;
       max-width: 100%;
       height: auto;
     }
