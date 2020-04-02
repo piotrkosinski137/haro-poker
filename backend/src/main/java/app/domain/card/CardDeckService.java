@@ -1,11 +1,16 @@
 package app.domain.card;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class CardDeckService {
 
-/*	public void shuffleNewDeck() {
-		get.....
+	public void shuffleNewDeck() {
+		CardDeck.getNewShuffledDeck();
 	}
 
-	public Set getCards(int amount);
-	*/
+	public Set<Card> getCards(final int amount){
+		final CardDeck cardDeck = CardDeck.getExistingDeck();
+		return cardDeck.getDeck().stream().limit(amount).collect(Collectors.toSet());
+	}
 }
