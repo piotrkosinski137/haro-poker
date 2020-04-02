@@ -9,6 +9,7 @@
     width: 70px;
   }
 }
+
 .dashboard-details {
   border-style: solid;
   border-color: goldenrod;
@@ -27,3 +28,27 @@
   }
 }
 
+@-webkit-keyframes border-blink {
+  from, to {
+    border-color: transparent
+  }
+  50% {
+    border-color: black
+  }
+}
+
+@keyframes border-blink {
+  from, to {
+    border-color: transparent
+  }
+  50% {
+    border-color: #ff3133
+  }
+}
+
+.border-blink {
+  border: 3px solid;
+  border-radius: 7px;
+  -webkit-animation: border-blink 1.5s step-end infinite;
+  animation: border-blink 1.5s step-end infinite;
+}

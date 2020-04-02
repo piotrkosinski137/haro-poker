@@ -50,6 +50,17 @@
   }
 
   .cards {
+    .slide-in {
+      animation: slide-in 0.5s forwards;
+      -webkit-animation: slide-in 0.5s forwards;
+    }
+    @keyframes slide-in {
+      100% { transform: translateY(0%); }
+    }
+    @-webkit-keyframes slide-in {
+      100% { -webkit-transform: translateY(0%); }
+    }
+
     display: flex;
     margin: auto;
     position: absolute;
@@ -58,6 +69,8 @@
     width: 92px;
     height: 120px;
     .card-item {
+      transform: translateX(-100%);
+      -webkit-transform: translateX(-100%);
       border-radius: 5px;
       max-width: 100%;
       height: auto;
@@ -68,3 +81,5 @@
 .action-panel {
   text-align: center;
 }
+
+
