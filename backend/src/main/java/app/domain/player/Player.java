@@ -1,30 +1,19 @@
 package app.domain.player;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.UUID;
+public class Player {
 
-class Player {
+  private final int id;
+  private final String name;
+  private int balance;
+  private boolean isActive;
 
-  private UUID id;
-  private String name;
-  private BigDecimal balance;
 
-  public Player(String name) {
-    this.id = UUID.randomUUID();
+
+  Player(String name) {
+    id = 1;
     this.name = name;
-    this.balance = new BigDecimal(10000);
   }
-
-  public void bet(BigDecimal amount) {
-    balance = balance.subtract(amount);
-  }
-
-  public void earnMoney(BigDecimal amount) {
-    balance = balance.add(amount);
-  }
-
-  public UUID getId() {
+  public int getId() {
     return id;
   }
 
@@ -32,20 +21,9 @@ class Player {
     return name;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Player player = (Player) o;
-    return id.equals(player.id);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
+
+  //generateId
+
+
 }

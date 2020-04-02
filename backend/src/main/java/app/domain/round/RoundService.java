@@ -1,11 +1,13 @@
 package app.domain.round;
 
-import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import app.domain.player.Player;
+import app.domain.roundPlayer.RoundPlayer;
 
 @Service
 public class RoundService {
@@ -13,15 +15,35 @@ public class RoundService {
   private Logger logger = LoggerFactory.getLogger(RoundService.class);
   private Round round;
 
+  //service methods
+
+  public Stack<RoundPlayer> addPlayersToRound (Stack<Player> players) {
+    return null;
+  }
+
+  public void takeBlinds(){
+  }
+
+  public void giveCardsToPlayers (){
+
+  }
+
+  public void putCardsOnTable() {
+
+  }
+
+  public void changeRoundStage(){
+  }
+
+  public void resetRound(){
+    round = new Round();
+  }
+
   public RoundService() {
     this.round = new Round();
   }
 
-  public BigDecimal getPot() {
-    return round.getPot();
-  }
-
-  public void nextRound() {
+  public void nexturn() {
     switch (round.getRoundStage()) {
       case INIT:
         break;
@@ -41,11 +63,4 @@ public class RoundService {
     round.changeRoundStage();
   }
 
-  public void addPlayer(UUID playerId) {
-    round.addPlayer(playerId);
-  }
-
-  public void removePlayer(UUID playerId) {
-    round.addPlayer(playerId);
-  }
 }

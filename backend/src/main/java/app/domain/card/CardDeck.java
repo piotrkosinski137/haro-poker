@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
-public class CardDeck {
+class CardDeck {
 
 	private static final List<Card> CACHE_DECK = initCache();
 	private static CardDeck INSTANCE;
@@ -18,14 +18,14 @@ public class CardDeck {
 		Collections.shuffle(new ArrayList<>(cardsDeck));
 	}
 
-	public static CardDeck getExistingDeck() {
+	static CardDeck getExistingDeck() {
 		if(INSTANCE == null) {
 			INSTANCE = new CardDeck();
 		}
 		return INSTANCE;
 	}
 
-	public static CardDeck getNewShuffledDeck() {
+	static CardDeck getNewShuffledDeck() {
 		INSTANCE = new CardDeck();
 		return INSTANCE;
 	}
