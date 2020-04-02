@@ -49,25 +49,54 @@
     top: 250px
   }
 
+  .pot {
+    color: white;
+    background-color: black;
+    opacity: 50%;
+    padding: 3px;
+    border-radius: 15px;
+    position: relative;
+    left: 42.5%;
+    text-align: center;
+    width: 150px;
+  }
+
+  .round-pot {
+    top: 15%;
+  }
+
+  .turn-pot {
+    top: 60%;
+  }
+
   .cards {
     .slide-in {
       animation: slide-in 0.5s forwards;
       -webkit-animation: slide-in 0.5s forwards;
     }
+
     @keyframes slide-in {
-      100% { transform: translateY(0%); }
+      100% {
+        transform: translateY(0%);
+      }
     }
     @-webkit-keyframes slide-in {
-      100% { -webkit-transform: translateY(0%); }
+      100% {
+        -webkit-transform: translateY(0%);
+      }
     }
 
     display: flex;
     margin: auto;
     position: absolute;
-    top: -5%; left: -36%; bottom: 0; right: 0;
+    top: -5%;
+    left: -36%;
+    bottom: 0;
+    right: 0;
 
     width: 92px;
-    height: 120px;
+    height: 130px;
+
     .card-item {
       transform: translateX(-100%);
       -webkit-transform: translateX(-100%);

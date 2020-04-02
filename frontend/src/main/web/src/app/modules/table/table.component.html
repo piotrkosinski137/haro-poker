@@ -1,12 +1,11 @@
 <div class="table-container">
-  <div *ngFor="let playerName of playerNames">
-    <p>{{playerName}}</p>
-  </div>
+  <p class="pot round-pot">Round Pot: 1320</p>
   <div class="cards">
     <ng-container *ngFor="let card of (cards$ | async)">
       <img alt="card" class="card-item m-1 slide-in" [src]='"assets/cards/"+ card +".jpg"'/>
     </ng-container>
   </div>
+  <p class="pot turn-pot">Turn Pot: 240</p>
   <div class="player-1-dashboard">
     <app-player-game-dashboard [hasTurn]="false"></app-player-game-dashboard>
   </div>
