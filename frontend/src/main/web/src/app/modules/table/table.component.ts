@@ -14,7 +14,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   greeting: string;
   subscription: Subscription;
-  // cards = ['2C', '6H', '8C', 'QS', 'QH'];
   cards$: Observable<any>;
   playerNames = [];
 
