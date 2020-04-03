@@ -21,7 +21,7 @@ public class Card implements Comparable<Card> {
 	}
 
 	private String getCardValue() {
-		return String.join(".", Integer.toString(rank.getValue()), Integer.toString(suit.getValue()));
+		return rank.getValue().concat(suit.getValue());
 	}
 
 	public int compareTo(final Card o) {
