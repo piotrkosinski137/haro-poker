@@ -30,7 +30,7 @@ class CardDeck {
 		return INSTANCE;
 	}
 
-	public Deque<Card> getDeck() {
+	Deque<Card> getDeck() {
 		return cardsDeck;
 	}
 

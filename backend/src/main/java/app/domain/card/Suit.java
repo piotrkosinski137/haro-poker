@@ -1,18 +1,18 @@
 package app.domain.card;
 
 enum Suit {
-	DIAMONDS(1),
-	CLUBS(2),
-	HEARTS(3),
-	SPADES(4);
+	DIAMONDS("D"),
+	CLUBS("C"),
+	HEARTS("H"),
+	SPADES("S");
 
-	private final int value;
+	private final String value;
 
-	Suit(final int value) {
+	Suit(final String value) {
 		this.value = value;
 	}
 
-	int getValue() {
+	String getValue() {
 		return value;
 	}
 }
