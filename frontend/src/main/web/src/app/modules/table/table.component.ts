@@ -15,7 +15,6 @@ import {CardsService} from "../../api/cards.service";
 
 export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  greeting: string;
   helloSubscription: Subscription;
   playersSubscription: Subscription;
   players: Player[];
@@ -30,7 +29,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     localStorage.setItem("playerId", '1');
 
     this.cards$ = this.cardsService.getCards();
-    this.helloSubscription = this.helloService.getGreeting().subscribe(result => this.greeting = result.content);
+    this.helloSubscription = this.helloService.getGreeting().subscribe(result => console.log(result.content));
     this.playersSubscription = this.playerService.getPlayers().subscribe(players => this.players = players);
   }
 

@@ -1,15 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
-import { TableComponent } from './modules/table/table.component';
+import {TableComponent} from './modules/table/table.component';
 import {NgbModal, NgbModalConfig, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule} from "@angular/forms";
-import { LoginModalComponent } from './modules/login-modal/login-modal.component';
-import { BetDashboardComponent } from './modules/table/bet-dashboard/bet-dashboard.component';
+import {LoginModalComponent} from './modules/login-modal/login-modal.component';
+import {BetDashboardComponent} from './modules/table/bet-dashboard/bet-dashboard.component';
 import {PlayerGameDashboardComponent} from "./modules/table/player-game-dashboard/player-game-dashboard.component";
+import { AdminPanelComponent } from './modules/admin-panel/admin-panel.component';
+import { BlindPanelComponent } from './modules/admin-panel/blind-panel/blind-panel.component';
+import { PlayerBalancePanelComponent } from './modules/admin-panel/player-balance-panel/player-balance-panel.component';
 
 @NgModule({
   declarations: [
@@ -17,11 +18,13 @@ import {PlayerGameDashboardComponent} from "./modules/table/player-game-dashboar
     TableComponent,
     LoginModalComponent,
     BetDashboardComponent,
-    PlayerGameDashboardComponent
+    PlayerGameDashboardComponent,
+    AdminPanelComponent,
+    BlindPanelComponent,
+    PlayerBalancePanelComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
     NgbModule,
     FormsModule
@@ -30,4 +33,5 @@ import {PlayerGameDashboardComponent} from "./modules/table/player-game-dashboar
   entryComponents: [LoginModalComponent],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
