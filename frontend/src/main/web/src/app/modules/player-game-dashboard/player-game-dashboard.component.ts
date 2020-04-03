@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Player} from "../../model/player";
 
 @Component({
   selector: 'app-player-game-dashboard',
@@ -8,14 +9,14 @@ import {Component, Input, OnInit} from '@angular/core';
 export class PlayerGameDashboardComponent implements OnInit {
 
   @Input()
-  hasTurn: boolean;
+  player: Player;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  doesHaveTurn() {
-    return this.hasTurn;
+  hasTurn() {
+    return this.player.hasTurn
   }
 }

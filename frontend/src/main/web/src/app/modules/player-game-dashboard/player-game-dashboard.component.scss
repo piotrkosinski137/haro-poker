@@ -28,6 +28,18 @@
   }
 }
 
+.chip-img {
+  width: 40px;
+  position: absolute;
+}
+
+.border-blink {
+  border: 3px solid;
+  border-radius: 7px;
+  -webkit-animation: border-blink 1.5s step-end infinite;
+  animation: border-blink 1.5s step-end infinite;
+}
+
 @-webkit-keyframes border-blink {
   from, to {
     border-color: transparent
@@ -46,9 +58,46 @@
   }
 }
 
-.border-blink {
-  border: 3px solid;
-  border-radius: 7px;
-  -webkit-animation: border-blink 1.5s step-end infinite;
-  animation: border-blink 1.5s step-end infinite;
+
+// Dealer chip positions
+.player-1-chip {
+  left: 100%;
+}
+
+.player-2-chip {
+  left: -25%;
+}
+
+.player-3-chip {
+  left: -25%;
+}
+
+.player-4-chip {
+  top: -30%;
+  left: -25%;
+}
+
+.player-5-chip {
+  top: -40%;
+}
+
+.player-6-chip {
+  top: -30%;
+  left: 100%;
+}
+
+.player-7-chip {
+  left: 100%;
+}
+
+.dealer-chip {
+  content: url('../../../assets/dealer_chip.png');
+}
+
+.small-blind-chip {
+  content: url('../../../assets/small_blind_chip.png');
+}
+
+.big-blind-chip {
+  content: url('../../../assets/big_blind_chip.png');
 }
