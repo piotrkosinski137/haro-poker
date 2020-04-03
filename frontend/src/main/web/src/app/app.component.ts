@@ -9,4 +9,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isAdmin() {
+    return localStorage.getItem("playerId") === '1';
+  }
 }
