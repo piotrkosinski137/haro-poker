@@ -7,7 +7,8 @@ export class Player {
               private _balance: number,
               private _turnBid: number,
               private _hasTurn: boolean,
-              private _playerPosition: PlayerPosition
+              private _playerPosition: PlayerPosition,
+              private _hasFolded: boolean
   ) {
   }
 
@@ -47,5 +48,10 @@ export class Player {
 
   hasBigBlind() {
     return this.playerPosition === PlayerPosition.BIG_BLIND
+  }
+
+
+  get hasFolded(): boolean {
+    return this._hasFolded;
   }
 }

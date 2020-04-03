@@ -1,6 +1,17 @@
+.turn-bid {
+  color: white;
+  background-color: black;
+  opacity: 50%;
+  border-radius: 15px;
+  text-align: center;
+  width: 145px;
+  position: relative;
+  margin: 0 0 5px 0;
+}
+
 .dashboard-container {
   position: relative;
-  height: 110px;
+  height: 140px;
   width: 144px;
 
   .card-hand {
@@ -11,8 +22,7 @@
 }
 
 .dashboard-details {
-  border-style: solid;
-  border-color: goldenrod;
+  border: 3px goldenrod solid;
   border-radius: 7px;
   width: 140px;
   text-align: center;
@@ -20,6 +30,7 @@
   bottom: 0;
 
   .nick-item {
+    color: white;
     background-image: linear-gradient(to right, #445588, #4183c4);
   }
 
@@ -54,50 +65,55 @@
     border-color: transparent
   }
   50% {
-    border-color: #ff3133
+    border-color: red;
   }
 }
 
 
 // Dealer chip positions
 .player-1-chip {
-  left: 100%;
+  top: 75%;
+  left: 105%;
 }
 
 .player-2-chip {
-  left: -25%;
+  top: 75%;
+  left: -35%;
 }
 
 .player-3-chip {
-  left: -25%;
+  top: 40%;
+  left: -35%;
 }
 
 .player-4-chip {
-  top: -30%;
-  left: -25%;
+  top: 15%;
+  left: -35%;
 }
 
 .player-5-chip {
-  top: -40%;
+  top: 10%;
+  left: -35%;
 }
 
 .player-6-chip {
-  top: -30%;
-  left: 100%;
+  top: 15%;
+  left: 105%;
 }
 
 .player-7-chip {
-  left: 100%;
+  top: 40%;
+  left: 105%;
 }
 
 .dealer-chip {
-  content: url('../../../assets/dealer_chip.png');
+  content: url('../../../../assets/dealer_chip.png');
 }
 
 .small-blind-chip {
-  content: url('../../../assets/small_blind_chip.png');
+  content: url('../../../../assets/small_blind_chip.png');
 }
 
 .big-blind-chip {
-  content: url('../../../assets/big_blind_chip.png');
+  content: url('../../../../assets/big_blind_chip.png');
 }

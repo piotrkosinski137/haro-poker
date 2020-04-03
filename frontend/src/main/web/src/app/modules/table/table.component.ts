@@ -5,6 +5,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoginModalComponent} from "../login-modal/login-modal.component";
 import {PlayerService} from "../../api/player.service";
 import {Player} from "../../model/player";
+import {CardsService} from "../../api/cards.service";
 
 @Component({
   selector: 'app-table',
@@ -22,11 +23,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   playerNames = [];
 
   constructor(private helloService: HelloService, private modalService: NgbModal,
-              private playerService: PlayerService) {
+              private playerService: PlayerService, private cardsService: CardsService) {
   }
 
   ngOnInit(): void {
-    this.cards$ = this.helloService.getCards();
+    localStorage.setItem("playerId", '1');
+
+    this.cards$ = this.cardsService.getCards();
     this.helloSubscription = this.helloService.getGreeting().subscribe(result => this.greeting = result.content);
     this.playersSubscription = this.playerService.getPlayers().subscribe(players => this.players = players);
   }
