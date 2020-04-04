@@ -8,7 +8,9 @@ export class Player {
               private _turnBid: number,
               private _hasTurn: boolean,
               private _playerPosition: PlayerPosition,
-              private _hasFolded: boolean
+              private _hasFolded: boolean,
+              private _isActive: boolean,
+
   ) {
   }
 
@@ -36,6 +38,18 @@ export class Player {
 
   get balance(): number {
     return this._balance;
+  }
+
+  set balance(value: number) {
+    this._balance = value;
+  }
+
+  get isActive(): boolean {
+    return this._isActive;
+  }
+
+  set isActive(value: boolean) {
+    this._isActive = value;
   }
 
   isDealer() {

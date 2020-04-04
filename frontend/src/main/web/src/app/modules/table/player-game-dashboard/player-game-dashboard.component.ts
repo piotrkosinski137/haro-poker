@@ -36,6 +36,10 @@ export class PlayerGameDashboardComponent implements OnInit, OnDestroy {
     return this.player.hasFolded;
   }
 
+  isActive() {
+    return this.player.isActive;
+  }
+
   ngOnDestroy() {
     this.playerCardsSubscription.unsubscribe();
   }

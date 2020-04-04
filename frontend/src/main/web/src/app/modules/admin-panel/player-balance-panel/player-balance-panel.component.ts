@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {PlayerService} from "../../../api/player.service";
-import {Observable} from "rxjs";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Player} from "../../../model/player";
 
 @Component({
@@ -11,20 +9,24 @@ import {Player} from "../../../model/player";
 export class PlayerBalancePanelComponent implements OnInit {
 
   balanceInputEnabled = false;
-  players$: Observable<Player[]>;
+  @Input()
+  players: Player[];
 
-  constructor(private playerService: PlayerService) { }
+  @Output()
+  playerBalancesChanged = new EventEmitter<Player[]>();
 
-  ngOnInit() {
-    this.players$ = this.playerService.getPlayers();
+  constructor() {
   }
 
-  disableBalanceInputs() {
-    this.balanceInputEnabled = false;
+  ngOnInit() {
   }
 
   enableBalanceInputs() {
     this.balanceInputEnabled = true;
   }
 
+  onBalanceChangeSubmitted() {
+    this.balanceInputEnabled = false;
+    this.playerBalancesChanged.emit(this.players);
+  }
 }

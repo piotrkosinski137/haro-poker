@@ -1,0 +1,17 @@
+<nav class="navbar navbar-light bg-transparent navbar-hamburger">
+  <button class="navbar-toggler navbar-button" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto hamburger-item">
+      <!-- when backend will be available, make two buttons-->
+      <li class="nav-item" data-toggle="collapse"
+          data-target=".navbar-collapse.show" (click)="onChangePlayerStateClicked()">
+        <a class="nav-link text-white-50">Pause/Unpause</a>
+      </li>
+    </ul>
+  </div>
+</nav>
