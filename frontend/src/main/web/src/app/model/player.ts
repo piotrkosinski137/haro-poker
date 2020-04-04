@@ -38,6 +38,10 @@ export class Player {
     return this._balance;
   }
 
+  set balance(value: number) {
+    this._balance = value;
+  }
+
   isDealer() {
     return this.playerPosition === PlayerPosition.DEALER
   }

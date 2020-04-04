@@ -3,19 +3,23 @@
     Players balance
   </div>
   <div class="card-body">
-    <ng-container *ngFor="let player of players$ | async">
-      <div class="form-group row">
-        <label for="player" class="col-3 col-form-label">{{player.name}}: </label>
-        <div class="col-4">
-          <div (click)=enableBalanceInputs()>
-            <input type="number" class="form-control" id="player" [value]="player.balance"
-            [disabled]="!balanceInputEnabled">
+    <form #form="ngForm">
+      <ng-container *ngFor="let player of players">
+        <div class="form-group row">
+          <label [for]="player.id" class="col-3 col-form-label">{{player.name}}: </label>
+          <div class="col-4">
+            <div (click)=enableBalanceInputs()>
+              <input type="number" class="form-control"
+                     [name]="player.id.toString()"
+                     [(ngModel)]="player.balance"
+                     [disabled]="!balanceInputEnabled">
+            </div>
           </div>
         </div>
-      </div>
-    </ng-container>
-    <button class="btn btn-primary mt-2 text-white"
-      (click)="disableBalanceInputs()">Submit
+      </ng-container>
+    </form>
+    <button class="btn btn-primary mt-2 text-white" [disabled]="!balanceInputEnabled"
+            (click)="onBalanceChangeSubmitted(form)">Submit
     </button>
   </div>
 </div>

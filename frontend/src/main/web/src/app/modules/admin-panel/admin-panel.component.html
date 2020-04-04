@@ -7,7 +7,9 @@
       <app-blind-panel></app-blind-panel>
     </div>
     <div class="col-4">
-      <app-player-balance-panel></app-player-balance-panel>
+      <app-player-balance-panel
+        [players]="players"
+      (playerBalancesChanged)="onPlayerBalancesChanged($event)"></app-player-balance-panel>
     </div>
   </div>
 </div>

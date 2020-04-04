@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Player} from "../model/player";
 import {Observable, of} from "rxjs";
 import {PlayerPosition} from "../model/player-position";
+import {BalanceRequest} from "../model/balance-request";
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,13 @@ export class PlayerService {
 
   getPlayers(): Observable<Player[]> {
     return of(this.players);
+  }
+
+  updateBalances(balanceRequests: BalanceRequest[]) {
+    this.players.forEach(player => player.balance = this.getBalanceRequest(balanceRequests, player.id))
+  }
+
+  getBalanceRequest(balanceRequests: BalanceRequest[], id: number) {
+    return +balanceRequests.find(request => request.id === id.toString()).balance;
   }
 }
