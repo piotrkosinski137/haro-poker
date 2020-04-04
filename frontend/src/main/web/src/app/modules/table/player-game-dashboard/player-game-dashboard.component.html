@@ -10,7 +10,7 @@
   </ng-container>
   <div class="dashboard-details">
     <li class="list-group-item p-1 nick-item"><strong>{{player.name}}</strong></li>
-    <li class="list-group-item p-1 balance-item">{{(player.balance).toLocaleString()}}</li>
+    <li class="list-group-item p-1 balance-item">{{(player.balance?.toLocaleString()) || 0}}</li>
   </div>
 </div>
 <div *ngIf="player.isDealer()">

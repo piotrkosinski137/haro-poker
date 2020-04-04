@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Player} from "../../../model/player";
-import {BalanceRequest} from "../../../model/balance-request";
 
 @Component({
   selector: 'app-player-balance-panel',
@@ -14,7 +13,7 @@ export class PlayerBalancePanelComponent implements OnInit {
   players: Player[];
 
   @Output()
-  playerBalancesChanged = new EventEmitter<BalanceRequest[]>();
+  playerBalancesChanged = new EventEmitter<Player[]>();
 
   constructor() {
   }
@@ -26,10 +25,8 @@ export class PlayerBalancePanelComponent implements OnInit {
     this.balanceInputEnabled = true;
   }
 
-  onBalanceChangeSubmitted(form: any) {
+  onBalanceChangeSubmitted() {
     this.balanceInputEnabled = false;
-    this.playerBalancesChanged.emit(
-      form._directives.map(ngModel => new BalanceRequest(ngModel.name, ngModel.model))
-    )
+    this.playerBalancesChanged.emit(this.players);
   }
 }

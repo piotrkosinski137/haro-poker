@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PlayerService} from "../../api/player.service";
 import {Subscription} from "rxjs";
 import {Player} from "../../model/player";
-import {BalanceRequest} from "../../model/balance-request";
 
 @Component({
   selector: 'app-admin-panel',
@@ -26,7 +25,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     this.playerSubscription.unsubscribe();
   }
 
-  onPlayerBalancesChanged(balanceRequests: BalanceRequest[]) {
-    this.playerService.updateBalances(balanceRequests);
+  onPlayerBalancesChanged(players: Player[]) {
+    this.playerService.updateBalances(players);
   }
 }
