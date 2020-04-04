@@ -5,28 +5,28 @@ import app.domain.round.RoundService;
 
 class GameService {
 
-	private final RoundService roundService;
-	private Game game;
+    private final RoundService roundService;
+    private Game game;
 
-	GameService(RoundService roundService) {
-		this.roundService = roundService;
-		game = new Game();
-	}
+    GameService(RoundService roundService) {
+        this.roundService = roundService;
+        game = new Game();
+    }
 
-	public void joinToGame(Player player) {
+    public void joinToGame(Player player) {
 
-	}
+    }
 
-	public void startRound() {
-		roundService.startRound(game.getActivePlayers());
-	}
+    public void startRound() {
+        roundService.startRound(game.getActivePlayers());
+    }
 
-	public void nextRound() {
+    public void nextRound() {
 
-	}
+    }
 
-	//finishGame (gameSummary)
+    //finishGame (gameSummary)
 
-	//propagateRoundResults
+    //propagateRoundResults
 
 }
