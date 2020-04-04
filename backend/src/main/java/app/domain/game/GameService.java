@@ -4,14 +4,14 @@ import app.domain.player.Player;
 
 class GameService {
 
-	public void joinToGame(Player player) {
+    public void joinToGame(Player player) {
 
-	}
+    }
 
-	//nextRound
+    //nextRound
 
-	//finishGame (gameSummary)
+    //finishGame (gameSummary)
 
-	//propagateRoundResults
+    //propagateRoundResults
 
 }
