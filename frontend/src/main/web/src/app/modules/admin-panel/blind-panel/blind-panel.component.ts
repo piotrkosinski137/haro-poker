@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class BlindPanelComponent implements OnInit {
 
   blindInputsEnabled = false;
+  smallBlind: number = 100;
 
   constructor() { }
 

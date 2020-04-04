@@ -11,6 +11,7 @@ import {PlayerGameDashboardComponent} from "./modules/table/player-game-dashboar
 import { AdminPanelComponent } from './modules/admin-panel/admin-panel.component';
 import { BlindPanelComponent } from './modules/admin-panel/blind-panel/blind-panel.component';
 import { PlayerBalancePanelComponent } from './modules/admin-panel/player-balance-panel/player-balance-panel.component';
+import { NavbarComponent } from './modules/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PlayerBalancePanelComponent } from './modules/admin-panel/player-balanc
     PlayerGameDashboardComponent,
     AdminPanelComponent,
     BlindPanelComponent,
-    PlayerBalancePanelComponent
+    PlayerBalancePanelComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,7 @@
         <div (click)="enableBlindInputs()">
           <input type="number" class="form-control"
                  id="small-blind" [disabled]=!blindInputsEnabled
-                 value="100">
+                 [(ngModel)]="smallBlind">
         </div>
       </div>
     </div>
@@ -18,8 +18,8 @@
       <div class="col-4">
         <div (click)="enableBlindInputs()">
           <input type="number" class="form-control"
-                 id="big-blind" [disabled]=!blindInputsEnabled
-                 value="200">
+                 id="big-blind" disabled
+                 [value]="smallBlind*2">
         </div>
       </div>
     </div>

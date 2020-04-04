@@ -19,14 +19,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   playersSubscription: Subscription;
   players: Player[];
   cards$: Observable<any>;
-  playerNames = [];
 
   constructor(private helloService: HelloService, private modalService: NgbModal,
               private playerService: PlayerService, private cardsService: CardsService) {
   }
 
   ngOnInit(): void {
-    localStorage.setItem("playerId", '1');
+    localStorage.clear();
 
     this.cards$ = this.cardsService.getCards();
     this.helloSubscription = this.helloService.getGreeting().subscribe(result => console.log(result.content));
@@ -42,7 +41,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
       backdrop: 'static',
       keyboard: false
     }).result.then((playerName) => {
-      this.playerNames.push(playerName)
+      this.playerService.addPlayer(playerName);
     });
   }
 
