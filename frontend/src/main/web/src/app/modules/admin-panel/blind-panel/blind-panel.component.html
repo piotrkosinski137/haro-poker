@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header admin-panel-body-header">
+    Blinds
+  </div>
+  <div class="card-body">
+    <div class="form-group row">
+      <label for="small-blind" class="col-3 col-form-label">Small blind:</label>
+      <div class="col-4">
+        <div (click)="enableBlindInputs()">
+          <input type="number" class="form-control"
+                 id="small-blind" [disabled]=!blindInputsEnabled
+                 value="100">
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="big-blind" class="col-3 col-form-label">Big blind:</label>
+      <div class="col-4">
+        <div (click)="enableBlindInputs()">
+          <input type="number" class="form-control"
+                 id="big-blind" [disabled]=!blindInputsEnabled
+                 value="200">
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary mt-2 text-white"
+            (click)="disableBlindInputs()">Submit
+    </button>
+  </div>
+</div>
+

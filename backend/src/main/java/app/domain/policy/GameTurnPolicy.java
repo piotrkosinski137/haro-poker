@@ -2,5 +2,5 @@ package app.domain.policy;
 
 public interface GameTurnPolicy {
 
-  void perform();
+    void perform();
 }
