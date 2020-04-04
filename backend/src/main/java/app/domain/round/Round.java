@@ -1,6 +1,7 @@
 package app.domain.round;
 
 import app.domain.card.Card;
+import app.domain.game.Blinds;
 
 import java.util.*;
 
@@ -11,7 +12,6 @@ class Round {
     private Set<Card> tableCards;
     private Deque<RoundPlayer> roundPlayers;
     private RoundStage stage;
-    private int totalPot;  //we will see
 
     public Round() {
         tableCards = new HashSet<>();
@@ -19,25 +19,65 @@ class Round {
         stage = RoundStage.INIT;
     }
 
-    public void addRoundPlayers(Collection<RoundPlayer> roundPlayers) {
+    void addRoundPlayers(Collection<RoundPlayer> roundPlayers) {
         this.roundPlayers.addAll(roundPlayers);
     }
 
-    //nextPlayer
-
-    public Set<Card> getTableCards() {
-        return tableCards;
+    void chargeBlinds(Blinds blinds) {
+        //dealer gives 0 blind
+        roundPlayers.addLast(roundPlayers.pollFirst());
+        //small gives small blind
+        bid(blinds.getSmall());
+        //big gives big blind
+        bid(blinds.getBig());
     }
 
-    public int getPot() {
-        return totalPot;
+    void bid(int amount) {
+        RoundPlayer player = roundPlayers.pollFirst();
+        player.bid(amount);
+        roundPlayers.addLast(player);
+        // trigger websocket to see that next player has changed
+        // trigger websocket to see that totalPot has changed
     }
 
-    public RoundStage getRoundStage() {
+    void fold() {
+        RoundPlayer player = roundPlayers.pollFirst();
+        player.fold();
+        roundPlayers.addLast(player);
+    }
+
+    void nextStage() {
+        changeRoundStage();
+        roundPlayers.forEach(RoundPlayer::nextStage);
+    }
+
+    Deque<RoundPlayer> getRoundPlayers() {
+        return roundPlayers;
+    }
+
+    boolean playersBidsAreEqual() {
+        return roundPlayers.stream()
+                .filter(RoundPlayer::isInGame)
+                .map(RoundPlayer::getTurnBid)
+                .distinct()
+                .count() == 1;
+    }
+
+    void putCardsOnTable(Set<Card> cards) {
+        tableCards.addAll(cards);
+    }
+
+    int calculateTotalPot() {
+        return roundPlayers.stream()
+                .mapToInt(RoundPlayer::getRoundBid)
+                .sum();
+    }
+
+    RoundStage getRoundStage() {
         return stage;
     }
 
-    public void changeRoundStage() {
+    void changeRoundStage() {
         switch (stage) {
             case INIT:
                 stage = FLOP;
@@ -48,11 +88,14 @@ class Round {
             case TURN:
                 stage = RIVER;
                 break;
-            case RIVER:
-                stage = INIT; // to consider
-                break;
             default:
                 break;
         }
+    }
+
+    void pickWinner(int playerId) {
+        roundPlayers.stream()
+                .filter(player -> player.getId() == playerId)
+                .forEach(player -> player.winMoney(calculateTotalPot()));
     }
 }

@@ -10,28 +10,68 @@ public class RoundPlayer {
     private int id;
     private int balance;
     private Set<Card> cardsInHand;
+    // sum of bids during one stage (Eg. flop, river)
     private int turnBid;
+    // sum of bids during whole round, info needed for manual cases (when there will be couple all'ins)
     private int roundBid;
     private boolean hasFolded;
+
+    private RoundPlayer() {
+    }
 
     public RoundPlayer(int id, int balance) {
         this.id = id;
         this.balance = balance;
     }
 
-    public void bid(int bid) {
-        turnBid += bid;
+    void putCardsInHand(Set<Card> cards) {
+        cardsInHand.addAll(cards);
     }
 
-    public int fold() {
+    void bid(int bid) {
+        turnBid += bid;
+        roundBid += bid;
+        balance -= bid;
+    }
+
+    void fold() {
         hasFolded = true;
+    }
+
+    void nextStage() {
+        turnBid = 0;
+    }
+
+    void nextRound() {
+        turnBid = 0;
+        roundBid = 0;
+        hasFolded = false;
+    }
+
+    void winMoney(int money) {
+        balance += money;
+    }
+
+    boolean isInGame() {
+        return !hasFolded;
+    }
+
+    int getId() {
+        return id;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    int getTurnBid() {
         return turnBid;
     }
 
-    public void nextRound() {
-        roundBid += turnBid;
-        turnBid = 0;
+    int getRoundBid() {
+        return roundBid;
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -5,15 +5,21 @@ public class Player {
     private final int id;
     private final String name;
     private int balance;
-    private boolean isActive;
 
-    Player(String name) {
-        id = generateId();
+    /*
+     * id will come from frontend. It knows the best which table number is empty
+     * */
+    Player(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void updateBalance(int amount) {
+        balance = amount;
     }
 
     public String getName() {
@@ -24,12 +30,7 @@ public class Player {
         return balance;
     }
 
-    private int generateId() {
-        // need to know every player id
-        return 1;
-    }
-
     public boolean isActive() {
-        return isActive;
+        return balance > 0;
     }
 }
