@@ -5,24 +5,30 @@ import static app.domain.round.RoundStage.INIT;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
 import app.domain.card.Card;
-import app.domain.roundPlayer.RoundPlayer;
 
 class Round {
 
   private Set<Card> tableCards;
-  private Stack<RoundPlayer> roundPlayers;
+  private Deque<RoundPlayer> roundPlayers;
   private RoundStage stage;
   private int totalPot;  //we will see
 
-
   public Round() {
     tableCards = new HashSet<>();
+    roundPlayers = new ArrayDeque<>();
     stage = RoundStage.INIT;
+  }
+
+  public void addRoundPlayers(Collection<RoundPlayer> roundPlayers) {
+    this.roundPlayers.addAll(roundPlayers);
   }
 
   //nextPlayer

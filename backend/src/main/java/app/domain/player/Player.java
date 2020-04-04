@@ -7,12 +7,11 @@ public class Player {
   private int balance;
   private boolean isActive;
 
-
-
   Player(String name) {
-    id = 1;
+    id = generateId();
     this.name = name;
   }
+
   public int getId() {
     return id;
   }
@@ -21,9 +20,16 @@ public class Player {
     return name;
   }
 
+  public int getBalance() {
+    return balance;
+  }
 
+  private int generateId() {
+    // need to know every player id
+    return 1;
+  }
 
-  //generateId
-
-
+  public boolean isActive() {
+    return isActive;
+  }
 }
