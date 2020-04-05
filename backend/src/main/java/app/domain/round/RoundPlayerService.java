@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.stream.Collectors;
 
-public class RoundPlayerService {
+class RoundPlayerService {
 
     private Deque<RoundPlayer> roundPlayers;
 
@@ -42,7 +42,6 @@ public class RoundPlayerService {
     }
 
 
-
     ///TODO!!! wszystkie metody za !
 
 
@@ -74,3 +73,19 @@ public class RoundPlayerService {
                 .count() == 1;
     }
 }
+
+/* *//*
+ * We will take precaution that only current player can bet. Then there is no need to track id
+ * Current roundPlayer is always at the beginning of deque
+ * *//*
+    public void bid(int amount) {
+        round.bid(amount);
+        if (round.playersBidsAreEqual()) {
+            if (round.getRoundStage() != RIVER) {
+                nextStage();
+            } else {
+                // the end of round - now admin should pick winner
+            }
+        }
+    }
+    }*/
