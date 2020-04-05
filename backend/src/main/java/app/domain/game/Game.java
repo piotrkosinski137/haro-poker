@@ -25,19 +25,21 @@ class Game {
         return blinds;
     }
 
+    int getEntryFee() {
+        return entryFee;
+    }
+
+    void setEntryFee(int entryFee) {
+        this.entryFee = entryFee;
+    }
+
     Deque<Player> getActivePlayers() {
         return players.stream()
                 .filter(Player::isActive)
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    void movePlayers() {
+    void rotatePlayers() {
         players.addLast(players.pollFirst());
-    }
-
-    void updateBalance(int playerId, int amount) {
-        players.stream()
-                .filter(player -> player.getId() == playerId)
-                .forEach(player -> player.updateBalance(amount));
     }
 }

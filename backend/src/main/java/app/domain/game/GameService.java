@@ -1,22 +1,23 @@
 package app.domain.game;
 
 import app.domain.player.Player;
+import app.domain.player.PlayerService;
 import app.domain.round.RoundPlayer;
 import app.domain.round.RoundService;
+import java.util.Deque;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.stream.Collectors;
-
 @Service
-class GameService {
+public class GameService {
 
     private final RoundService roundService;
+    private final PlayerService playerService;
     private Game game;
+    //gameTime - it should starts with first round!
 
-    GameService(RoundService roundService) {
+    public GameService(final RoundService roundService, final PlayerService playerService) {
         this.roundService = roundService;
+        this.playerService = playerService;
         game = new Game();
     }
 
@@ -25,26 +26,24 @@ class GameService {
     }
 
     public void startRound() {
-        game.movePlayers();
-        roundService.startRound(convertToRoundPlayers(game.getActivePlayers()),
-                game.getBlinds());
+        roundService.startRound(game.getActivePlayers(), game.getBlinds());
     }
 
-    /*
-     * Admin ends round and picks winner
-     * Balances from roundPlayers are propagated to players
+    /**
+     * Admin ends round and picks winner Balances from roundPlayers are propagated to players
      */
-    public void finishRound(int playerId) {
-
-        //maybe it should return some kind of dto instead of round players
-        Deque<RoundPlayer> roundPlayers = roundService.finishRound(playerId);
-        roundPlayers.forEach(roundPlayer -> game.updateBalance(playerId, roundPlayer.getBalance()));
+    public void finishRound(final int winnerPlayerId) {
+        Deque<RoundPlayer> roundPlayers = roundService.finishRound(winnerPlayerId);
+        roundPlayers.forEach(roundPlayer -> playerService.updateBalance(game.getActivePlayers(), roundPlayers));
+        game.rotatePlayers();
     }
 
-    private Deque<RoundPlayer> convertToRoundPlayers(Deque<Player> players) {
-        return players.stream()
-                .map(player -> new RoundPlayer(player.getId(), player.getBalance()))
-                .collect(Collectors.toCollection(ArrayDeque::new));
+    public void setEntryFee(final int entryFee) {
+       game.setEntryFee(entryFee);
+    }
+
+    public void setBlinds(final int blind) {
+        game.getBlinds().setBlinds(blind);
     }
 
     //finishGame (gameSummary)

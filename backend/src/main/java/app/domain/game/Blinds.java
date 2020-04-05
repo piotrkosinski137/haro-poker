@@ -5,7 +5,7 @@ public class Blinds {
     private int small;
     private int big;
 
-    public Blinds() {
+    Blinds() {
         small = 100;
         big = 200;
     }
@@ -18,8 +18,8 @@ public class Blinds {
         return big;
     }
 
-    public void setBlinds(int small, int big) {
-        this.small = small;
-        this.big = big;
+    void setBlinds(int blind) {
+        this.small = blind/2;
+        this.big = blind;
     }
 }
