@@ -1,64 +1,62 @@
 package app.domain.round;
 
+import app.domain.card.CardDeckService;
+import app.domain.game.Blinds;
 import app.domain.player.Player;
-import app.domain.roundPlayer.RoundPlayer;
-import java.util.Stack;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Deque;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RoundService {
 
-    private Logger logger = LoggerFactory.getLogger(RoundService.class);
+    private final CardDeckService cardDeckService;
+    private RoundPlayerService roundPlayerService;
     private Round round;
 
-    //service methods
-
-    public RoundService() {
-        this.round = new Round();
+    public RoundService(final CardDeckService cardDeckService) {
+        this.cardDeckService = cardDeckService;
     }
 
-    public Stack<RoundPlayer> addPlayersToRound(Stack<Player> players) {
-        return null;
-    }
-
-    public void takeBlinds() {
-    }
-
-    public void giveCardsToPlayers() {
-
-    }
-
-    public void putCardsOnTable() {
-
-    }
-
-    public void changeRoundStage() {
-    }
-
-    public void resetRound() {
+    /**
+     *  Entrypoint for each new round:
+     *
+     *  - reset round
+     *  - set roundPlayers
+     *  - give cards to players
+     *  - charge blinds
+     * */
+    public void startRound(final Deque<Player> players, final Blinds blinds) {
         round = new Round();
+        roundPlayerService = new RoundPlayerService(players);
+        cardDeckService.shuffleNewDeck();
+        roundPlayerService.chargeBlinds(blinds);
+        giveCardsToPlayers();
     }
 
-    public void nexturn() {
-        switch (round.getRoundStage()) {
-            case INIT:
-                break;
-            case FLOP:
-                //round.addTableCards(cardService.getCards(FLOP.getCardAmount()));
-                break;
-            case TURN:
-                //round.addTableCards(cardService.getCards(TURN.getCardAmount()));
-                break;
-            case RIVER:
-                //round.addTableCards(cardService.getCards(RIVER.getCardAmount()));
-                break;
-            default:
-                logger.info("It was last round");
-                break;
-        }
+    public Deque<RoundPlayer> finishRound(final int winnerPlayerId) {
+        //TODO sprawdzenie czy runda jest rozpoczęta
+        roundPlayerService.pickWinner(winnerPlayerId);
+        return roundPlayerService.getRoundPlayers();
+    }
+
+    /*
+     * Eg. We finished first betting and now:
+     * - three cards will appear on table
+     * - roundStage will change to from Init to Flop
+     * - roundPlayers tourBet will be zero (it contains only money for current stage)
+     * */
+    public void startNextStage() {
+        //TODO sprawdzenie czy runda jest rozpoczęta
         round.changeRoundStage();
+        putCardsOnTable();
+        roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
     }
 
+    private void giveCardsToPlayers() {
+        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2))); //dont like this magic number
+    }
+
+    private void putCardsOnTable() {
+        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
+    }
 }

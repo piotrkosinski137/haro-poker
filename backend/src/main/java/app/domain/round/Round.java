@@ -1,44 +1,37 @@
 package app.domain.round;
 
 import static app.domain.round.RoundStage.FLOP;
-import static app.domain.round.RoundStage.INIT;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
 import app.domain.card.Card;
-import app.domain.roundPlayer.RoundPlayer;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 
 class Round {
 
     private Set<Card> tableCards;
-    private Stack<RoundPlayer> roundPlayers;
     private RoundStage stage;
-    private int totalPot;  //we will see
 
-
-    public Round() {
+    Round() {
         tableCards = new HashSet<>();
         stage = RoundStage.INIT;
     }
 
-    //nextPlayer
-
     public Set<Card> getTableCards() {
-        return tableCards;
+        return Collections.unmodifiableSet(tableCards);
     }
 
-    public int getPot() {
-        return totalPot;
+    void putCardsOnTable(final Set<Card> cards) {
+        tableCards.addAll(cards);
     }
 
-    public RoundStage getRoundStage() {
+    RoundStage getRoundStage() {
         return stage;
     }
 
-    public void changeRoundStage() {
+    void changeRoundStage() {
         switch (stage) {
             case INIT:
                 stage = FLOP;
@@ -48,9 +41,6 @@ class Round {
                 break;
             case TURN:
                 stage = RIVER;
-                break;
-            case RIVER:
-                stage = INIT; // to consider
                 break;
             default:
                 break;

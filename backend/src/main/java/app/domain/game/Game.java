@@ -1,27 +1,45 @@
 package app.domain.game;
 
 import app.domain.player.Player;
-import java.util.List;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.stream.Collectors;
 
 class Game {
 
-    private final List<Player> players;
+    private final Deque<Player> players;
+    private Blinds blinds;
     private int entryFee;
 
-
-    private Game(Player player) {
-        players = List.of(player);
+    Game() {
+        players = new ArrayDeque<>();
+        blinds = new Blinds();
     }
 
-    public int getEntryFee() {
+    void addPlayer(Player player) {
+        players.addLast(player);
+    }
+
+    Blinds getBlinds() {
+        return blinds;
+    }
+
+    int getEntryFee() {
         return entryFee;
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    void setEntryFee(int entryFee) {
+        this.entryFee = entryFee;
     }
 
-    //private movePlayers
+    Deque<Player> getActivePlayers() {
+        return players.stream()
+                .filter(Player::isActive)
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
 
-
+    void rotatePlayers() {
+        players.addLast(players.pollFirst());
+    }
 }

@@ -7,9 +7,11 @@ public class Player {
     private int balance;
     private boolean isActive;
 
-
-    Player(String name) {
-        id = 1;
+    /**
+     * Id will come from frontend. It knows the best which table number is empty
+     * */
+    Player(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -17,11 +19,25 @@ public class Player {
         return id;
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    void updateBalance(int amount) {
+        balance = amount;
+    }
+
     public String getName() {
         return name;
     }
 
-    //generateId
+    void setActive(boolean active) {
+        isActive = active;
+    }
 
 
 }
