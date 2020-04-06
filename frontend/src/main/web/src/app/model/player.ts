@@ -2,61 +2,16 @@ import {PlayerPosition} from "./player-position";
 
 export class Player {
 
-  constructor(private _id: number,
-              private _name: string,
-              private _balance: number,
-              private _turnBid: number,
-              private _roundBid: number,
-              private _hasTurn: boolean,
-              private _playerPosition: PlayerPosition,
-              private _hasFolded: boolean,
-              private _isActive: boolean,
+  constructor(public id: number,
+              public name: string,
+              public balance: number,
+              public turnBid: number,
+              public roundBid: number,
+              public hasTurn: boolean,
+              public playerPosition: PlayerPosition,
+              public hasFolded: boolean,
+              public active: boolean,
   ) {
-  }
-
-
-  get id(): number {
-    return this._id;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get turnBid(): number {
-    return this._turnBid;
-  }
-
-  get roundBid(): number {
-    return this._roundBid;
-  }
-
-  set roundBid(value: number) {
-    this._roundBid = value;
-  }
-
-  get hasTurn(): boolean {
-    return this._hasTurn;
-  }
-
-  get playerPosition(): PlayerPosition {
-    return this._playerPosition;
-  }
-
-  get balance(): number {
-    return this._balance;
-  }
-
-  set balance(value: number) {
-    this._balance = value;
-  }
-
-  get isActive(): boolean {
-    return this._isActive;
-  }
-
-  set isActive(value: boolean) {
-    this._isActive = value;
   }
 
   isDealer() {
@@ -69,9 +24,5 @@ export class Player {
 
   hasBigBlind() {
     return this.playerPosition === PlayerPosition.BIG_BLIND
-  }
-
-  get hasFolded(): boolean {
-    return this._hasFolded;
   }
 }

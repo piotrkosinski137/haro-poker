@@ -37,7 +37,7 @@ export class PlayerGameDashboardComponent implements OnInit, OnDestroy {
   }
 
   isActive() {
-    return this.player.isActive;
+    return this.player.active;
   }
 
   ngOnDestroy() {

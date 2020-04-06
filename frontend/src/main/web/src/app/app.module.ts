@@ -8,10 +8,10 @@ import {FormsModule} from "@angular/forms";
 import {LoginModalComponent} from './modules/login-modal/login-modal.component';
 import {BetDashboardComponent} from './modules/table/bet-dashboard/bet-dashboard.component';
 import {PlayerGameDashboardComponent} from "./modules/table/player-game-dashboard/player-game-dashboard.component";
-import { AdminPanelComponent } from './modules/admin-panel/admin-panel.component';
-import { BlindPanelComponent } from './modules/admin-panel/blind-panel/blind-panel.component';
-import { PlayerBidsPanelComponent } from './modules/admin-panel/player-bids-panel/player-bids-panel.component';
-import { NavbarComponent } from './modules/navbar/navbar.component';
+import {AdminPanelComponent} from './modules/admin-panel/admin-panel.component';
+import {BlindPanelComponent} from './modules/admin-panel/blind-panel/blind-panel.component';
+import {PlayerBidsPanelComponent} from './modules/admin-panel/player-bids-panel/player-bids-panel.component';
+import {NavbarComponent} from './modules/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,8 @@ import { NavbarComponent } from './modules/navbar/navbar.component';
     NgbModule,
     FormsModule
   ],
-  providers: [NgbModalConfig, NgbModal],
+  providers: [NgbModalConfig, NgbModal
+  ],
   entryComponents: [LoginModalComponent],
   bootstrap: [AppComponent]
 })

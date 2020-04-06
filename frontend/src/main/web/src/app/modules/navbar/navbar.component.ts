@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onChangePlayerStateClicked() {
     this.playerSubscription = this.playerService.getSessionPlayer().subscribe(player => this.player = player);
-    this.player.isActive = !this.player.isActive;
+    this.player.active = !this.player.active;
   }
 
   ngOnDestroy() {

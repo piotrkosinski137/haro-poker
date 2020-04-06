@@ -3,6 +3,9 @@ package app.web;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+* Don't delete until we create meaningful endpoints. It shows us if backend/frontend communication works on heroku
+* */
 @RestController
 public class HelloController {
 
