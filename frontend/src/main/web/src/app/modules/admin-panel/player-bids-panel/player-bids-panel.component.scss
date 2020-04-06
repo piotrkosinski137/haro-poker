@@ -3,9 +3,14 @@
   background-color: #007bff;
 }
 
-
 .btn-disabled {
   &:disabled {
     background-color: gray !important;
   }
+}
+
+.mismatch-text {
+  color: red;
+  position: relative;
+  top: 30%;
 }

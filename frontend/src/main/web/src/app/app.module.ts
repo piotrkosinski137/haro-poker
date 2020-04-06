@@ -10,7 +10,7 @@ import {BetDashboardComponent} from './modules/table/bet-dashboard/bet-dashboard
 import {PlayerGameDashboardComponent} from "./modules/table/player-game-dashboard/player-game-dashboard.component";
 import { AdminPanelComponent } from './modules/admin-panel/admin-panel.component';
 import { BlindPanelComponent } from './modules/admin-panel/blind-panel/blind-panel.component';
-import { PlayerBalancePanelComponent } from './modules/admin-panel/player-balance-panel/player-balance-panel.component';
+import { PlayerBidsPanelComponent } from './modules/admin-panel/player-bids-panel/player-bids-panel.component';
 import { NavbarComponent } from './modules/navbar/navbar.component';
 
 @NgModule({
@@ -22,7 +22,7 @@ import { NavbarComponent } from './modules/navbar/navbar.component';
     PlayerGameDashboardComponent,
     AdminPanelComponent,
     BlindPanelComponent,
-    PlayerBalancePanelComponent,
+    PlayerBidsPanelComponent,
     NavbarComponent
   ],
   imports: [
