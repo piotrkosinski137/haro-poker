@@ -26,7 +26,7 @@ public class PlayersSocketController {
 
     @MessageMapping("/players/add")
     public void addPlayer(@Payload String playerName) {
-        players.add(new PlayerDTO(calculateId(), playerName.replace("\"",""), 10000, 0, 0, false, 3, false, true));
+        players.add(new PlayerDTO(calculateId(), playerName.replace("\"", ""), 10000, 0, 0, false, 3, false, true));
         template.convertAndSend("/topic/players", players);
     }
 
