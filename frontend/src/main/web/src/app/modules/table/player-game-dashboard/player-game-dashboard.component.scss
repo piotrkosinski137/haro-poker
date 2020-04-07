@@ -19,23 +19,27 @@
     border-radius: 6px;
     width: 70px;
   }
-}
 
-.dashboard-details {
-  border: 3px goldenrod solid;
-  border-radius: 7px;
-  width: 140px;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-
-  .nick-item {
-    color: white;
-    background-image: linear-gradient(to right, #445588, #4183c4);
+  .inactive-opacity {
+    opacity: 20%;
   }
 
-  .balance-item {
-    background-image: linear-gradient(to right, #E8E8E8, #EAF2F5);
+  .dashboard-details {
+    border: 3px goldenrod solid;
+    border-radius: 7px;
+    width: 140px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+
+    .nick-item {
+      color: white;
+      background-image: linear-gradient(to right, #445588, #4183c4);
+    }
+
+    .balance-item {
+      background-image: linear-gradient(to right, #E8E8E8, #EAF2F5);
+    }
   }
 }
 
