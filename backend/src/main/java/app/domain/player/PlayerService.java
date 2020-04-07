@@ -13,5 +13,4 @@ public class PlayerService {
                 .findFirst()
                 .ifPresent(playerToUpdate -> playerToUpdate.updateBalance(roundPlayer.getBalance())));
     }
-
 }

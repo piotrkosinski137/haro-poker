@@ -1,7 +1,5 @@
 package app.domain.round;
 
-import static app.domain.round.RoundStage.INIT;
-
 import app.domain.card.CardDeckService;
 import app.domain.game.Blinds;
 import app.domain.player.Player;
@@ -47,46 +45,18 @@ public class RoundService {
      * - roundStage will change to from Init to Flop
      * - roundPlayers tourBet will be zero (it contains only money for current stage)
      * */
-    public void nextStage() {
+    public void startNextStage() {
         //TODO sprawdzenie czy runda jest rozpoczęta
-        putCardsOnTable();
         round.changeRoundStage();
-        roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextRound);
+        putCardsOnTable();
+        roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
     }
 
     private void giveCardsToPlayers() {
-        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
+        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2))); //dont like this magic number
     }
 
     private void putCardsOnTable() {
-        if (round.getRoundStage() == INIT) {
-            round.putCardsOnTable(cardDeckService.getCards(3));
-        } else {
-            round.putCardsOnTable(cardDeckService.getCards(1));
-        }
+        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
     }
 }
-
-
-   /* *//*
-     * We will take precaution that only current player can bet. Then there is no need to track id
-     * Current roundPlayer is always at the beginning of deque
-     * *//*
-    public void bid(int amount) {
-        round.bid(amount);
-        if (round.playersBidsAreEqual()) {
-            if (round.getRoundStage() != RIVER) {
-                nextStage();
-            } else {
-                // the end of round - now admin should pick winner
-            }
-        }
-    }
-
-    public void fold() {
-        round.fold();
-    }
-
-    public int getTotalPot() {
-        return round.calculateTotalPot();
-    }*/

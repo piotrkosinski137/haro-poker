@@ -49,4 +49,6 @@ public class GameService {
     //finishGame (gameSummary)
 
     //propagateRoundResults
+
+    //konczymy jedna runde a nie rozpoczynamy kolejnej w obecnym stanie ale moze to dobrze.
 }

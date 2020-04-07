@@ -53,12 +53,6 @@ public class RoundPlayer {
         turnBid = 0;
     }
 
-    void prepareForNextRound() {
-        turnBid = 0;
-        roundBid = 0;
-        hasFolded = false;
-    }
-
     void winMoney(final int money) {
         balance += money;
     }
