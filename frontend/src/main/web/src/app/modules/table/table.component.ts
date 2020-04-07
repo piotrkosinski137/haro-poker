@@ -29,7 +29,8 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.cards$ = this.cardsService.getCards();
     this.helloSubscription = this.helloService.getGreeting().subscribe(result => console.log(result.content));
-    this.playersSubscription = this.playerService.getPlayers().subscribe(players => this.players = players);
+    this.playersSubscription = this.playerService.getPlayers().subscribe(players => this.players = players
+    );
   }
 
   ngAfterViewInit() {
@@ -41,7 +42,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
       backdrop: 'static',
       keyboard: false
     }).result.then((playerName) => {
-      this.playerService.addPlayer(playerName);
+      this.playerService.registerPlayer(playerName);
     });
   }
 

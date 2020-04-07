@@ -13,12 +13,12 @@
     <li class="list-group-item p-1 balance-item">{{(player.balance?.toLocaleString()) || 0}}</li>
   </div>
 </div>
-<div *ngIf="player.isDealer()">
+<div *ngIf="player.isDealer">
   <img class="chip-img player-{{player.id}}-chip dealer-chip">
 </div>
-<div *ngIf="player.hasSmallBlind()">
+<div *ngIf="player.hasSmallBlind">
   <img class="chip-img player-{{player.id}}-chip small-blind-chip">
 </div>
-<div *ngIf="player.hasBigBlind()">
+<div *ngIf="player.hasBigBlind">
   <img class="chip-img player-{{player.id}}-chip big-blind-chip">
 </div>
