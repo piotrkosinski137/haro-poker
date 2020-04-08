@@ -3,6 +3,7 @@ import {Player} from "../model/player";
 import {Observable, of} from "rxjs";
 import {MessagingService} from "./messaging.service";
 import {Message} from "@stomp/stompjs";
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
@@ -14,8 +15,7 @@ export class PlayerService implements OnInit {
   players = [];
 
   constructor() {
-    console.log(window.location.host)
-    this.messagingService = new MessagingService('wss://' + window.location.host + '/players/add', '/topic/players');
+    this.messagingService = new MessagingService('wss://' + environment.WS_PATH + '/players/add', '/topic/players');
 
     this.messagingService.stream().subscribe((message: Message) => {
       console.log("When subscribed, it loads players from backend");

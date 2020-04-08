@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  PROXY_PATH: '/api/'
+  PROXY_PATH: '/api/',
+  WS_PATH: 'localhost:8080'
 };
 
 /*
