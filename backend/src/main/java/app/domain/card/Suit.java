@@ -1,6 +1,6 @@
 package app.domain.card;
 
-enum Suit {
+public enum Suit {
     DIAMONDS("D"),
     CLUBS("C"),
     HEARTS("H"),

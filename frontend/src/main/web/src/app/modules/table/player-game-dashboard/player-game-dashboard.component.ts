@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Player} from "../../../model/player";
-import {CardsService} from "../../../api/cards.service";
 import {Subscription} from "rxjs";
+import {CardsSocketService} from "../../../api/websocket/cards-socket.service";
 
 @Component({
   selector: 'app-player-game-dashboard',
@@ -15,11 +15,11 @@ export class PlayerGameDashboardComponent implements OnInit, OnDestroy {
   cards: string[];
   playerCardsSubscription: Subscription;
 
-  constructor(private cardsService: CardsService) { }
+  constructor(private cardsService: CardsSocketService) { }
 
   ngOnInit() {
     if(this.isSessionPlayer()) {
-      this.playerCardsSubscription = this.cardsService.getPlayerCards(this.player.id)
+      this.playerCardsSubscription = this.cardsService.getPlayerCards(this.player.tableNumber)
       .subscribe(cards => this.cards = cards);
     }
   }
@@ -29,7 +29,7 @@ export class PlayerGameDashboardComponent implements OnInit, OnDestroy {
   }
 
   isSessionPlayer() {
-    return this.player.id === +localStorage.getItem('playerId');
+    return this.player.tableNumber === +localStorage.getItem('playerId');
   }
 
   hasFolded() {

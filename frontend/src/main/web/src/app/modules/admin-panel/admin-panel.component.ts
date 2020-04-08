@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PlayerService} from "../../api/player.service";
 import {Subscription} from "rxjs";
 import {Player} from "../../model/player";
+import {PlayerRestService} from "../../api/rest/player-rest.service";
 
 @Component({
   selector: 'app-admin-panel',
@@ -13,7 +13,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   playerSubscription: Subscription;
   players: Player[];
 
-  constructor(private playerService: PlayerService) {
+  constructor(private playerService: PlayerRestService) {
   }
 
   ngOnInit() {

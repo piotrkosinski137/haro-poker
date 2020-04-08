@@ -2,7 +2,8 @@ import {PlayerPosition} from "./player-position";
 
 export class Player {
 
-  constructor(public id: number,
+  constructor(public id: string,
+              public tableNumber: number,
               public name: string,
               public balance: number,
               public turnBid: number,

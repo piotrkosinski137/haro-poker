@@ -1,29 +1,25 @@
 package app.domain.round;
 
 import app.domain.card.Card;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
 
 public class RoundPlayer {
 
-    private int id;
+    private UUID id;
     private int balance;
     private final Set<Card> cardsInHand;
-    /** sum of bids during one stage (Eg. flop, river) */
     private int turnBid;
-    /** sum of bids during whole round, info needed for manual cases (when there will be couple all'ins) */
     private int roundBid;
     private boolean hasFolded;
 
-    RoundPlayer(final int id, final int balance) {
+    RoundPlayer(final UUID id, final int balance) {
         cardsInHand = new HashSet<>();
         this.id = id;
         this.balance = balance;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 

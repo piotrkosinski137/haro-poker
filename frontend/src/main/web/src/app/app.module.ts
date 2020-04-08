@@ -12,6 +12,8 @@ import {AdminPanelComponent} from './modules/admin-panel/admin-panel.component';
 import {BlindPanelComponent} from './modules/admin-panel/blind-panel/blind-panel.component';
 import {PlayerBidsPanelComponent} from './modules/admin-panel/player-bids-panel/player-bids-panel.component';
 import {NavbarComponent} from './modules/navbar/navbar.component';
+import {PlayerSocketService} from "./api/websocket/player-socket.service";
+import {PlayerRestService} from "./api/rest/player-rest.service";
 
 @NgModule({
   declarations: [
@@ -31,8 +33,7 @@ import {NavbarComponent} from './modules/navbar/navbar.component';
     NgbModule,
     FormsModule
   ],
-  providers: [NgbModalConfig, NgbModal
-  ],
+  providers: [PlayerSocketService, PlayerRestService, NgbModalConfig, NgbModal],
   entryComponents: [LoginModalComponent],
   bootstrap: [AppComponent]
 })

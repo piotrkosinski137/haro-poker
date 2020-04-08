@@ -1,22 +1,29 @@
 package app.domain.player;
 
+import java.util.UUID;
+
 public class Player {
 
-    private final int id;
+    private final UUID id;
+    private final int tableNumber;
     private final String name;
     private int balance;
-    private boolean isActive;
+    private boolean active;
 
-    /**
-     * Id will come from frontend. It knows the best which table number is empty
-     * */
-    Player(int id, String name) {
-        this.id = id;
+    public Player(String name, int tableNumber) {
+        this.id = UUID.randomUUID();
         this.name = name;
+        this.tableNumber = tableNumber;
+        balance = 10000;
+        active = true;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
+    }
+
+    public int getTableNumber() {
+        return tableNumber;
     }
 
     public int getBalance() {
@@ -24,7 +31,7 @@ public class Player {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     void updateBalance(int amount) {
@@ -36,7 +43,7 @@ public class Player {
     }
 
     void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
 

@@ -4,8 +4,11 @@ import app.domain.player.Player;
 import app.domain.player.PlayerService;
 import app.domain.round.RoundPlayer;
 import app.domain.round.RoundService;
-import java.util.Deque;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Deque;
+import java.util.UUID;
 
 @Service
 public class GameService {
@@ -21,8 +24,15 @@ public class GameService {
         game = new Game();
     }
 
-    public void joinToGame(Player player) {
-        game.addPlayer(player);
+    public UUID joinToGame(String playerName) {
+        if (game.isFull()) {
+            throw new GameIsFull();
+        }
+        return game.addPlayer(playerName);
+    }
+
+    public Collection<Player> getPlayers() {
+        return game.getPlayers();
     }
 
     public void startRound() {
@@ -32,14 +42,14 @@ public class GameService {
     /**
      * Admin ends round and picks winner Balances from roundPlayers are propagated to players
      */
-    public void finishRound(final int winnerPlayerId) {
+    public void finishRound(final UUID winnerPlayerId) {
         Deque<RoundPlayer> roundPlayers = roundService.finishRound(winnerPlayerId);
         roundPlayers.forEach(roundPlayer -> playerService.updateBalance(game.getActivePlayers(), roundPlayers));
         game.rotatePlayers();
     }
 
     public void setEntryFee(final int entryFee) {
-       game.setEntryFee(entryFee);
+        game.setEntryFee(entryFee);
     }
 
     public void setBlinds(final int blind) {
