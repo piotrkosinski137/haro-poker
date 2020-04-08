@@ -15,7 +15,7 @@ export class PlayerService implements OnInit {
   players = [];
 
   constructor() {
-    this.messagingService = new MessagingService('wss://' + environment.WS_PATH + '/players/add', '/topic/players');
+    this.messagingService = new MessagingService(environment.WS_PATH + '/players/add', '/topic/players');
 
     this.messagingService.stream().subscribe((message: Message) => {
       console.log("When subscribed, it loads players from backend");
