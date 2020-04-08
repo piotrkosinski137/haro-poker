@@ -18,7 +18,6 @@ export class MessagingService {
       reconnect_delay: 5000,
       debug: true
     };
-
     this.stompService = new StompService(stompConfig);
     this.messages = this.stompService.subscribe(responsePath);
   }
