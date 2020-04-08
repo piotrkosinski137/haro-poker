@@ -1,4 +1,4 @@
-package app.web;
+package app.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Configuration
 @Profile("prod")
-public class ViewController implements WebMvcConfigurer {
+public class ViewProdConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

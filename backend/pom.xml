@@ -7,6 +7,7 @@
     <properties>
         <spock-core.version>1.3-groovy-2.5</spock-core.version>
         <frontend.version>1.0-SNAPSHOT</frontend.version>
+        <modelmapper.version>2.3.7</modelmapper.version>
     </properties>
 
     <build>
@@ -86,6 +87,11 @@
             <groupId>org.example</groupId>
             <scope>runtime</scope>
             <version>${frontend.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
         </dependency>
         <dependency>
             <artifactId>h2</artifactId>

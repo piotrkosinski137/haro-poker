@@ -6,11 +6,11 @@
     <form #form="ngForm">
       <ng-container *ngFor="let player of players">
         <div class="form-group row">
-          <label [for]="player.id" class="col-5 col-form-label">{{player.name}}: </label>
+          <label [for]="player.tableNumber" class="col-5 col-form-label">{{player.name}}: </label>
           <div class="col-4">
             <div (click)=enableBalanceInputs()>
               <input type="number" class="form-control"
-                     [name]="player.id.toString()"
+                     [name]="player.tableNumber.toString()"
                      [(ngModel)]="player.roundBid"
                      (input)="onRoundBidChange($event)"
                      min="0" max="1000000" step="50"

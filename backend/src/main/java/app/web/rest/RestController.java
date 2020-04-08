@@ -1,4 +1,4 @@
-package app.web;
+package app.web.rest;
 
 public class RestController {
 

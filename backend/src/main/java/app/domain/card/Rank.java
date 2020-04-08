@@ -1,6 +1,6 @@
 package app.domain.card;
 
-enum Rank {
+public enum Rank {
     TWO("2"),
     THREE("3"),
     FOUR("4"),

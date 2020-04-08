@@ -1,9 +1,13 @@
 package app.domain.round;
 
+import app.domain.card.Card;
 import app.domain.card.CardDeckService;
 import app.domain.game.Blinds;
 import app.domain.player.Player;
 import java.util.Deque;
+import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,7 +37,7 @@ public class RoundService {
         giveCardsToPlayers();
     }
 
-    public Deque<RoundPlayer> finishRound(final int winnerPlayerId) {
+    public Deque<RoundPlayer> finishRound(final UUID winnerPlayerId) {
         //TODO sprawdzenie czy runda jest rozpoczęta
         roundPlayerService.pickWinner(winnerPlayerId);
         return roundPlayerService.getRoundPlayers();
@@ -50,6 +54,10 @@ public class RoundService {
         round.changeRoundStage();
         putCardsOnTable();
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
+    }
+
+    public Set<Card> getTableCards() {
+        return round.getTableCards();
     }
 
     private void giveCardsToPlayers() {

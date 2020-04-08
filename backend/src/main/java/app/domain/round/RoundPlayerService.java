@@ -5,6 +5,7 @@ import app.domain.player.Player;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 class RoundPlayerService {
@@ -34,7 +35,7 @@ class RoundPlayerService {
         bid(blinds.getBig());
     }
 
-    void pickWinner(int playerId) {
+    void pickWinner(UUID playerId) {
         roundPlayers.stream()
                 .filter(player -> player.getId() == playerId)
                 .findFirst()
