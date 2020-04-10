@@ -69,14 +69,18 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     },0);
   }
 
+  isPlayerRound() {
+    let player = this.getSessionPlayer();
+    return player === undefined ? false : player.hasTurn;
+  }
+
+  getSessionPlayer() {
+    return this.roundPlayers.find(player => player.id === this.localStorageService.sessionId);
+  }
+
   ngOnDestroy(): void {
     this.gamePlayerSubscription.unsubscribe();
     this.roundPlayerSubscription.unsubscribe();
     this.cardSubscription.unsubscribe();
-  }
-
-  isPlayerRound() {
-    let player = this.roundPlayers.find(player => player.id === this.localStorageService.sessionId);
-    return player === undefined ? false : player.hasTurn;
   }
 }

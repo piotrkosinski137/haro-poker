@@ -50,5 +50,5 @@
   </div>
 </div>
 <div class="action-panel" *ngIf="isPlayerRound()">
-  <app-bet-dashboard></app-bet-dashboard>
+  <app-bet-dashboard [sessionPlayer]="getSessionPlayer()"></app-bet-dashboard>
 </div>

@@ -5,12 +5,12 @@
         <div class="col-3 bet-range">
           <label for="range">Place bet:</label>
           <input type="range" class="custom-range" id="range" step="100"
-                 min="0" [max]="playerBalance" [value]="currentBet"
+                 min="0" [max]="sessionPlayer?.balance" [value]="currentBet"
                  (input)="betValueChanged($event)">
         </div>
         <div class="col-1 p-0">
           <input class="form-control bet-input pr-1" type="number" [value]="currentBet"
-                 [max]="playerBalance" step="100" min="0" #bet
+                 [max]="sessionPlayer?.balance" step="100" min="0" #bet
                  (input)="betValueChanged($event)">
         </div>
         <div class="col-1 pr-1 pl-0">
@@ -29,7 +29,8 @@
           <button type="button" class="btn btn-warning action-button p-0">Fold</button>
         </div>
         <div class="col-1 pr-1 pl-0">
-          <button type="button" class="btn btn-danger action-button p-0">All-In</button>
+          <button type="button" class="btn btn-danger action-button p-0"
+                  (click)="onBetClick(sessionPlayer?.balance)">All-In</button>
         </div>
       </div>
     </div>

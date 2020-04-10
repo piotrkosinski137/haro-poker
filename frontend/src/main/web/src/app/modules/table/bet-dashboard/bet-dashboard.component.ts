@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {RoundPlayerRestService} from "../../../api/rest/round-player-rest.service";
+import {RoundPlayer} from "../../../model/round-player";
 
 @Component({
   selector: 'app-bet-dashboard',
@@ -8,7 +9,8 @@ import {RoundPlayerRestService} from "../../../api/rest/round-player-rest.servic
 })
 export class BetDashboardComponent implements OnInit {
 
-  playerBalance = 5000;
+  @Input()
+  sessionPlayer: RoundPlayer;
   currentBet = 0;
 
   constructor(private roundPlayerRestService: RoundPlayerRestService) {

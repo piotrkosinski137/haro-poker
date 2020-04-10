@@ -27,4 +27,9 @@ export class RoundPlayerSocketService implements OnInit {
   getRoundPlayers(): Observable<RoundPlayer[]> {
     return this.roundPlayersSubject.asObservable();
   }
+
+  /*  getSessionPlayer(): Observable<RoundPlayer> {
+      return this.roundPlayersSubject.asObservable()
+        .pipe(map(players => players.find(player => player.id = this.localStorageService.sessionId)));
+    }*/
 }
