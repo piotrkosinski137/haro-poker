@@ -9,6 +9,7 @@ import {GamePlayerSocketService} from "../../api/websocket/game-player-socket.se
 import {GamePlayerRestService} from "../../api/rest/game-player-rest.service";
 import {RoundPlayerSocketService} from "../../api/websocket/round-player-socket.service";
 import {RoundPlayer} from "../../model/round-player";
+import {LocalStorageService} from "../../api/local-storage.service";
 
 @Component({
   selector: 'app-table',
@@ -30,6 +31,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
               private gamePlayerRestService: GamePlayerRestService,
               private gamePlayerSocketService: GamePlayerSocketService,
               private roundPlayerSocketService: RoundPlayerSocketService,
+              private localStorageService: LocalStorageService,
               private cardsService: CardsSocketService) {
   }
 
@@ -61,15 +63,20 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.roundPlayers.find(player => player.tableNumber == tableNumber);
   }
 
+  calculateRoundPot() {
+    return this.roundPlayers.map(player => player.roundBid).reduce(function(totalRoundBid, roundBid){
+      return totalRoundBid + roundBid;
+    },0);
+  }
+
   ngOnDestroy(): void {
     this.gamePlayerSubscription.unsubscribe();
     this.roundPlayerSubscription.unsubscribe();
     this.cardSubscription.unsubscribe();
   }
 
-  calculateRoundPot() {
-    return this.roundPlayers.map(player => player.roundBid).reduce(function(totalRoundBid, roundBid){
-      return totalRoundBid + roundBid;
-    },0);
+  isPlayerRound() {
+    let player = this.roundPlayers.find(player => player.id === this.localStorageService.sessionId);
+    return player === undefined ? false : player.hasTurn;
   }
 }

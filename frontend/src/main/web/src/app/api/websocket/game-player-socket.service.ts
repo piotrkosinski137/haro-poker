@@ -33,7 +33,7 @@ export class GamePlayerSocketService implements OnInit {
 
   getSessionPlayer() {
     return this.getGamePlayers().pipe(
-      map(players => players.find(player => player.id === this.localStorageService.sessionId)));
+      map(players => players.find(player => this.localStorageService.isSessionPlayer(player.id))));
   }
 
   //    Blueprint how to send messages directly via websocket

@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GamePlayer} from "../../../model/game-player";
 import {RoundPlayer} from "../../../model/round-player";
+import {LocalStorageService} from "../../../api/local-storage.service";
 
 @Component({
   selector: 'app-player-game-dashboard',
@@ -14,17 +15,17 @@ export class PlayerGameDashboardComponent implements OnInit {
   @Input()
   roundPlayer: RoundPlayer;
 
-  constructor() {
+  constructor(private localStorageService: LocalStorageService) {
   }
 
   ngOnInit() {
-    if (this.isSessionPlayer()) {
-      // TODO get cards from private channel
-    }
+    // if (this.localStorageService.isSessionPlayer(this.gamePlayer.id)) {
+    //   // TODO get cards from private channel
+    // }
   }
 
   isSessionPlayer() {
-    return this.gamePlayer.id === localStorage.getItem('playerId');
+    return this.localStorageService.isSessionPlayer(this.gamePlayer.id)
   }
 
   isActive() {

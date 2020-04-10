@@ -16,4 +16,8 @@ export class LocalStorageService {
   get sessionId() {
     return localStorage.getItem('playerId');
   }
+
+  isSessionPlayer(id: string) {
+    return id === this.sessionId;
+  }
 }
