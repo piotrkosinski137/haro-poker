@@ -18,6 +18,7 @@ export class GamePlayerRestService {
   }
 
   changeActiveState() {
-    // TODO post with playerId, that's it
+    this.http.post(environment.PROXY_PATH + "players/" + this.localStorageService.sessionId + "/activation-status"
+      , null).subscribe();
   }
 }

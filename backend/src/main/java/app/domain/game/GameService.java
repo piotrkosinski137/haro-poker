@@ -39,6 +39,10 @@ public class GameService {
         roundService.startRound(game.getActivePlayers(), game.getBlinds());
     }
 
+    public void changeActiveStatus(UUID id) {
+        game.changeActiveStatus(id);
+    }
+
     /**
      * Admin ends round and picks winner Balances from roundPlayers are propagated to players
      */

@@ -61,4 +61,11 @@ class Game {
     public boolean isFull() {
         return gamePlayers.size() == 7;
     }
+
+    public void changeActiveStatus(UUID id) {
+        GamePlayer gamePlayer = gamePlayers.stream().filter(player -> player.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new GamePlayerNotFound(id));
+        gamePlayer.changeActiveStatus();
+    }
 }

@@ -5,6 +5,7 @@ import app.domain.round.RoundService;
 import app.web.websocket.dto.GamePlayerMapper;
 import app.web.websocket.dto.RoundPlayerMapper;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +44,12 @@ public class GameRestController {
     public void startRound() {
         gameService.startRound();
         template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(roundService.getPlayers()));
+    }
+
+    //TODO active status will change immediately but it should change after given round
+    @PostMapping("/players/{id}/activation-status")
+    public void changePlayerActiveStatus(@PathVariable String id) {
+        gameService.changeActiveStatus(UUID.fromString(id));
+        template.convertAndSend("/topic/game-players", gamePlayerMapper.mapToDtos(gameService.getPlayers()));
     }
 }

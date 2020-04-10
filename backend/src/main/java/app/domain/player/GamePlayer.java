@@ -47,4 +47,7 @@ public class GamePlayer {
     }
 
 
+    public void changeActiveStatus() {
+        this.active  = !this.active;
+    }
 }
