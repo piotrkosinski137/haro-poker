@@ -19,11 +19,11 @@ export class RoundPlayerRestService {
   bid(amount: number) {
     let params = new HttpParams().set('amount', String(amount));
     return this.http.post(environment.PROXY_PATH + "players/" + this.localStorageService.sessionId + "/bid",
-      null, {params: params})
-      .subscribe();
+      null, {params: params}).subscribe();
   }
 
   fold() {
-
+    return this.http.post(environment.PROXY_PATH + "players/" + this.localStorageService.sessionId + "/fold",
+      null).subscribe();
   }
 }

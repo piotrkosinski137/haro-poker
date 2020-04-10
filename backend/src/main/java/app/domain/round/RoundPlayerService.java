@@ -58,8 +58,15 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
-    void setPlayerWithTurn() {
-        roundPlayers.getFirst().setHasTurn(true);
+    // TODO make proper checks to avoid StackOverflowException
+    void setNextPlayer() {
+        RoundPlayer player = roundPlayers.getFirst();
+        if (!player.isInGame() || player.hasNoFunds()) {
+            roundPlayers.addLast(roundPlayers.pollFirst());
+            setNextPlayer();
+        } else {
+            player.setHasTurn(true);
+        }
     }
 
     void fold() {

@@ -29,5 +29,10 @@ export class BetDashboardComponent implements OnInit {
 
   onBetClick(amount: any) {
     this.roundPlayerRestService.bid(amount);
+    this.currentBet = 0;
+  }
+
+  onFoldClick() {
+    this.roundPlayerRestService.fold();
   }
 }

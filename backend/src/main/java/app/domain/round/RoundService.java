@@ -78,6 +78,11 @@ public class RoundService {
 
     public void bid(int amount) {
         roundPlayerService.bid(amount);
-        roundPlayerService.setPlayerWithTurn();
+        roundPlayerService.setNextPlayer();
+    }
+
+    public void fold() {
+        roundPlayerService.fold();
+        roundPlayerService.setNextPlayer();
     }
 }

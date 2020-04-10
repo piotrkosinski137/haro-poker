@@ -55,8 +55,15 @@ public class GameRestController {
 
     //TODO consider if id needed for security reasons
     @PostMapping("/players/{id}/bid")
-    public void bid(@PathVariable String id, int amount) {
+    public void bid(@PathVariable String id, @RequestParam int amount) {
         roundService.bid(amount);
+        template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(roundService.getPlayers()));
+    }
+
+    //TODO consider if id needed for security reasons
+    @PostMapping("/players/{id}/fold")
+    public void bid(@PathVariable String id) {
+        roundService.fold();
         template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(roundService.getPlayers()));
     }
 }

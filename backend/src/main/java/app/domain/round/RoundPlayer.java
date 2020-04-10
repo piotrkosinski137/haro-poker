@@ -53,6 +53,7 @@ public class RoundPlayer {
 
     void fold() {
         hasFolded = true;
+        hasTurn = false;
     }
 
     void prepareForNextStage() {
@@ -65,6 +66,10 @@ public class RoundPlayer {
 
     boolean isInGame() {
         return !hasFolded;
+    }
+
+    boolean hasNoFunds() {
+        return balance == 0;
     }
 
     int getTurnBid() {
