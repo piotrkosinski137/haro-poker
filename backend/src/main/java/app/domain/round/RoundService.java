@@ -75,4 +75,9 @@ public class RoundService {
             return roundPlayerService.getRoundPlayers();
         }
     }
+
+    public void bid(int amount) {
+        roundPlayerService.bid(amount);
+        roundPlayerService.setPlayerWithTurn();
+    }
 }

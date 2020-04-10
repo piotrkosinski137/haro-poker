@@ -48,6 +48,7 @@ public class RoundPlayer {
         turnBid += bid;
         roundBid += bid;
         balance -= bid;
+        hasTurn = false;
     }
 
     void fold() {
@@ -72,6 +73,10 @@ public class RoundPlayer {
 
     int getRoundBid() {
         return roundBid;
+    }
+
+    void setHasTurn(boolean hasTurn) {
+        this.hasTurn = hasTurn;
     }
 
     @Override

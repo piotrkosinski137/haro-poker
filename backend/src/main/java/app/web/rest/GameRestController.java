@@ -52,4 +52,11 @@ public class GameRestController {
         gameService.changeActiveStatus(UUID.fromString(id));
         template.convertAndSend("/topic/game-players", gamePlayerMapper.mapToDtos(gameService.getPlayers()));
     }
+
+    //TODO consider if id needed for security reasons
+    @PostMapping("/players/{id}/bid")
+    public void bid(@PathVariable String id, int amount) {
+        roundService.bid(amount);
+        template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(roundService.getPlayers()));
+    }
 }

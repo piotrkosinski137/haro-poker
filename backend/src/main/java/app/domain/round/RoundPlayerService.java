@@ -58,6 +58,10 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
+    void setPlayerWithTurn() {
+        roundPlayers.getFirst().setHasTurn(true);
+    }
+
     void fold() {
         RoundPlayer player = roundPlayers.pollFirst();
         player.fold();

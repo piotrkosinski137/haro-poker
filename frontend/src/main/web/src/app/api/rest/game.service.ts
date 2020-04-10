@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 
@@ -7,7 +7,8 @@ import {HttpClient} from "@angular/common/http";
 })
 export class GameService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   startRound() {
     return this.http.post(environment.PROXY_PATH + "round/start", null).subscribe();
