@@ -27,12 +27,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.gamePlayerSocketService.getSessionPlayer().subscribe(player => this.player = player));
   }
 
-  onChangePlayerActiveStatusClicked() {
-    this.gamePlayerRestService.changeActiveState();
+  onChangePlayerActiveStatusClick() {
+    this.gamePlayerRestService.changeActiveState(!this.player.active);
   }
 
   onRoundStart() {
-    this.gameService.startRound()
+    this.gameService.startGame()
   }
 
   isAdmin(tableNumber: number) {

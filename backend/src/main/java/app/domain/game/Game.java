@@ -58,14 +58,18 @@ class Game {
         gamePlayers.addLast(gamePlayers.pollFirst());
     }
 
-    public boolean isFull() {
+    boolean isFull() {
         return gamePlayers.size() == 7;
     }
 
-    public void changeActiveStatus(UUID id) {
+    void changeActiveStatus(UUID id, boolean isActive) {
         GamePlayer gamePlayer = gamePlayers.stream().filter(player -> player.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new GamePlayerNotFound(id));
-        gamePlayer.changeActiveStatus();
+        gamePlayer.setActive(isActive);
+    }
+
+    void activatePlayers() {
+        gamePlayers.forEach(player -> player.setActive(true));
     }
 }

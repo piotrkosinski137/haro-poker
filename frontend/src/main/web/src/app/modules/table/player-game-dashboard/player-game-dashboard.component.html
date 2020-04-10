@@ -1,10 +1,10 @@
 <div class="dashboard-container " [ngClass]="{'border-blink' : roundPlayer?.hasTurn}">
   <p class="turn-bid">{{(roundPlayer?.turnBid).toLocaleString()}}</p>
   <!--TODO when separate channels for each players will be established-->
-<!--  <ng-container *ngIf="isSessionPlayer() && isActive()">-->
-<!--    <img src="../../../assets/cards/{{(cards$ | async)[0]}}.jpg" class="card-hand">-->
-<!--    <img src="../../../assets/cards/{{(cards$ | async)[0]}}.jpg" class="card-hand">-->
-<!--  </ng-container>-->
+  <ng-container *ngIf="isSessionPlayer() && isActive() && !roundPlayer?.hasFolded">
+    <img src="../../../assets/cards/KD.jpg" class="card-hand">
+    <img src="../../../assets/cards/KC.jpg" class="card-hand">
+  </ng-container>
   <ng-container *ngIf="!isSessionPlayer() && !roundPlayer?.hasFolded && isActive()">
     <img src="../../../assets/cards/card_back.jpg" class="card-hand">
     <img src="../../../assets/cards/card_back.jpg" class="card-hand">

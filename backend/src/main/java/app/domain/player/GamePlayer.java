@@ -15,7 +15,7 @@ public class GamePlayer {
         this.name = name;
         this.tableNumber = tableNumber;
         balance = 10000;
-        active = true;
+        active = false;
     }
 
     public UUID getId() {
@@ -42,12 +42,8 @@ public class GamePlayer {
         return name;
     }
 
-    void setActive(boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
-
-    public void changeActiveStatus() {
-        this.active  = !this.active;
-    }
 }

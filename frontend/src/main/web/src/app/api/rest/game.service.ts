@@ -10,7 +10,7 @@ export class GameService {
   constructor(private http: HttpClient) {
   }
 
-  startRound() {
-    return this.http.post(environment.PROXY_PATH + "round/start", null).subscribe();
+  startGame() {
+    return this.http.post(environment.PROXY_PATH + "game/start", null).subscribe();
   }
 }

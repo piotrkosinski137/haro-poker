@@ -17,8 +17,9 @@ export class GamePlayerRestService {
       (response: any) => this.localStorageService.sessionId = String(response.id));
   }
 
-  changeActiveState() {
+  changeActiveState(isActive: boolean) {
+    let params = new HttpParams().set('isActive', String(isActive));
     this.http.post(environment.PROXY_PATH + "players/" + this.localStorageService.sessionId + "/activation-status"
-      , null).subscribe();
+      , null, {params: params}).subscribe();
   }
 }

@@ -35,12 +35,17 @@ public class GameService {
         return game.getGamePlayers();
     }
 
+    public void startGame() {
+        game.activatePlayers();
+        startRound();
+    }
+
     public void startRound() {
         roundService.startRound(game.getActivePlayers(), game.getBlinds());
     }
 
-    public void changeActiveStatus(UUID id) {
-        game.changeActiveStatus(id);
+    public void changeActiveStatus(UUID id, boolean isActive) {
+        game.changeActiveStatus(id, isActive);
     }
 
     /**

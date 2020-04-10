@@ -9,7 +9,7 @@
     <ul class="navbar-nav mr-auto hamburger-item">
       <!-- when backend will be available, make two buttons-->
       <li class="nav-item" data-toggle="collapse"
-          data-target=".navbar-collapse.show" (click)="onChangePlayerActiveStatusClicked()">
+          data-target=".navbar-collapse.show" (click)="onChangePlayerActiveStatusClick()">
         <a class="nav-link text-white-50">Active/Inactive</a>
       </li>
       <li class="nav-item" data-toggle="collapse" *ngIf="isAdmin(player?.tableNumber)"

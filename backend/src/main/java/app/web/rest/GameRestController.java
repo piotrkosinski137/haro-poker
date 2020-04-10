@@ -40,16 +40,17 @@ public class GameRestController {
         return new AddPlayerResponse(playerId.toString());
     }
 
-    @PostMapping("/round/start")
+    @PostMapping("/game/start")
     public void startRound() {
-        gameService.startRound();
+        gameService.startGame();
+        template.convertAndSend("/topic/game-players", gamePlayerMapper.mapToDtos(gameService.getPlayers()));
         template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(roundService.getPlayers()));
     }
 
     //TODO active status will change immediately but it should change after given round
     @PostMapping("/players/{id}/activation-status")
-    public void changePlayerActiveStatus(@PathVariable String id) {
-        gameService.changeActiveStatus(UUID.fromString(id));
+    public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
+        gameService.changeActiveStatus(UUID.fromString(id), isActive);
         template.convertAndSend("/topic/game-players", gamePlayerMapper.mapToDtos(gameService.getPlayers()));
     }
 
