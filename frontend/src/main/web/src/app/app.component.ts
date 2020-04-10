@@ -3,6 +3,7 @@ import {GamePlayerSocketService} from "./api/websocket/game-player-socket.servic
 import {Subscription} from "rxjs";
 import {GamePlayer} from "./model/game-player";
 import {LocalStorageService} from "./api/local-storage.service";
+import {GameSocketService} from "./api/websocket/game-socket.service";
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sessionPlayer: GamePlayer;
 
   constructor(private gamePlayerSocketService: GamePlayerSocketService,
+              private gameSocketService: GameSocketService,
               private localStorageService: LocalStorageService) {
   }
 

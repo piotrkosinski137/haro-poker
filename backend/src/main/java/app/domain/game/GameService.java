@@ -65,6 +65,14 @@ public class GameService {
         game.getBlinds().setBlinds(blind);
     }
 
+    public void updateBlinds(int small) {
+        game.updateBlinds(small);
+    }
+
+    public Blinds getBlinds() {
+        return game.getBlinds();
+    }
+
     //finishGame (gameSummary)
 
     //propagateRoundResults

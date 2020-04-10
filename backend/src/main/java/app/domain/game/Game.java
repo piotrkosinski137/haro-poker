@@ -72,4 +72,8 @@ class Game {
     void activatePlayers() {
         gamePlayers.forEach(player -> player.setActive(true));
     }
+
+    public void updateBlinds(int small) {
+        blinds.setBlinds(small);
+    }
 }

@@ -44,6 +44,11 @@ public class GameSocketController {
         return cardMapper.mapToDtos(roundService.getTableCards());
     }
 
+    @SubscribeMapping("/topic/game")
+    public GameDto subscribeToGame() {
+        return new GameDto(gameService.getBlinds());
+    }
+
     //    Blueprint how to get messages directly via websocket
 //    @MessageMapping("/players")
 //    public void addPlayer(@Payload String playerName) {
