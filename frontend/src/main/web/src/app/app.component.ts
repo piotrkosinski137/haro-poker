@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PlayerSocketService} from "./api/websocket/player-socket.service";
-import {PlayerRestService} from "./api/rest/player-rest.service";
+import {GamePlayerSocketService} from "./api/websocket/game-player-socket.service";
 import {Subscription} from "rxjs";
-import {Player} from "./model/player";
+import {GamePlayer} from "./model/game-player";
 import {LocalStorageService} from "./api/local-storage.service";
 
 @Component({
@@ -13,19 +12,19 @@ import {LocalStorageService} from "./api/local-storage.service";
 export class AppComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
-  sessionPlayer: Player;
+  sessionPlayer: GamePlayer;
 
-  constructor(private playerSocketService: PlayerSocketService, private playerService: PlayerRestService,
+  constructor(private gamePlayerSocketService: GamePlayerSocketService,
               private localStorageService: LocalStorageService) {
   }
 
   ngOnInit(): void {
     this.subscription = this.localStorageService.sessionPlayerId.subscribe(sessionId =>
-      this.playerService.getSessionPlayer().subscribe(player => this.sessionPlayer = player));
+      this.gamePlayerSocketService.getSessionPlayer().subscribe(player => this.sessionPlayer = player));
   }
 
-  isAdmin(tableNumer: number) {
-    return tableNumer === 1;
+  isAdmin(tableNumber: number) {
+    return tableNumber === 1;
   }
 
   ngOnDestroy(): void {

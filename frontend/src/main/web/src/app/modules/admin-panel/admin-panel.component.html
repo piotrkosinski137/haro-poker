@@ -8,8 +8,9 @@
     </div>
     <div class="col-4">
       <app-player-bids-panel
-        [players]="players"
-      (playerBalancesChanged)="onPlayerBalancesChanged($event)"></app-player-bids-panel>
+        [roundPlayers]="roundPlayers"
+        [gamePlayers]="gamePlayers"
+      (playerRoundBidsChanged)="onPlayerRoundBidsChanged($event)"></app-player-bids-panel>
     </div>
   </div>
 </div>

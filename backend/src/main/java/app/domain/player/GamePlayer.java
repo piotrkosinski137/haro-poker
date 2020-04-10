@@ -2,15 +2,15 @@ package app.domain.player;
 
 import java.util.UUID;
 
-public class Player {
+public class GamePlayer {
 
     private final UUID id;
-    private final int tableNumber;
+    private final Integer tableNumber;
     private final String name;
     private int balance;
     private boolean active;
 
-    public Player(String name, int tableNumber) {
+    public GamePlayer(String name, Integer tableNumber) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.tableNumber = tableNumber;
@@ -22,7 +22,7 @@ public class Player {
         return id;
     }
 
-    public int getTableNumber() {
+    public Integer getTableNumber() {
         return tableNumber;
     }
 

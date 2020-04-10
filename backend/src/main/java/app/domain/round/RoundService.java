@@ -3,12 +3,10 @@ package app.domain.round;
 import app.domain.card.Card;
 import app.domain.card.CardDeckService;
 import app.domain.game.Blinds;
-import app.domain.player.Player;
-import java.util.Deque;
-import java.util.Set;
-import java.util.UUID;
-
+import app.domain.player.GamePlayer;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class RoundService {
@@ -19,21 +17,22 @@ public class RoundService {
 
     public RoundService(final CardDeckService cardDeckService) {
         this.cardDeckService = cardDeckService;
+        round = new Round();
     }
 
     /**
-     *  Entrypoint for each new round:
-     *
-     *  - reset round
-     *  - set roundPlayers
-     *  - give cards to players
-     *  - charge blinds
-     * */
-    public void startRound(final Deque<Player> players, final Blinds blinds) {
-        round = new Round();
-        roundPlayerService = new RoundPlayerService(players);
+     * Entrypoint for each new round:
+     * <p>
+     * - reset round
+     * - set roundPlayers
+     * - give cards to players
+     * - charge blinds
+     */
+    public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) {
+        roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
+        roundPlayerService.setCurrentPlayer();
         giveCardsToPlayers();
     }
 
@@ -66,5 +65,14 @@ public class RoundService {
 
     private void putCardsOnTable() {
         round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
+    }
+
+    public Collection<RoundPlayer> getPlayers() {
+        //TODO either RoundPlayerService will be initialized during application startup or I need a flag to check if game has started or not
+        if (roundPlayerService == null) {
+            return new HashSet<>();
+        } else {
+            return roundPlayerService.getRoundPlayers();
+        }
     }
 }

@@ -6,17 +6,22 @@ import java.util.*;
 
 public class RoundPlayer {
 
-    private UUID id;
+    private final UUID id;
     private int balance;
     private final Set<Card> cardsInHand;
     private int turnBid;
     private int roundBid;
     private boolean hasFolded;
+    private Position playerPosition;
+    private boolean hasTurn;
+    private final Integer tableNumber;
 
-    RoundPlayer(final UUID id, final int balance) {
+    RoundPlayer(final UUID id, final int balance, final Integer tableNumber) {
         cardsInHand = new HashSet<>();
         this.id = id;
         this.balance = balance;
+        playerPosition = Position.NONE;
+        this.tableNumber = tableNumber;
     }
 
     public UUID getId() {
@@ -33,6 +38,10 @@ public class RoundPlayer {
 
     void putCardsInHand(final Set<Card> cards) {
         cardsInHand.addAll(cards);
+    }
+
+    void setPlayerPosition(Position position) {
+        this.playerPosition = position;
     }
 
     void bid(final int bid) {
@@ -80,5 +89,9 @@ public class RoundPlayer {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void hasTurn(boolean hasTurn) {
+        this.hasTurn = hasTurn;
     }
 }

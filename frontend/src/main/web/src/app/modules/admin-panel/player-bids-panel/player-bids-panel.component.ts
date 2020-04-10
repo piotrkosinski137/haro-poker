@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Player} from "../../../model/player";
+import {RoundPlayer} from "../../../model/round-player";
+import {GamePlayer} from "../../../model/game-player";
 
 @Component({
   selector: 'app-player-bids-panel',
@@ -10,20 +11,22 @@ export class PlayerBidsPanelComponent implements OnInit {
 
   balanceInputEnabled = false;
   @Input()
-  players: Player[];
+  roundPlayers: RoundPlayer[];
+  @Input()
+  gamePlayers: GamePlayer[];
   roundBidsTotal: number = 0;
   draftBidsTotal: number = 0;
 
   @Output()
-  playerBalancesChanged = new EventEmitter<Player[]>();
+  playerRoundBidsChanged = new EventEmitter<RoundPlayer[]>();
 
   constructor() {
   }
 
   ngOnInit() {
-    this.players.forEach(player => {
-      this.roundBidsTotal+= player.roundBid;
-      this.draftBidsTotal+= player.roundBid;
+    this.roundPlayers.forEach(player => {
+      this.roundBidsTotal += player.roundBid;
+      this.draftBidsTotal += player.roundBid;
     });
   }
 
@@ -31,19 +34,23 @@ export class PlayerBidsPanelComponent implements OnInit {
     this.balanceInputEnabled = true;
   }
 
-  onBalanceChangeSubmitted() {
+  onRoundBidsChangeSubmitted() {
     this.balanceInputEnabled = false;
-    this.playerBalancesChanged.emit(this.players);
+    this.playerRoundBidsChanged.emit(this.roundPlayers);
   }
 
   onRoundBidChange(event$: any) {
     this.draftBidsTotal = 0;
-    this.players.forEach(player => {
-      this.draftBidsTotal+= player.roundBid
+    this.roundPlayers.forEach(player => {
+      this.draftBidsTotal += player.roundBid
     });
   }
 
   roundBidsDifference() {
     return this.roundBidsTotal - this.draftBidsTotal;
+  }
+
+  getPlayerName(id: string) {
+    return this.gamePlayers.find(player => player.id === id).name;
   }
 }

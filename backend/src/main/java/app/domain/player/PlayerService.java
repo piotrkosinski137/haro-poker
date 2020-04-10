@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerService {
 
-    public void updateBalance(final Deque<Player> gamePlayers, final Deque<RoundPlayer> roundPlayers) {
+    public void updateBalance(final Deque<GamePlayer> gamePlayers, final Deque<RoundPlayer> roundPlayers) {
         roundPlayers.forEach(roundPlayer -> gamePlayers.stream()
                 .filter(gamePlayer -> gamePlayer.getId() == roundPlayer.getId())
                 .findFirst()

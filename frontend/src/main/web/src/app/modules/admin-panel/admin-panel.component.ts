@@ -1,7 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {Player} from "../../model/player";
-import {PlayerRestService} from "../../api/rest/player-rest.service";
+import {RoundPlayerSocketService} from "../../api/websocket/round-player-socket.service";
+import {RoundPlayer} from "../../model/round-player";
+import {RoundPlayerRestService} from "../../api/rest/round-player-rest.service";
+import {GamePlayer} from "../../model/game-player";
+import {GamePlayerSocketService} from "../../api/websocket/game-player-socket.service";
 
 @Component({
   selector: 'app-admin-panel',
@@ -10,22 +13,29 @@ import {PlayerRestService} from "../../api/rest/player-rest.service";
 })
 export class AdminPanelComponent implements OnInit, OnDestroy {
 
-  playerSubscription: Subscription;
-  players: Player[];
+  roundPlayerSubscription: Subscription;
+  gamePlayerSubscription: Subscription;
+  roundPlayers: RoundPlayer[];
+  gamePlayers: GamePlayer[];
 
-  constructor(private playerService: PlayerRestService) {
+  constructor(private roundPlayerSocketService: RoundPlayerSocketService,
+              private gamePlayerSocketService: GamePlayerSocketService,
+              private roundPlayerRestService: RoundPlayerRestService) {
   }
 
   ngOnInit() {
-    this.playerSubscription = this.playerService.getPlayers()
-      .subscribe(players => this.players = players);
+    this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers()
+      .subscribe(gamePlayers => this.gamePlayers = gamePlayers);
+    this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers()
+      .subscribe(roundPlayers => this.roundPlayers = roundPlayers);
+  }
+
+  onPlayerRoundBidsChanged(roundPlayers: RoundPlayer[]) {
+    this.roundPlayerRestService.manualRoundBidsUpdate(roundPlayers);
   }
 
   ngOnDestroy() {
-    this.playerSubscription.unsubscribe();
-  }
-
-  onPlayerBalancesChanged(players: Player[]) {
-    this.playerService.updateBalances(players);
+    this.roundPlayerSubscription.unsubscribe();
+    this.gamePlayerSubscription.unsubscribe();
   }
 }

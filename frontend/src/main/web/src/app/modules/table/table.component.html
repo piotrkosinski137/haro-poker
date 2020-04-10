@@ -1,5 +1,5 @@
 <div class="table-container">
-  <p class="pot round-pot">Round Pot: 300</p>
+  <p class="pot round-pot">Round Pot: {{calculateRoundPot()}}</p>
   <div class="cards">
     <ng-container *ngFor="let card of cards">
       <img alt="card" class="card-item m-1 slide-in" [src]='"assets/cards/"+ card.rank + card.suit +".jpg"'/>
@@ -7,38 +7,45 @@
   </div>
   <p class="pot turn-pot">Turn Pot: 300</p>
   <div class="player-1-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(1)"
-                               *ngIf="getPlayerByTableNumber(1)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(1)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(1)"
+                               *ngIf="getGamePlayerByTableNumber(1)">
     </app-player-game-dashboard>
   </div>
   <div class="player-2-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(2)"
-                               *ngIf="getPlayerByTableNumber(2)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(2)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(2)"
+                               *ngIf="getGamePlayerByTableNumber(2)">
     </app-player-game-dashboard>
   </div>
   <div class="player-3-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(3)"
-                               *ngIf="getPlayerByTableNumber(3)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(3)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(3)"
+                               *ngIf="getGamePlayerByTableNumber(3)">
     </app-player-game-dashboard>
   </div>
   <div class="player-4-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(4)"
-                               *ngIf="getPlayerByTableNumber(4)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(4)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(4)"
+                               *ngIf="getGamePlayerByTableNumber(4)">
     </app-player-game-dashboard>
   </div>
   <div class="player-5-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(5)"
-                               *ngIf="getPlayerByTableNumber(5)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(5)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(5)"
+                               *ngIf="getGamePlayerByTableNumber(5)">
     </app-player-game-dashboard>
   </div>
   <div class="player-6-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(6)"
-                               *ngIf="getPlayerByTableNumber(6)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(6)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(6)"
+                               *ngIf="getGamePlayerByTableNumber(6)">
     </app-player-game-dashboard>
   </div>
   <div class="player-7-dashboard">
-    <app-player-game-dashboard [player]="getPlayerByTableNumber(7)"
-                               *ngIf="getPlayerByTableNumber(7)">
+    <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(7)"
+                               [roundPlayer]="getRoundPlayerByTableNumber(7)"
+                               *ngIf="getGamePlayerByTableNumber(7)">
     </app-player-game-dashboard>
   </div>
 </div>

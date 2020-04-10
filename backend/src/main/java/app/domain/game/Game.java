@@ -1,30 +1,30 @@
 package app.domain.game;
 
-import app.domain.player.Player;
+import app.domain.player.GamePlayer;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 class Game {
 
-    private final Deque<Player> players;
+    private final Deque<GamePlayer> gamePlayers;
     private Blinds blinds;
     private int entryFee;
 
     Game() {
-        players = new ArrayDeque<>();
+        gamePlayers = new ArrayDeque<>();
         blinds = new Blinds();
     }
 
     UUID addPlayer(String playerName) {
-        Player player = new Player(playerName, findEmptyTableNumber());
-        players.addLast(player);
-        return player.getId();
+        GamePlayer gamePlayer = new GamePlayer(playerName, findEmptyTableNumber());
+        gamePlayers.addLast(gamePlayer);
+        return gamePlayer.getId();
     }
 
     private int findEmptyTableNumber() {
         List<Integer> tableNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
-        players.forEach(player -> tableNumbers.remove(Integer.valueOf(player.getTableNumber())));
+        gamePlayers.forEach(player -> tableNumbers.remove(player.getTableNumber()));
 
         if (tableNumbers.isEmpty()) {
             throw new GameIsFull();
@@ -44,21 +44,21 @@ class Game {
         this.entryFee = entryFee;
     }
 
-    Deque<Player> getActivePlayers() {
-        return players.stream()
-                .filter(Player::isActive)
+    Deque<GamePlayer> getActivePlayers() {
+        return gamePlayers.stream()
+                .filter(GamePlayer::isActive)
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    Collection<Player> getPlayers() {
-        return Collections.unmodifiableCollection(players);
+    Collection<GamePlayer> getGamePlayers() {
+        return Collections.unmodifiableCollection(gamePlayers);
     }
 
     void rotatePlayers() {
-        players.addLast(players.pollFirst());
+        gamePlayers.addLast(gamePlayers.pollFirst());
     }
 
     public boolean isFull() {
-        return players.size() == 7;
+        return gamePlayers.size() == 7;
     }
 }

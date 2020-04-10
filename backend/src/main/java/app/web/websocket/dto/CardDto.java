@@ -7,12 +7,6 @@ public class CardDto {
     private CardDto() {
     }
 
-    //TODO remove when tableCard mockup will not be needed
-    public CardDto(String rank, String suit) {
-        this.rank = rank;
-        this.suit = suit;
-    }
-
     public String getRank() {
         return rank;
     }

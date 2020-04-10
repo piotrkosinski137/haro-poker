@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {Player} from "../../model/player";
-import {PlayerRestService} from "../../api/rest/player-rest.service";
+import {GamePlayer} from "../../model/game-player";
 import {LocalStorageService} from "../../api/local-storage.service";
+import {GameService} from "../../api/rest/game.service";
+import {GamePlayerSocketService} from "../../api/websocket/game-player-socket.service";
 
 @Component({
   selector: 'app-navbar',
@@ -12,26 +13,27 @@ import {LocalStorageService} from "../../api/local-storage.service";
 export class NavbarComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
-  player: Player;
+  player: GamePlayer;
 
-  constructor(private playerService: PlayerRestService, private localStorageService: LocalStorageService) {
+  constructor(private gamePlayerSocketService: GamePlayerSocketService, private localStorageService: LocalStorageService,
+              private gameService: GameService) {
   }
 
   ngOnInit() {
     this.subscription = this.localStorageService.sessionPlayerId.subscribe(sessionId =>
-      this.playerService.getSessionPlayer().subscribe(player => this.player = player));
+      this.gamePlayerSocketService.getSessionPlayer().subscribe(player => this.player = player));
   }
 
   onChangePlayerStateClicked() {
     this.player.active = !this.player.active;
   }
 
-  //TODO
-  onGameStart() {
+  onRoundStart() {
+    this.gameService.startRound()
   }
 
-  isAdmin(tableNumer: number) {
-    return tableNumer === 1;
+  isAdmin(tableNumber: number) {
+    return tableNumber === 1;
   }
 
   ngOnDestroy() {

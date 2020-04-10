@@ -1,6 +1,6 @@
 package app.domain.game;
 
-import app.domain.player.Player;
+import app.domain.player.GamePlayer;
 import app.domain.player.PlayerService;
 import app.domain.round.RoundPlayer;
 import app.domain.round.RoundService;
@@ -31,8 +31,8 @@ public class GameService {
         return game.addPlayer(playerName);
     }
 
-    public Collection<Player> getPlayers() {
-        return game.getPlayers();
+    public Collection<GamePlayer> getPlayers() {
+        return game.getGamePlayers();
     }
 
     public void startRound() {

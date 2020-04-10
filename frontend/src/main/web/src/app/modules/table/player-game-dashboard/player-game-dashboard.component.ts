@@ -1,46 +1,33 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Player} from "../../../model/player";
-import {Subscription} from "rxjs";
-import {CardsSocketService} from "../../../api/websocket/cards-socket.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {GamePlayer} from "../../../model/game-player";
+import {RoundPlayer} from "../../../model/round-player";
 
 @Component({
   selector: 'app-player-game-dashboard',
   templateUrl: './player-game-dashboard.component.html',
   styleUrls: ['./player-game-dashboard.component.scss']
 })
-export class PlayerGameDashboardComponent implements OnInit, OnDestroy {
+export class PlayerGameDashboardComponent implements OnInit {
 
   @Input()
-  player: Player;
-  cards: string[];
-  playerCardsSubscription: Subscription;
+  gamePlayer: GamePlayer;
+  @Input()
+  roundPlayer: RoundPlayer;
 
-  constructor(private cardsService: CardsSocketService) { }
+  constructor() {
+  }
 
   ngOnInit() {
-    if(this.isSessionPlayer()) {
-      this.playerCardsSubscription = this.cardsService.getPlayerCards(this.player.tableNumber)
-      .subscribe(cards => this.cards = cards);
+    if (this.isSessionPlayer()) {
+      // TODO get cards from private channel
     }
   }
 
-  hasTurn() {
-    return this.player.hasTurn;
-  }
-
   isSessionPlayer() {
-    return this.player.tableNumber === +localStorage.getItem('playerId');
-  }
-
-  hasFolded() {
-    return this.player.hasFolded;
+    return this.gamePlayer.id === localStorage.getItem('playerId');
   }
 
   isActive() {
-    return this.player.active;
-  }
-
-  ngOnDestroy() {
-    this.playerCardsSubscription.unsubscribe();
+    return this.gamePlayer.active;
   }
 }
