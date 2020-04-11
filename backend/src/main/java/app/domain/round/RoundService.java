@@ -67,8 +67,14 @@ public class RoundService {
         publisher.publishEvent(new TableCardsChanged(this, round.getTableCards()));
     }
 
+
+    // TODO Try to subscribe to cards stream as well as roudplayers when game will start
     public Set<Card> getTableCards() {
-        return round.getTableCards();
+        if (Objects.isNull(round)) {
+            return new HashSet<>();
+        } else {
+            return round.getTableCards();
+        }
     }
 
     private void giveCardsToPlayers() {
