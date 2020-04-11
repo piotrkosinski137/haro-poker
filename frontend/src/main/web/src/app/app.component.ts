@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {GamePlayerSocketService} from "./api/websocket/game-player-socket.service";
-import {Subscription} from "rxjs";
-import {GamePlayer} from "./model/game-player";
-import {LocalStorageService} from "./api/local-storage.service";
-import {GameSocketService} from "./api/websocket/game-socket.service";
+import {GamePlayerSocketService} from './api/websocket/game-player-socket.service';
+import {Subscription} from 'rxjs';
+import {GamePlayer} from './model/game-player';
+import {LocalStorageService} from './api/local-storage.service';
+import {GameSocketService} from './api/websocket/game-socket.service';
 
 @Component({
   selector: 'app-root',

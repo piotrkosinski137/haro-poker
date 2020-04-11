@@ -5,13 +5,13 @@ import app.domain.game.Blinds;
 public class GameDto {
     private int smallBlind;
     private int bigBlind;
-    private long timeStamp;
+    private long gameTimeStamp;
 
-    private GameDto() { //???
+    private GameDto() { //??? to avoid initialize dto in invalid state
     }
 
-    public GameDto(Blinds blinds, long timeStamp) {
-        this.timeStamp = timeStamp;
+    public GameDto(Blinds blinds, long gameTimeStamp) {
+        this.gameTimeStamp = gameTimeStamp;
         this.smallBlind = blinds.getSmall();
         this.bigBlind = blinds.getBig();
     }
@@ -32,11 +32,11 @@ public class GameDto {
         this.bigBlind = bigBlind;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public long getGameTimeStamp() {
+        return gameTimeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setGameTimeStamp(long gameTimeStamp) {
+        this.gameTimeStamp = gameTimeStamp;
     }
 }
