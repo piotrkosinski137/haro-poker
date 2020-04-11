@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RoundPlayerRestService} from "../../../api/rest/round-player-rest.service";
-import {RoundPlayer} from "../../../model/round-player";
+import {RoundPlayerRestService} from '../../../api/rest/round-player-rest.service';
+import {RoundPlayer} from '../../../model/round-player';
 
 @Component({
   selector: 'app-bet-dashboard',
@@ -11,6 +11,8 @@ export class BetDashboardComponent implements OnInit {
 
   @Input()
   sessionPlayer: RoundPlayer;
+  @Input()
+  minBet: number;
   currentBet = 0;
 
   constructor(private roundPlayerRestService: RoundPlayerRestService) {
@@ -20,11 +22,7 @@ export class BetDashboardComponent implements OnInit {
   }
 
   betValueChanged($event: any) {
-    this.currentBet = $event.target.value
-  }
-
-  hasNotBet() {
-    return this.currentBet == 0;
+    this.currentBet = $event.target.value;
   }
 
   onBetClick(amount: any) {
@@ -34,5 +32,13 @@ export class BetDashboardComponent implements OnInit {
 
   onFoldClick() {
     this.roundPlayerRestService.fold();
+  }
+
+  notEnoughFundsToBet() {
+    return this.sessionPlayer.balance < (this.minBet - this.sessionPlayer.turnBid);
+  }
+
+  cantCheck() {
+    return this.sessionPlayer.turnBid !== this.minBet;
   }
 }
