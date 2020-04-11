@@ -1,8 +1,11 @@
 package app.domain.round;
 
 import app.domain.card.Card;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 public class RoundPlayer {
 
@@ -11,7 +14,7 @@ public class RoundPlayer {
     private final Set<Card> cardsInHand;
     private int turnBid;
     private int roundBid;
-    private boolean hasFolded;
+    private boolean outOfBidding;
     private Position playerPosition;
     private boolean hasTurn;
     private final Integer tableNumber;
@@ -51,8 +54,16 @@ public class RoundPlayer {
         hasTurn = false;
     }
 
+    void allIn() {
+        turnBid += balance;
+        roundBid += balance;
+        balance = 0;
+        hasTurn = false;
+        outOfBidding = true;
+    }
+
     void fold() {
-        hasFolded = true;
+        outOfBidding = true;
         hasTurn = false;
     }
 
@@ -65,7 +76,7 @@ public class RoundPlayer {
     }
 
     boolean isInGame() {
-        return !hasFolded;
+        return !outOfBidding;
     }
 
     boolean hasNoFunds() {
@@ -103,5 +114,9 @@ public class RoundPlayer {
 
     public void hasTurn(boolean hasTurn) {
         this.hasTurn = hasTurn;
+    }
+
+    public Position getPlayerPosition() {
+        return playerPosition;
     }
 }

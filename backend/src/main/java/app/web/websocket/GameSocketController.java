@@ -2,11 +2,16 @@ package app.web.websocket;
 
 import app.domain.game.GameService;
 import app.domain.round.RoundService;
-import app.web.websocket.dto.*;
+import app.web.websocket.dto.GameDto;
+import app.web.websocket.dto.GamePlayerDto;
+import app.web.websocket.dto.GamePlayerMapper;
+import app.web.websocket.dto.RoundDto;
+import app.web.websocket.dto.RoundMapper;
+import app.web.websocket.dto.RoundPlayerDto;
+import app.web.websocket.dto.RoundPlayerMapper;
+import java.util.Collection;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-
-import java.util.Collection;
 
 @Controller
 public class GameSocketController {
@@ -15,18 +20,15 @@ public class GameSocketController {
     private final RoundService roundService;
     private final GamePlayerMapper gamePlayerMapper;
     private final RoundPlayerMapper roundPlayerMapper;
-    private final CardMapper cardMapper;
+    private final RoundMapper roundMapper;
 
-    public GameSocketController(GameService gameService,
-                                RoundService roundService,
-                                GamePlayerMapper gamePlayerMapper,
-                                RoundPlayerMapper roundPlayerMapper,
-                                CardMapper cardMapper) {
+    public GameSocketController(GameService gameService, RoundService roundService, GamePlayerMapper gamePlayerMapper, RoundPlayerMapper roundPlayerMapper,
+            RoundMapper roundMapper) {
         this.gameService = gameService;
         this.roundService = roundService;
         this.gamePlayerMapper = gamePlayerMapper;
         this.roundPlayerMapper = roundPlayerMapper;
-        this.cardMapper = cardMapper;
+        this.roundMapper = roundMapper;
     }
 
     @SubscribeMapping("/topic/game-players")
@@ -39,9 +41,9 @@ public class GameSocketController {
         return roundPlayerMapper.mapToDtos(roundService.getPlayers());
     }
 
-    @SubscribeMapping("/topic/cards")
-    public Collection<CardDto> subscribeToTableCards() {
-        return cardMapper.mapToDtos(roundService.getTableCards());
+    @SubscribeMapping("/topic/round")
+    public RoundDto subscribeToRound() {
+        return roundMapper.mapToDto(roundService.getRound());
     }
 
     @SubscribeMapping("/topic/game")

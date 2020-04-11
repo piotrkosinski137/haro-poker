@@ -39,10 +39,6 @@ public class GameService {
         return playerId;
     }
 
-    public Collection<GamePlayer> getPlayers() {
-        return game.getGamePlayers();
-    }
-
     public void startGame() {
         startRound();
         game.setGameTimeStamp(Instant.now().toEpochMilli());
@@ -50,8 +46,12 @@ public class GameService {
         publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
-    void startRound() {
+    public void startRound() {
         roundService.startRound(game.getActivePlayers(), game.getBlinds());
+    }
+
+    public Collection<GamePlayer> getPlayers() {
+        return game.getGamePlayers();
     }
 
     public void changeActiveStatus(UUID id, boolean isActive) {
@@ -86,6 +86,4 @@ public class GameService {
     }
 
     //finishGame (gameSummary)
-
-    //konczymy jedna runde a nie rozpoczynamy kolejnej w obecnym stanie ale moze to dobrze.
 }

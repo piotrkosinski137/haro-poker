@@ -2,15 +2,20 @@ package app.domain.round;
 
 import app.domain.card.Card;
 import app.domain.card.CardDeckService;
+import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
-import app.domain.event.TableCardsChanged;
 import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
+import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 public class RoundService {
@@ -18,65 +23,63 @@ public class RoundService {
     private final CardDeckService cardDeckService;
     private RoundPlayerService roundPlayerService;
     private final ApplicationEventPublisher publisher;
-    private Round round;
+    private final Round round;
 
     public RoundService(final CardDeckService cardDeckService, ApplicationEventPublisher publisher) {
         this.cardDeckService = cardDeckService;
         this.publisher = publisher;
+        round = new Round();
     }
 
     /**
      * Entrypoint for each new round:
      * <p>
-     * - reset round
-     * - set roundPlayers
-     * - give cards to players
-     * - charge blinds
+     * - reset round - set roundPlayers - give cards to players - charge blinds
      */
     public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) {
-        round = new Round();
+        round.changeRoundStage();
         roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
         roundPlayerService.setCurrentPlayer();
         giveCardsToPlayers();
+        publisher.publishEvent(new RoundChanged(this, round));
     }
 
     public Deque<RoundPlayer> finishRound(final UUID winnerPlayerId) {
-        if (Objects.isNull(round)) {
+        if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
         roundPlayerService.pickWinner(winnerPlayerId);
-        round = null;
+        round.changeRoundStage();
+        publisher.publishEvent(new RoundChanged(this, round));
         return roundPlayerService.getRoundPlayers();
     }
 
     /**
-     * Eg. We finished first betting and now:
-     * - three cards will appear on table
-     * - roundStage will change to from Init to Flop
-     * - roundPlayers tourBet will be zero (it contains only money for current stage)
-     * */
-    public void startNextStage() {
-        if (Objects.isNull(round)) {
+     * Eg. We finished first betting and now: - three cards will appear on table - roundStage will change to from Init to Flop - roundPlayers tourBet will be zero (it contains only
+     * money for current stage)
+     */
+    public void startNextStage() {  //TODO think about this to automaticly finish round
+        if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
         round.changeRoundStage();
         putCardsOnTable();
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
-        publisher.publishEvent(new TableCardsChanged(this, round.getTableCards()));
+        publisher.publishEvent(new RoundChanged(this, round));
     }
 
-    public Set<Card> getTableCards() {
-        return round.getTableCards();
+    public Set<Card> getPlayerCards(final String id) {
+        return roundPlayerService.getRoundPlayers().stream()
+                .filter(roundPlayer -> roundPlayer.getId().toString().equals(id))
+                .findFirst()
+                .orElseThrow(PlayerNotFound::new)
+                .getCardsInHand();
     }
 
-    private void giveCardsToPlayers() {
-        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
-    }
-
-    private void putCardsOnTable() {
-        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
+    public Round getRound() {
+        return round;
     }
 
     public Collection<RoundPlayer> getPlayers() {
@@ -90,13 +93,42 @@ public class RoundService {
 
     public void bid(int amount) {
         roundPlayerService.bid(amount);
-        roundPlayerService.setNextPlayer();
-        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        checkGameConditions();
+    }
+
+    public void allIn() {
+        roundPlayerService.allIn();
+        checkGameConditions();
     }
 
     public void fold() {
         roundPlayerService.fold();
-        roundPlayerService.setNextPlayer();
-        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        checkGameConditions();
+    }
+
+    private void checkGameConditions() {
+        checkNumberOfPlayers();
+        if (!roundPlayerService.playersBidsAreEqual()) {
+            roundPlayerService.setNextPlayer();
+            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        } //else if (roundPlayerService.isBigBlindPlayer() && round.getRoundStage() == RoundStage.INIT) {
+        else {
+            startNextStage();
+        }
+    }
+
+    private void checkNumberOfPlayers() {
+        if (roundPlayerService.getRoundPlayers().size() ==1 ) {
+            final UUID id = roundPlayerService.getRoundPlayers().getFirst().getId();
+            finishRound(id);
+        }
+    }
+
+    private void giveCardsToPlayers() {
+        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
+    }
+
+    private void putCardsOnTable() {
+        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
     }
 }

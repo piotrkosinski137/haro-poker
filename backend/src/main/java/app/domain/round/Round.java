@@ -1,6 +1,8 @@
 package app.domain.round;
 
 import static app.domain.round.RoundStage.FLOP;
+import static app.domain.round.RoundStage.INIT;
+import static app.domain.round.RoundStage.NOT_STARTED;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
@@ -9,14 +11,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-class Round {
+public class Round {
 
     private final Set<Card> tableCards;
     private RoundStage stage;
 
     Round() {
         tableCards = new HashSet<>();
-        stage = RoundStage.INIT;
+        stage = RoundStage.NOT_STARTED;
     }
 
     public Set<Card> getTableCards() {
@@ -33,6 +35,9 @@ class Round {
 
     void changeRoundStage() {
         switch (stage) {
+            case NOT_STARTED:
+                stage = INIT;
+                break;
             case INIT:
                 stage = FLOP;
                 break;
@@ -41,6 +46,9 @@ class Round {
                 break;
             case TURN:
                 stage = RIVER;
+                break;
+            case RIVER:
+                stage = NOT_STARTED;
                 break;
             default:
                 break;

@@ -2,11 +2,11 @@ package app.web.websocket;
 
 import app.domain.event.GameChanged;
 import app.domain.event.GamePlayersChanged;
+import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
-import app.domain.event.TableCardsChanged;
-import app.web.websocket.dto.CardMapper;
 import app.web.websocket.dto.GameDto;
 import app.web.websocket.dto.GamePlayerMapper;
+import app.web.websocket.dto.RoundMapper;
 import app.web.websocket.dto.RoundPlayerMapper;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,16 +18,13 @@ public class GameEventListener {
     private final SimpMessagingTemplate template;
     private final RoundPlayerMapper roundPlayerMapper;
     private final GamePlayerMapper gamePlayerMapper;
-    private final CardMapper cardMapper;
+    private final RoundMapper roundMapper;
 
-    public GameEventListener(SimpMessagingTemplate template,
-                             RoundPlayerMapper roundPlayerMapper,
-                             GamePlayerMapper gamePlayerMapper,
-                             CardMapper cardMapper) {
+    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper, GamePlayerMapper gamePlayerMapper, RoundMapper roundMapper) {
         this.template = template;
         this.roundPlayerMapper = roundPlayerMapper;
         this.gamePlayerMapper = gamePlayerMapper;
-        this.cardMapper = cardMapper;
+        this.roundMapper = roundMapper;
     }
 
     @EventListener
@@ -42,11 +39,11 @@ public class GameEventListener {
 
     @EventListener
     public void handleGameChange(GameChanged event) {
-        template.convertAndSend("/topic/game", new GameDto(event.getBlinds(), event.getTimeStamp()));
+        template.convertAndSend("/topic/game", new GameDto(event.getBlinds(), event.getGameTimeStamp()));
     }
 
     @EventListener
-    public void handleTableCardsChange(TableCardsChanged event) {
-        template.convertAndSend("/topic/cards", cardMapper.mapToDtos(event.getCards()));
+    public void handleRoundChanged(RoundChanged event) {
+        template.convertAndSend("/topic/cards", roundMapper.mapToDto(event.getRound()));
     }
 }
