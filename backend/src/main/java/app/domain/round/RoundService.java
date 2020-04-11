@@ -3,8 +3,10 @@ package app.domain.round;
 import app.domain.card.Card;
 import app.domain.card.CardDeckService;
 import app.domain.event.RoundPlayersChanged;
+import app.domain.event.TableCardsChanged;
 import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
+import app.domain.round.exception.RoundNotStarted;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,6 @@ public class RoundService {
     public RoundService(final CardDeckService cardDeckService, ApplicationEventPublisher publisher) {
         this.cardDeckService = cardDeckService;
         this.publisher = publisher;
-        round = new Round();
     }
 
     /**
@@ -33,6 +34,7 @@ public class RoundService {
      * - charge blinds
      */
     public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) {
+        round = new Round();
         roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
@@ -41,22 +43,28 @@ public class RoundService {
     }
 
     public Deque<RoundPlayer> finishRound(final UUID winnerPlayerId) {
-        //TODO sprawdzenie czy runda jest rozpoczęta
+        if (Objects.isNull(round)) {
+            throw new RoundNotStarted();
+        }
         roundPlayerService.pickWinner(winnerPlayerId);
+        round = null;
         return roundPlayerService.getRoundPlayers();
     }
 
-    /*
+    /**
      * Eg. We finished first betting and now:
      * - three cards will appear on table
      * - roundStage will change to from Init to Flop
      * - roundPlayers tourBet will be zero (it contains only money for current stage)
      * */
     public void startNextStage() {
-        //TODO sprawdzenie czy runda jest rozpoczęta
+        if (Objects.isNull(round)) {
+            throw new RoundNotStarted();
+        }
         round.changeRoundStage();
         putCardsOnTable();
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
+        publisher.publishEvent(new TableCardsChanged(this, round.getTableCards()));
     }
 
     public Set<Card> getTableCards() {
@@ -64,7 +72,7 @@ public class RoundService {
     }
 
     private void giveCardsToPlayers() {
-        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2))); //dont like this magic number
+        roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
     }
 
     private void putCardsOnTable() {
@@ -73,7 +81,7 @@ public class RoundService {
 
     public Collection<RoundPlayer> getPlayers() {
         //TODO either RoundPlayerService will be initialized during application startup or I need a flag to check if game has started or not
-        if (roundPlayerService == null) {
+        if (Objects.isNull(roundPlayerService)) {
             return new HashSet<>();
         } else {
             return roundPlayerService.getRoundPlayers();

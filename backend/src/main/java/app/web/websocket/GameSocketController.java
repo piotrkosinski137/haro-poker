@@ -46,7 +46,7 @@ public class GameSocketController {
 
     @SubscribeMapping("/topic/game")
     public GameDto subscribeToGame() {
-        return new GameDto(gameService.getBlinds());
+        return new GameDto(gameService.getBlinds(), gameService.getTimeStamp());
     }
 
     //    Blueprint how to get messages directly via websocket

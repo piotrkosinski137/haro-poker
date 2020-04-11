@@ -1,14 +1,23 @@
 package app.domain.game;
 
+import app.domain.game.exceptions.GameIsFull;
+import app.domain.game.exceptions.GamePlayerNotFound;
 import app.domain.player.GamePlayer;
-
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 class Game {
 
     private final Deque<GamePlayer> gamePlayers;
-    private Blinds blinds;
+    private final Blinds blinds;
+    private long gameTimeStamp;
     private int entryFee;
 
     Game() {
@@ -16,32 +25,14 @@ class Game {
         blinds = new Blinds();
     }
 
-    UUID addPlayer(String playerName) {
-        GamePlayer gamePlayer = new GamePlayer(playerName, findEmptyTableNumber());
+    UUID addPlayer(GamePlayer gamePlayer) {
         gamePlayers.addLast(gamePlayer);
         return gamePlayer.getId();
-    }
 
-    private int findEmptyTableNumber() {
-        List<Integer> tableNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
-        gamePlayers.forEach(player -> tableNumbers.remove(player.getTableNumber()));
-
-        if (tableNumbers.isEmpty()) {
-            throw new GameIsFull();
-        }
-        return tableNumbers.get(0);
     }
 
     Blinds getBlinds() {
         return blinds;
-    }
-
-    int getEntryFee() {
-        return entryFee;
-    }
-
-    void setEntryFee(int entryFee) {
-        this.entryFee = entryFee;
     }
 
     Deque<GamePlayer> getActivePlayers() {
@@ -62,18 +53,40 @@ class Game {
         return gamePlayers.size() == 7;
     }
 
-    void changeActiveStatus(UUID id, boolean isActive) {
+    void changeActiveStatus(UUID id, boolean isActive) { //???? nie powinno tak byc
         GamePlayer gamePlayer = gamePlayers.stream().filter(player -> player.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new GamePlayerNotFound(id));
         gamePlayer.setActive(isActive);
     }
 
-    void activatePlayers() {
-        gamePlayers.forEach(player -> player.setActive(true));
+    void updateBlinds(int small) {
+        blinds.setBlinds(small);
     }
 
-    public void updateBlinds(int small) {
-        blinds.setBlinds(small);
+    int findEmptyTableNumber() {
+        List<Integer> tableNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+        gamePlayers.forEach(player -> tableNumbers.remove(player.getTableNumber()));
+
+        if (tableNumbers.isEmpty()) {
+            throw new GameIsFull();
+        }
+        return tableNumbers.get(0);
+    }
+
+    long getGameTimeStamp() {
+        return gameTimeStamp;
+    }
+
+    void setGameTimeStamp(long gameTimeStamp) {
+        this.gameTimeStamp = gameTimeStamp;
+    }
+
+    int getEntryFee() {
+        return entryFee;
+    }
+
+    void setEntryFee(int entryFee) {
+        this.entryFee = entryFee;
     }
 }

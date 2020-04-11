@@ -1,18 +1,19 @@
 package app.domain.round;
 
+import static app.domain.round.Position.BIG_BLIND;
+import static app.domain.round.Position.DEALER;
+import static app.domain.round.Position.SMALL_BLIND;
+
 import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static app.domain.round.Position.*;
-
 class RoundPlayerService {
 
-    private Deque<RoundPlayer> roundPlayers;
+    private final Deque<RoundPlayer> roundPlayers;
 
     RoundPlayerService(final Deque<GamePlayer> gamePlayers) {
         this.roundPlayers = convertToRoundPlayers(gamePlayers);
@@ -28,7 +29,7 @@ class RoundPlayerService {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    void chargeBlinds(final Blinds blinds) {
+    void chargeBlinds(final Blinds blinds) { //TODO think about this
         managePosition(DEALER, 0);
         managePosition(SMALL_BLIND, blinds.getSmall());
         managePosition(BIG_BLIND, blinds.getBig());
@@ -48,7 +49,6 @@ class RoundPlayerService {
                 .ifPresent(player -> player.winMoney(calculateTotalPot()));
     }
 
-    ///TODO!!! wszystkie metody za !
     void bid(int amount) {
         RoundPlayer player = roundPlayers.pollFirst();
         player.bid(amount);
@@ -90,19 +90,3 @@ class RoundPlayerService {
         roundPlayers.getFirst().hasTurn(true);
     }
 }
-
-/* *//*
- * We will take precaution that only current player can bet. Then there is no need to track id
- * Current roundPlayer is always at the beginning of deque
- * *//*
-    public void bid(int amount) {
-        round.bid(amount);
-        if (round.playersBidsAreEqual()) {
-            if (round.getRoundStage() != RIVER) {
-                nextStage();
-            } else {
-                // the end of round - now admin should pick winner
-            }
-        }
-    }
-    }*/

@@ -1,34 +1,32 @@
 package app.domain.game;
 
-import app.domain.Timer;
 import app.domain.event.GameChanged;
 import app.domain.event.GamePlayersChanged;
 import app.domain.event.RoundPlayersChanged;
+import app.domain.game.exceptions.GameIsFull;
 import app.domain.player.GamePlayer;
-import app.domain.player.PlayerService;
+import app.domain.player.GamePlayerService;
 import app.domain.round.RoundPlayer;
 import app.domain.round.RoundService;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.UUID;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
 
     private final RoundService roundService;
-    private final PlayerService playerService;
+    private final GamePlayerService gamePlayerService;
     private final ApplicationEventPublisher publisher;
-    private final Timer timer;
-    private Game game;
+    private final Game game;
 
-    public GameService(final RoundService roundService, final PlayerService playerService, ApplicationEventPublisher publisher, Timer timer) {
+    public GameService(final RoundService roundService, final GamePlayerService gamePlayerService, ApplicationEventPublisher publisher) {
         this.roundService = roundService;
-        this.playerService = playerService;
+        this.gamePlayerService = gamePlayerService;
         this.publisher = publisher;
-        this.timer = timer;
         game = new Game();
     }
 
@@ -36,7 +34,7 @@ public class GameService {
         if (game.isFull()) {
             throw new GameIsFull();
         }
-        UUID playerId = game.addPlayer(playerName);
+        UUID playerId = game.addPlayer(gamePlayerService.createNewGamePlayer(playerName, game.findEmptyTableNumber()));
         publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
         return playerId;
     }
@@ -46,20 +44,18 @@ public class GameService {
     }
 
     public void startGame() {
-        timer.start();
-        game.activatePlayers();
         startRound();
-        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+        game.setGameTimeStamp(Instant.now().toEpochMilli());
+        publisher.publishEvent(new GameChanged(this, getBlinds(), game.getGameTimeStamp()));
         publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
-    public void startRound() {
+    void startRound() {
         roundService.startRound(game.getActivePlayers(), game.getBlinds());
     }
 
     public void changeActiveStatus(UUID id, boolean isActive) {
         game.changeActiveStatus(id, isActive);
-        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
     }
 
     /**
@@ -67,30 +63,29 @@ public class GameService {
      */
     public void finishRound(final UUID winnerPlayerId) {
         Deque<RoundPlayer> roundPlayers = roundService.finishRound(winnerPlayerId);
-        roundPlayers.forEach(roundPlayer -> playerService.updateBalance(game.getActivePlayers(), roundPlayers));
+        roundPlayers.forEach(roundPlayer -> gamePlayerService.updateBalance(game.getActivePlayers(), roundPlayers));
         game.rotatePlayers();
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
     }
 
     public void setEntryFee(final int entryFee) {
         game.setEntryFee(entryFee);
     }
 
-    public void setBlinds(final int blind) {
-        game.getBlinds().setBlinds(blind);
-    }
-
     public void updateBlinds(int small) {
         game.updateBlinds(small);
-        publisher.publishEvent(new GameChanged(this, getBlinds()));
+        publisher.publishEvent(new GameChanged(this, getBlinds(), game.getGameTimeStamp()));
     }
 
     public Blinds getBlinds() {
         return game.getBlinds();
     }
 
-    //finishGame (gameSummary)
+    public long getTimeStamp() {
+        return game.getGameTimeStamp();
+    }
 
-    //propagateRoundResults
+    //finishGame (gameSummary)
 
     //konczymy jedna runde a nie rozpoczynamy kolejnej w obecnym stanie ale moze to dobrze.
 }

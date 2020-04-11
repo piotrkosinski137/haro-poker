@@ -42,7 +42,7 @@ public class GameEventListener {
 
     @EventListener
     public void handleGameChange(GameChanged event) {
-        template.convertAndSend("/topic/game", new GameDto(event.getBlinds()));
+        template.convertAndSend("/topic/game", new GameDto(event.getBlinds(), event.getTimeStamp()));
     }
 
     @EventListener

@@ -10,12 +10,12 @@ public class GamePlayer {
     private int balance;
     private boolean active;
 
-    public GamePlayer(String name, Integer tableNumber) {
+    GamePlayer(final String name, final Integer tableNumber) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.tableNumber = tableNumber;
         balance = 10000;
-        active = false;
+        active = true;
     }
 
     public UUID getId() {
@@ -36,6 +36,7 @@ public class GamePlayer {
 
     void updateBalance(int amount) {
         balance = amount;
+        checkIfPlayerIsActive();
     }
 
     public String getName() {
@@ -44,6 +45,14 @@ public class GamePlayer {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    void deactivatePlayer(){ active = false;}
+
+    void activatePlayer(){ active = true;}
+
+    private void checkIfPlayerIsActive() {
+        active = balance > 0;
     }
 
 }

@@ -5,13 +5,15 @@ import app.domain.game.Blinds;
 public class GameDto {
     private int smallBlind;
     private int bigBlind;
+    private long timeStamp;
 
-    private GameDto() {
+    private GameDto() { //???
     }
 
-    public GameDto(Blinds blinds) {
-        smallBlind = blinds.getSmall();
-        bigBlind = blinds.getBig();
+    public GameDto(Blinds blinds, long timeStamp) {
+        this.timeStamp = timeStamp;
+        this.smallBlind = blinds.getSmall();
+        this.bigBlind = blinds.getBig();
     }
 
     public int getSmallBlind() {
@@ -28,5 +30,13 @@ public class GameDto {
 
     public void setBigBlind(int bigBlind) {
         this.bigBlind = bigBlind;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
