@@ -59,6 +59,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  getMaxBet() {
+    return this.roundPlayers.map(player => player.roundBid).reduce((prev, curr) => (prev > curr) ? prev : curr);
+  }
+
   getGamePlayerByTableNumber(tableNumber: number) {
     return this.gamePlayers.find(player => player.tableNumber === tableNumber);
   }

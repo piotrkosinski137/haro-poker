@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GamePlayer} from "../../../model/game-player";
-import {RoundPlayer} from "../../../model/round-player";
-import {LocalStorageService} from "../../../api/local-storage.service";
+import {GamePlayer} from '../../../model/game-player';
+import {RoundPlayer} from '../../../model/round-player';
+import {LocalStorageService} from '../../../api/local-storage.service';
 
 @Component({
   selector: 'app-player-game-dashboard',
@@ -25,7 +25,7 @@ export class PlayerGameDashboardComponent implements OnInit {
   }
 
   isSessionPlayer() {
-    return this.localStorageService.isSessionPlayer(this.gamePlayer.id)
+    return this.localStorageService.isSessionPlayer(this.gamePlayer.id);
   }
 
   isActive() {
