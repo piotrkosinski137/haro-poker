@@ -4,13 +4,13 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <ng-container *ngFor="let player of players">
+      <ng-container *ngFor="let player of roundPlayers">
         <div class="form-group row">
-          <label [for]="player.id" class="col-5 col-form-label">{{player.name}}: </label>
+          <label [for]="player.tableNumber" class="col-5 col-form-label">{{getPlayerName(player.id)}}: </label>
           <div class="col-4">
             <div (click)=enableBalanceInputs()>
               <input type="number" class="form-control"
-                     [name]="player.id.toString()"
+                     [name]="player.tableNumber.toString()"
                      [(ngModel)]="player.roundBid"
                      (input)="onRoundBidChange($event)"
                      min="0" max="1000000" step="50"
@@ -24,7 +24,7 @@
       <div class="col-2">
         <button class="btn btn-primary mt-2 text-white btn-disabled"
                 [disabled]="!balanceInputEnabled || roundBidsDifference() != 0"
-                (click)="onBalanceChangeSubmitted()">Submit
+                (click)="onRoundBidsChangeSubmitted()">Submit
         </button>
       </div>
       <div class="col-8" *ngIf="roundBidsDifference() != 0">

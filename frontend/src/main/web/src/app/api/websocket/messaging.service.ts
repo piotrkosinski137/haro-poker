@@ -18,7 +18,6 @@ export class MessagingService {
       reconnect_delay: 5000,
       debug: true
     };
-
     this.stompService = new StompService(stompConfig);
     this.messages = this.stompService.subscribe(responsePath);
   }
@@ -28,7 +27,7 @@ export class MessagingService {
   }
 
   public send(url: string, message: any) {
-    return this.stompService.publish(url, JSON.stringify(message));
+    return this.stompService.publish(url, message);
   }
 
   public state(): BehaviorSubject<StompState> {

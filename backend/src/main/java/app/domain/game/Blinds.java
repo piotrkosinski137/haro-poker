@@ -19,7 +19,7 @@ public class Blinds {
     }
 
     void setBlinds(int blind) {
-        this.small = blind/2;
-        this.big = blind;
+        this.small = blind;
+        this.big = blind*2;
     }
 }

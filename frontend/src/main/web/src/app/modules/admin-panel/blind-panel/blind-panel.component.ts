@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {GameService} from "../../../api/rest/game.service";
+import {Game} from "../../../model/game";
 
 @Component({
   selector: 'app-blind-panel',
@@ -7,18 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BlindPanelComponent implements OnInit {
 
+  @Input()
+  game: Game;
   blindInputsEnabled = false;
   buttonEnabled = false;
-  smallBlind: number = 100;
 
-  constructor() { }
+  constructor(private gameService: GameService) { }
 
   ngOnInit() {
   }
 
-  disableBlindInputs() {
+  onChangeBlindClick(small: string) {
     this.blindInputsEnabled = false;
     this.buttonEnabled = false;
+    this.gameService.updateBlinds(+small);
   }
 
   enableBlindInputs() {

@@ -12,6 +12,9 @@ import {AdminPanelComponent} from './modules/admin-panel/admin-panel.component';
 import {BlindPanelComponent} from './modules/admin-panel/blind-panel/blind-panel.component';
 import {PlayerBidsPanelComponent} from './modules/admin-panel/player-bids-panel/player-bids-panel.component';
 import {NavbarComponent} from './modules/navbar/navbar.component';
+import {GamePlayerSocketService} from "./api/websocket/game-player-socket.service";
+import {GamePlayerRestService} from "./api/rest/game-player-rest.service";
+import { TimerComponent } from './modules/table/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import {NavbarComponent} from './modules/navbar/navbar.component';
     AdminPanelComponent,
     BlindPanelComponent,
     PlayerBidsPanelComponent,
-    NavbarComponent
+    NavbarComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,
@@ -31,8 +35,7 @@ import {NavbarComponent} from './modules/navbar/navbar.component';
     NgbModule,
     FormsModule
   ],
-  providers: [NgbModalConfig, NgbModal
-  ],
+  providers: [GamePlayerSocketService, GamePlayerRestService, NgbModalConfig, NgbModal],
   entryComponents: [LoginModalComponent],
   bootstrap: [AppComponent]
 })

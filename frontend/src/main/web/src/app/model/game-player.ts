@@ -1,15 +1,11 @@
 import {PlayerPosition} from "./player-position";
 
-export class Player {
+export class GamePlayer {
 
-  constructor(public id: number,
+  constructor(public id: string,
+              public tableNumber: number,
               public name: string,
-              public balance: number,
-              public turnBid: number,
-              public roundBid: number,
-              public hasTurn: boolean,
               public playerPosition: PlayerPosition,
-              public hasFolded: boolean,
               public active: boolean,
   ) {
   }

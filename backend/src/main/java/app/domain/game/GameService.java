@@ -1,49 +1,91 @@
 package app.domain.game;
 
-import app.domain.player.Player;
+import app.domain.Timer;
+import app.domain.event.GameChanged;
+import app.domain.event.GamePlayersChanged;
+import app.domain.event.RoundPlayersChanged;
+import app.domain.player.GamePlayer;
 import app.domain.player.PlayerService;
 import app.domain.round.RoundPlayer;
 import app.domain.round.RoundService;
-import java.util.Deque;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Deque;
+import java.util.UUID;
 
 @Service
 public class GameService {
 
     private final RoundService roundService;
     private final PlayerService playerService;
+    private final ApplicationEventPublisher publisher;
+    private final Timer timer;
     private Game game;
-    //gameTime - it should starts with first round!
 
-    public GameService(final RoundService roundService, final PlayerService playerService) {
+    public GameService(final RoundService roundService, final PlayerService playerService, ApplicationEventPublisher publisher, Timer timer) {
         this.roundService = roundService;
         this.playerService = playerService;
+        this.publisher = publisher;
+        this.timer = timer;
         game = new Game();
     }
 
-    public void joinToGame(Player player) {
-        game.addPlayer(player);
+    public UUID joinToGame(String playerName) {
+        if (game.isFull()) {
+            throw new GameIsFull();
+        }
+        UUID playerId = game.addPlayer(playerName);
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+        return playerId;
+    }
+
+    public Collection<GamePlayer> getPlayers() {
+        return game.getGamePlayers();
+    }
+
+    public void startGame() {
+        timer.start();
+        game.activatePlayers();
+        startRound();
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+        publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
     public void startRound() {
         roundService.startRound(game.getActivePlayers(), game.getBlinds());
     }
 
+    public void changeActiveStatus(UUID id, boolean isActive) {
+        game.changeActiveStatus(id, isActive);
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+    }
+
     /**
      * Admin ends round and picks winner Balances from roundPlayers are propagated to players
      */
-    public void finishRound(final int winnerPlayerId) {
+    public void finishRound(final UUID winnerPlayerId) {
         Deque<RoundPlayer> roundPlayers = roundService.finishRound(winnerPlayerId);
         roundPlayers.forEach(roundPlayer -> playerService.updateBalance(game.getActivePlayers(), roundPlayers));
         game.rotatePlayers();
     }
 
     public void setEntryFee(final int entryFee) {
-       game.setEntryFee(entryFee);
+        game.setEntryFee(entryFee);
     }
 
     public void setBlinds(final int blind) {
         game.getBlinds().setBlinds(blind);
+    }
+
+    public void updateBlinds(int small) {
+        game.updateBlinds(small);
+        publisher.publishEvent(new GameChanged(this, getBlinds()));
+    }
+
+    public Blinds getBlinds() {
+        return game.getBlinds();
     }
 
     //finishGame (gameSummary)

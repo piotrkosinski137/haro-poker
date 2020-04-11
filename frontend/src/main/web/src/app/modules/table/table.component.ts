@@ -1,11 +1,17 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subscription} from "rxjs";
-import {HelloService} from "../../api/hello.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoginModalComponent} from "../login-modal/login-modal.component";
-import {PlayerService} from "../../api/player.service";
-import {Player} from "../../model/player";
-import {CardsService} from "../../api/cards.service";
+import {GamePlayer} from "../../model/game-player";
+import {Card} from "../../model/card";
+import {CardsSocketService} from "../../api/websocket/cards-socket.service";
+import {GamePlayerSocketService} from "../../api/websocket/game-player-socket.service";
+import {GamePlayerRestService} from "../../api/rest/game-player-rest.service";
+import {RoundPlayerSocketService} from "../../api/websocket/round-player-socket.service";
+import {RoundPlayer} from "../../model/round-player";
+import {LocalStorageService} from "../../api/local-storage.service";
+import {GameSocketService} from "../../api/websocket/game-socket.service";
+import {Time} from "../../model/time";
 
 @Component({
   selector: 'app-table',
@@ -15,22 +21,30 @@ import {CardsService} from "../../api/cards.service";
 
 export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  helloSubscription: Subscription;
-  playersSubscription: Subscription;
-  players: Player[];
-  cards$: Observable<any>;
+  gamePlayerSubscription: Subscription;
+  roundPlayerSubscription: Subscription;
+  cardSubscription: Subscription;
 
-  constructor(private helloService: HelloService, private modalService: NgbModal,
-              private playerService: PlayerService, private cardsService: CardsService) {
+  gamePlayers: GamePlayer[];
+  roundPlayers: RoundPlayer[];
+  cards: Card[];
+  time$: Observable<Time>;
+
+  constructor(private modalService: NgbModal,
+              private gamePlayerRestService: GamePlayerRestService,
+              private gamePlayerSocketService: GamePlayerSocketService,
+              private roundPlayerSocketService: RoundPlayerSocketService,
+              private localStorageService: LocalStorageService,
+              private cardsService: CardsSocketService,
+              private gameSocketService: GameSocketService) {
   }
 
   ngOnInit(): void {
     localStorage.clear();
-
-    this.cards$ = this.cardsService.getCards();
-    this.helloSubscription = this.helloService.getGreeting().subscribe(result => console.log(result.content));
-    this.playersSubscription = this.playerService.getPlayers().subscribe(players => this.players = players
-    );
+    this.cardSubscription = this.cardsService.getCards().subscribe(cards => this.cards = cards);
+    this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers().subscribe(players => this.gamePlayers = players);
+    this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers().subscribe(players => this.roundPlayers = players);
+    this.time$ = this.gameSocketService.getTimer();
   }
 
   ngAfterViewInit() {
@@ -42,16 +56,36 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
       backdrop: 'static',
       keyboard: false
     }).result.then((playerName) => {
-      this.playerService.registerPlayer(playerName);
+      this.gamePlayerRestService.registerGamePlayer(playerName);
     });
   }
 
-  getPlayerById(id: number) {
-    return this.players.find(player => player.id == id);
+  getGamePlayerByTableNumber(tableNumber: number) {
+    return this.gamePlayers.find(player => player.tableNumber == tableNumber);
+  }
+
+  getRoundPlayerByTableNumber(tableNumber: number) {
+    return this.roundPlayers.find(player => player.tableNumber == tableNumber);
+  }
+
+  calculateRoundPot() {
+    return this.roundPlayers.map(player => player.roundBid).reduce(function(totalRoundBid, roundBid){
+      return totalRoundBid + roundBid;
+    },0);
+  }
+
+  isPlayerRound() {
+    let player = this.getSessionPlayer();
+    return player === undefined ? false : player.hasTurn;
+  }
+
+  getSessionPlayer() {
+    return this.roundPlayers.find(player => player.id === this.localStorageService.sessionId);
   }
 
   ngOnDestroy(): void {
-    this.helloSubscription.unsubscribe();
-    this.playersSubscription.unsubscribe();
+    this.gamePlayerSubscription.unsubscribe();
+    this.roundPlayerSubscription.unsubscribe();
+    this.cardSubscription.unsubscribe();
   }
 }

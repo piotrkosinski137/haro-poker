@@ -1,0 +1,17 @@
+.timer-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .timer-element {
+    width: 60px;
+    background-color: whitesmoke;
+    border-radius: 8px;
+    opacity: .7;
+    text-align: center;
+    margin: 5px 5px 0 0;
+
+    .timer-text {
+      font-size: 10px;
+    }
+  }
+}

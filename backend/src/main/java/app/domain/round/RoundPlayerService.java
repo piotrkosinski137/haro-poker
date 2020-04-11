@@ -1,56 +1,69 @@
 package app.domain.round;
 
 import app.domain.game.Blinds;
-import app.domain.player.Player;
+import app.domain.player.GamePlayer;
+
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.Deque;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static app.domain.round.Position.*;
 
 class RoundPlayerService {
 
     private Deque<RoundPlayer> roundPlayers;
 
-    RoundPlayerService(final Deque<Player> roundPlayers) {
-        this.roundPlayers = convertToRoundPlayers(roundPlayers);
+    RoundPlayerService(final Deque<GamePlayer> gamePlayers) {
+        this.roundPlayers = convertToRoundPlayers(gamePlayers);
     }
 
     Deque<RoundPlayer> getRoundPlayers() {
-        return (Deque<RoundPlayer>) Collections.unmodifiableCollection(roundPlayers);
+        return new ArrayDeque<>(roundPlayers);
     }
 
-    private Deque<RoundPlayer> convertToRoundPlayers(final Deque<Player> players) {
-        return players.stream()
-                .map(player -> new RoundPlayer(player.getId(), player.getBalance()))
+    private Deque<RoundPlayer> convertToRoundPlayers(final Deque<GamePlayer> gamePlayers) {
+        return gamePlayers.stream()
+                .map(player -> new RoundPlayer(player.getId(), player.getBalance(), player.getTableNumber()))
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     void chargeBlinds(final Blinds blinds) {
-        //dealer gives 0 blind
-        roundPlayers.addLast(roundPlayers.pollFirst());
-        //small gives small blind
-        bid(blinds.getSmall());
-        //big gives big blind
-        bid(blinds.getBig());
+        managePosition(DEALER, 0);
+        managePosition(SMALL_BLIND, blinds.getSmall());
+        managePosition(BIG_BLIND, blinds.getBig());
     }
 
-    void pickWinner(int playerId) {
+    private void managePosition(Position position, int blind) {
+        RoundPlayer player = roundPlayers.pollFirst();
+        player.setPlayerPosition(position);
+        player.bid(blind);
+        roundPlayers.addLast(player);
+    }
+
+    void pickWinner(UUID playerId) {
         roundPlayers.stream()
                 .filter(player -> player.getId() == playerId)
                 .findFirst()
                 .ifPresent(player -> player.winMoney(calculateTotalPot()));
     }
 
-
     ///TODO!!! wszystkie metody za !
-
-
     void bid(int amount) {
         RoundPlayer player = roundPlayers.pollFirst();
         player.bid(amount);
         roundPlayers.addLast(player);
-        // trigger websocket to see that next player has changed
-        // trigger websocket to see that totalPot has changed
+    }
+
+    // TODO make proper checks to avoid StackOverflowException
+    void setNextPlayer() {
+        RoundPlayer player = roundPlayers.getFirst();
+        if (!player.isInGame() || player.hasNoFunds()) {
+            roundPlayers.addLast(roundPlayers.pollFirst());
+            setNextPlayer();
+        } else {
+            player.setHasTurn(true);
+        }
     }
 
     void fold() {
@@ -71,6 +84,10 @@ class RoundPlayerService {
                 .map(RoundPlayer::getTurnBid)
                 .distinct()
                 .count() == 1;
+    }
+
+    public void setCurrentPlayer() {
+        roundPlayers.getFirst().hasTurn(true);
     }
 }
 

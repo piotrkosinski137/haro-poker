@@ -1,7 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PlayerService} from "../../api/player.service";
 import {Subscription} from "rxjs";
-import {Player} from "../../model/player";
+import {GamePlayer} from "../../model/game-player";
+import {LocalStorageService} from "../../api/local-storage.service";
+import {GameService} from "../../api/rest/game.service";
+import {GamePlayerSocketService} from "../../api/websocket/game-player-socket.service";
+import {GamePlayerRestService} from "../../api/rest/game-player-rest.service";
 
 @Component({
   selector: 'app-navbar',
@@ -10,20 +13,33 @@ import {Player} from "../../model/player";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  playerSubscription: Subscription;
-  player: Player;
+  subscription: Subscription;
+  player: GamePlayer;
 
-  constructor(private playerService: PlayerService) { }
-
-  ngOnInit() {
+  constructor(private gamePlayerSocketService: GamePlayerSocketService,
+              private gamePlayerRestService: GamePlayerRestService,
+              private localStorageService: LocalStorageService,
+              private gameService: GameService) {
   }
 
-  onChangePlayerStateClicked() {
-    this.playerSubscription = this.playerService.getSessionPlayer().subscribe(player => this.player = player);
-    this.player.active = !this.player.active;
+  ngOnInit() {
+    this.subscription = this.localStorageService.sessionPlayerId.subscribe(sessionId =>
+      this.gamePlayerSocketService.getSessionPlayer().subscribe(player => this.player = player));
+  }
+
+  onChangePlayerActiveStatusClick() {
+    this.gamePlayerRestService.changeActiveState(!this.player.active);
+  }
+
+  onRoundStart() {
+    this.gameService.startGame()
+  }
+
+  isAdmin(tableNumber: number) {
+    return tableNumber === 1;
   }
 
   ngOnDestroy() {
-    this.playerSubscription.unsubscribe()
+    this.subscription.unsubscribe()
   }
 }
