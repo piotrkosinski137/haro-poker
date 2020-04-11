@@ -1,5 +1,6 @@
 package app.domain.game;
 
+import app.domain.Timer;
 import app.domain.player.GamePlayer;
 import app.domain.player.PlayerService;
 import app.domain.round.RoundPlayer;
@@ -15,12 +16,13 @@ public class GameService {
 
     private final RoundService roundService;
     private final PlayerService playerService;
+    private final Timer timer;
     private Game game;
-    //gameTime - it should starts with first round!
 
-    public GameService(final RoundService roundService, final PlayerService playerService) {
+    public GameService(final RoundService roundService, final PlayerService playerService, Timer timer) {
         this.roundService = roundService;
         this.playerService = playerService;
+        this.timer = timer;
         game = new Game();
     }
 
@@ -36,6 +38,7 @@ public class GameService {
     }
 
     public void startGame() {
+        timer.start();
         game.activatePlayers();
         startRound();
     }

@@ -15,21 +15,24 @@ class GameTest extends Specification {
         game.addPlayer(playerName1)
 
         then:
-        with(game.getActivePlayers()) {
+        with(game.getGamePlayers()) {
             size() == 1
-            getFirst().getTableNumber() == 1
+            stream().filter({ player -> player.getTableNumber() == 1 })
+                    .findFirst()
+                    .isPresent()
         }
 
         when: "second player is added"
         game.addPlayer(playerName2)
 
         then:
-        with(game.getActivePlayers()) {
+        with(game.getGamePlayers()) {
             size() == 2
-            getLast().getTableNumber() == 2
+            stream().filter({ player -> player.getTableNumber() == 2 })
+                    .findFirst()
+                    .isPresent()
         }
     }
-
 
     def "should fail when game is full"() {
         when:

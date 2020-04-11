@@ -1,11 +1,12 @@
 <div class="table-container">
-  <p class="pot round-pot">Round Pot: {{calculateRoundPot()}}</p>
+  <app-timer [time]="(time$ | async)"></app-timer>
+  <p class="label round-pot">Round Pot: {{calculateRoundPot()}}</p>
   <div class="cards">
     <ng-container *ngFor="let card of cards">
       <img alt="card" class="card-item m-1 slide-in" [src]='"assets/cards/"+ card.rank + card.suit +".jpg"'/>
     </ng-container>
   </div>
-  <p class="pot turn-pot">Turn Pot: 300</p>
+  <p class="label turn-pot">Turn Pot: 300</p>
   <div class="player-1-dashboard">
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(1)"
                                [roundPlayer]="getRoundPlayerByTableNumber(1)"

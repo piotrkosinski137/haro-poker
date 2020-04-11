@@ -14,6 +14,7 @@ import {PlayerBidsPanelComponent} from './modules/admin-panel/player-bids-panel/
 import {NavbarComponent} from './modules/navbar/navbar.component';
 import {GamePlayerSocketService} from "./api/websocket/game-player-socket.service";
 import {GamePlayerRestService} from "./api/rest/game-player-rest.service";
+import { TimerComponent } from './modules/table/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {GamePlayerRestService} from "./api/rest/game-player-rest.service";
     AdminPanelComponent,
     BlindPanelComponent,
     PlayerBidsPanelComponent,
-    NavbarComponent
+    NavbarComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,

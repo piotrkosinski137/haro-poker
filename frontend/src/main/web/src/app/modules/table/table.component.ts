@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {LoginModalComponent} from "../login-modal/login-modal.component";
 import {GamePlayer} from "../../model/game-player";
@@ -10,6 +10,8 @@ import {GamePlayerRestService} from "../../api/rest/game-player-rest.service";
 import {RoundPlayerSocketService} from "../../api/websocket/round-player-socket.service";
 import {RoundPlayer} from "../../model/round-player";
 import {LocalStorageService} from "../../api/local-storage.service";
+import {GameSocketService} from "../../api/websocket/game-socket.service";
+import {Time} from "../../model/time";
 
 @Component({
   selector: 'app-table',
@@ -26,13 +28,15 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   gamePlayers: GamePlayer[];
   roundPlayers: RoundPlayer[];
   cards: Card[];
+  time$: Observable<Time>;
 
   constructor(private modalService: NgbModal,
               private gamePlayerRestService: GamePlayerRestService,
               private gamePlayerSocketService: GamePlayerSocketService,
               private roundPlayerSocketService: RoundPlayerSocketService,
               private localStorageService: LocalStorageService,
-              private cardsService: CardsSocketService) {
+              private cardsService: CardsSocketService,
+              private gameSocketService: GameSocketService) {
   }
 
   ngOnInit(): void {
@@ -40,6 +44,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cardSubscription = this.cardsService.getCards().subscribe(cards => this.cards = cards);
     this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers().subscribe(players => this.gamePlayers = players);
     this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers().subscribe(players => this.roundPlayers = players);
+    this.time$ = this.gameSocketService.getTimer();
   }
 
   ngAfterViewInit() {
