@@ -48,10 +48,7 @@ class RoundPlayerService {
                 .ifPresent(player -> player.winMoney(calculateTotalPot()));
     }
 
-
     ///TODO!!! wszystkie metody za !
-
-
     void bid(int amount) {
         RoundPlayer player = roundPlayers.pollFirst();
         player.bid(amount);

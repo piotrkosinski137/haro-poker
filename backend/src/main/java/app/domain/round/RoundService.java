@@ -2,8 +2,10 @@ package app.domain.round;
 
 import app.domain.card.Card;
 import app.domain.card.CardDeckService;
+import app.domain.event.RoundPlayersChanged;
 import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,10 +15,12 @@ public class RoundService {
 
     private final CardDeckService cardDeckService;
     private RoundPlayerService roundPlayerService;
+    private final ApplicationEventPublisher publisher;
     private Round round;
 
-    public RoundService(final CardDeckService cardDeckService) {
+    public RoundService(final CardDeckService cardDeckService, ApplicationEventPublisher publisher) {
         this.cardDeckService = cardDeckService;
+        this.publisher = publisher;
         round = new Round();
     }
 
@@ -79,10 +83,12 @@ public class RoundService {
     public void bid(int amount) {
         roundPlayerService.bid(amount);
         roundPlayerService.setNextPlayer();
+        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
     public void fold() {
         roundPlayerService.fold();
         roundPlayerService.setNextPlayer();
+        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 }

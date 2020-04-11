@@ -1,10 +1,14 @@
 package app.domain.game;
 
 import app.domain.Timer;
+import app.domain.event.GameChanged;
+import app.domain.event.GamePlayersChanged;
+import app.domain.event.RoundPlayersChanged;
 import app.domain.player.GamePlayer;
 import app.domain.player.PlayerService;
 import app.domain.round.RoundPlayer;
 import app.domain.round.RoundService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,12 +20,14 @@ public class GameService {
 
     private final RoundService roundService;
     private final PlayerService playerService;
+    private final ApplicationEventPublisher publisher;
     private final Timer timer;
     private Game game;
 
-    public GameService(final RoundService roundService, final PlayerService playerService, Timer timer) {
+    public GameService(final RoundService roundService, final PlayerService playerService, ApplicationEventPublisher publisher, Timer timer) {
         this.roundService = roundService;
         this.playerService = playerService;
+        this.publisher = publisher;
         this.timer = timer;
         game = new Game();
     }
@@ -30,7 +36,9 @@ public class GameService {
         if (game.isFull()) {
             throw new GameIsFull();
         }
-        return game.addPlayer(playerName);
+        UUID playerId = game.addPlayer(playerName);
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+        return playerId;
     }
 
     public Collection<GamePlayer> getPlayers() {
@@ -41,6 +49,8 @@ public class GameService {
         timer.start();
         game.activatePlayers();
         startRound();
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+        publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
     public void startRound() {
@@ -49,6 +59,7 @@ public class GameService {
 
     public void changeActiveStatus(UUID id, boolean isActive) {
         game.changeActiveStatus(id, isActive);
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
     }
 
     /**
@@ -70,6 +81,7 @@ public class GameService {
 
     public void updateBlinds(int small) {
         game.updateBlinds(small);
+        publisher.publishEvent(new GameChanged(this, getBlinds()));
     }
 
     public Blinds getBlinds() {
