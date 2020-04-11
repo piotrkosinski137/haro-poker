@@ -1,15 +1,14 @@
 package app.domain.event;
 
 import app.domain.round.RoundPlayer;
-import org.springframework.context.ApplicationEvent;
-
 import java.util.Collection;
+import org.springframework.context.ApplicationEvent;
 
 public class RoundPlayersChanged extends ApplicationEvent {
 
-    private Collection<RoundPlayer> roundPlayers;
+    private final Collection<RoundPlayer> roundPlayers;
 
-    public RoundPlayersChanged(Object source, Collection<RoundPlayer> roundPlayers) {
+    public RoundPlayersChanged(final Object source, final Collection<RoundPlayer> roundPlayers) {
         super(source);
         this.roundPlayers = roundPlayers;
     }

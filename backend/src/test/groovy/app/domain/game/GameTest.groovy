@@ -1,5 +1,6 @@
 package app.domain.game
 
+import app.domain.game.exceptions.GameIsFull
 import spock.lang.Specification
 
 class GameTest extends Specification {

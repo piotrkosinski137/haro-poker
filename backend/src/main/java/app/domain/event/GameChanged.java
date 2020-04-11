@@ -5,9 +5,9 @@ import org.springframework.context.ApplicationEvent;
 
 public class GameChanged extends ApplicationEvent {
 
-    private Blinds blinds;
+    private final Blinds blinds;
 
-    public GameChanged(Object source, Blinds blinds) {
+    public GameChanged(final Object source, final Blinds blinds) {
         super(source);
         this.blinds = blinds;
     }

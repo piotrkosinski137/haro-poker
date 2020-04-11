@@ -1,4 +1,4 @@
-package app.domain.game;
+package app.domain.game.exceptions;
 
 import java.util.UUID;
 

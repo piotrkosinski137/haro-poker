@@ -9,7 +9,7 @@ public class GameDto {
     private GameDto() {
     }
 
-    public GameDto(Blinds blinds) {
+    public GameDto(Blinds blinds) {   //TODO refactor to have blinds and timestamp!!!
         smallBlind = blinds.getSmall();
         bigBlind = blinds.getBig();
     }

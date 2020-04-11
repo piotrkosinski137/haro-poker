@@ -7,9 +7,9 @@ import java.util.Collection;
 
 public class GamePlayersChanged extends ApplicationEvent {
 
-    private Collection<GamePlayer> gamePlayers;
+    private final Collection<GamePlayer> gamePlayers;
 
-    public GamePlayersChanged(Object source, Collection<GamePlayer> gamePlayers) {
+    public GamePlayersChanged(final Object source, final Collection<GamePlayer> gamePlayers) {
         super(source);
         this.gamePlayers = gamePlayers;
     }

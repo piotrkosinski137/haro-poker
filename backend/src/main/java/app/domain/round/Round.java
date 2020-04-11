@@ -11,7 +11,7 @@ import java.util.Set;
 
 class Round {
 
-    private Set<Card> tableCards;
+    private final Set<Card> tableCards;
     private RoundStage stage;
 
     Round() {

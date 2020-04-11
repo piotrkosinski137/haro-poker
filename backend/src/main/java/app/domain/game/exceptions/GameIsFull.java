@@ -1,8 +1,8 @@
-package app.domain.game;
+package app.domain.game.exceptions;
 
 public class GameIsFull extends RuntimeException {
 
-    GameIsFull() {
+    public GameIsFull() {
         super("Game is full");
     }
 }

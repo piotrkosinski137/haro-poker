@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 class PlayerTest extends Specification {
 
-    def player = new Player(1, "Toms")
+    //def player = new GamePlayer(1, "Toms")
 
     def 'should create new ready for game player'() {
         when:

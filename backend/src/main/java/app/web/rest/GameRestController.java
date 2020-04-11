@@ -28,12 +28,16 @@ public class GameRestController {
         gameService.startGame();
     }
 
+    @PostMapping("/game/nextStage")
+    public void nextStage() {
+        roundService.startNextStage();
+    }
+
     @PutMapping("/game/blinds/update")
     public void updateBlinds(@RequestParam int small) {
         gameService.updateBlinds(small);
     }
 
-    //TODO active status will change immediately but it should change after given round
     @PostMapping("/players/{id}/activation-status")
     public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
         gameService.changeActiveStatus(UUID.fromString(id), isActive);
