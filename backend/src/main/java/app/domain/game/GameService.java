@@ -46,7 +46,7 @@ public class GameService {
     public void startGame() {
         startRound();
         game.setGameTimeStamp(Instant.now().toEpochMilli());
-        publisher.publishEvent(new GameChanged(this, game));
+        publisher.publishEvent(new GameChanged(this, getBlinds())); //TODO
         publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
@@ -74,7 +74,7 @@ public class GameService {
 
     public void updateBlinds(int small) {
         game.updateBlinds(small);
-        publisher.publishEvent(new GameChanged(this, game));
+        publisher.publishEvent(new GameChanged(this, getBlinds()));
     }
 
     public Blinds getBlinds() {   //TODO to remove
