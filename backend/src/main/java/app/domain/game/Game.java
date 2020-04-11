@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Game {
+class Game {
 
     private final Deque<GamePlayer> gamePlayers;
     private final Blinds blinds;
@@ -31,7 +31,7 @@ public class Game {
 
     }
 
-    public Blinds getBlinds() {
+    Blinds getBlinds() {
         return blinds;
     }
 
@@ -74,7 +74,7 @@ public class Game {
         return tableNumbers.get(0);
     }
 
-    public long getGameTimeStamp() {
+    long getGameTimeStamp() {
         return gameTimeStamp;
     }
 
