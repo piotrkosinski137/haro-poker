@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Time} from "../../../model/time";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-timer',
@@ -9,11 +9,24 @@ import {Time} from "../../../model/time";
 export class TimerComponent implements OnInit {
 
   @Input()
-  time: Time;
+  gameTimestamp: number;
 
-  constructor() { }
+  seconds = 0;
+  minutes = 0;
+  hours = 0;
+
+  constructor() {
+    setInterval(() => {
+      if (this.gameTimestamp !== 0) {
+        const now = Date.now();
+        const diffDuration = moment.duration(now - this.gameTimestamp);
+        this.seconds = diffDuration.seconds();
+        this.minutes = diffDuration.minutes();
+        this.hours = diffDuration.hours();
+      }
+    }, 1000);
+  }
 
   ngOnInit() {
   }
-
 }

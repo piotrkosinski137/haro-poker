@@ -1,4 +1,4 @@
-import {PlayerPosition} from "./player-position";
+import {PlayerPosition} from './player-position';
 
 export class GamePlayer {
 
@@ -11,14 +11,14 @@ export class GamePlayer {
   }
 
   isDealer() {
-    return this.playerPosition === PlayerPosition.DEALER
+    return this.playerPosition === PlayerPosition.DEALER;
   }
 
   hasSmallBlind() {
-    return this.playerPosition === PlayerPosition.SMALL_BLIND
+    return this.playerPosition === PlayerPosition.SMALL_BLIND;
   }
 
   hasBigBlind() {
-    return this.playerPosition === PlayerPosition.BIG_BLIND
+    return this.playerPosition === PlayerPosition.BIG_BLIND;
   }
 }

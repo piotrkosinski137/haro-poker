@@ -1,5 +1,5 @@
 <div class="table-container">
-  <app-timer [time]="(time$ | async)"></app-timer>
+  <app-timer [gameTimestamp]="(gameTimestamp$ | async)"></app-timer>
   <p class="label round-pot">Round Pot: {{calculateRoundPot()}}</p>
   <div class="cards">
     <ng-container *ngFor="let card of cards">

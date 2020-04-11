@@ -34,7 +34,10 @@ public class RoundService {
     /**
      * Entrypoint for each new round:
      * <p>
-     * - reset round - set roundPlayers - give cards to players - charge blinds
+     * - reset round
+     * - set roundPlayers
+     * - give cards to players
+     * - charge blinds
      */
     public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) {
         round.changeRoundStage();
@@ -57,9 +60,11 @@ public class RoundService {
     }
 
     /**
-     * Eg. We finished first betting and now: - three cards will appear on table - roundStage will change to from Init to Flop - roundPlayers tourBet will be zero (it contains only
-     * money for current stage)
-     */
+     * Eg. We finished first betting and now:
+     * - three cards will appear on table
+     * - roundStage will change to from Init to Flop
+     * - roundPlayers tourBet will be zero (it contains only money for current stage)
+     * */
     public void startNextStage() {  //TODO think about this to automaticly finish round
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
