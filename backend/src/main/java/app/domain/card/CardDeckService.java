@@ -1,8 +1,9 @@
 package app.domain.card;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CardDeckService {
@@ -12,7 +13,11 @@ public class CardDeckService {
     }
 
     public Set<Card> getCards(final int amount) {
+        Set<Card> cards = new HashSet<>();
         final CardDeck cardDeck = CardDeck.getExistingDeck();
-        return cardDeck.getDeck().stream().limit(amount).collect(Collectors.toSet());
+        for (int i = 0; i < amount; i++) {
+            cards.add(cardDeck.getDeck().pollFirst());
+        }
+        return cards;
     }
 }

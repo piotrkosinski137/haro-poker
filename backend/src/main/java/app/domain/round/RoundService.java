@@ -8,14 +8,15 @@ import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
 
 @Service
 public class RoundService {
@@ -64,8 +65,8 @@ public class RoundService {
      * - three cards will appear on table
      * - roundStage will change to from Init to Flop
      * - roundPlayers tourBet will be zero (it contains only money for current stage)
-     * */
-    public void startNextStage() {  //TODO think about this to automaticly finish round
+     */
+    public void startNextStage() {  //TODO think about this to automatically finish stage
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
@@ -75,7 +76,7 @@ public class RoundService {
         publisher.publishEvent(new RoundChanged(this, round));
     }
 
-    public Set<Card> getPlayerCards(final String id) {
+    public synchronized Set<Card> getPlayerCards(final String id) {
         return roundPlayerService.getRoundPlayers().stream()
                 .filter(roundPlayer -> roundPlayer.getId().toString().equals(id))
                 .findFirst()
@@ -113,17 +114,17 @@ public class RoundService {
 
     private void checkGameConditions() {
         checkNumberOfPlayers();
-        if (!roundPlayerService.playersBidsAreEqual()) {
+  //      if (!roundPlayerService.playersBidsAreEqual()) {
             roundPlayerService.setNextPlayer();
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-        } //else if (roundPlayerService.isBigBlindPlayer() && round.getRoundStage() == RoundStage.INIT) {
-        else {
-            startNextStage();
-        }
+//        } //else if (roundPlayerService.isBigBlindPlayer() && round.getRoundStage() == RoundStage.INIT) {
+//        else {
+//            startNextStage();
+//        }
     }
 
     private void checkNumberOfPlayers() {
-        if (roundPlayerService.getRoundPlayers().size() ==1 ) {
+        if (roundPlayerService.getRoundPlayers().size() == 1) {
             final UUID id = roundPlayerService.getRoundPlayers().getFirst().getId();
             finishRound(id);
         }

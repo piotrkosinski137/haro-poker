@@ -44,6 +44,6 @@ public class GameEventListener {
 
     @EventListener
     public void handleRoundChanged(RoundChanged event) {
-        template.convertAndSend("/topic/cards", roundMapper.mapToDto(event.getRound()));
+        template.convertAndSend("/topic/round", roundMapper.mapToDto(event.getRound()));
     }
 }

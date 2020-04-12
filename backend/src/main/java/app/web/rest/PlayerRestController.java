@@ -2,12 +2,17 @@ package app.web.rest;
 
 import app.domain.game.GameService;
 import app.domain.round.RoundService;
-import java.util.UUID;
+import app.web.websocket.dto.CardDto;
+import app.web.websocket.dto.CardMapper;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/player")
@@ -15,10 +20,12 @@ public class PlayerRestController {
 
     private final GameService gameService;
     private final RoundService roundService;
+    private final CardMapper cardMapper;
 
-    public PlayerRestController(GameService gameService, RoundService roundService) {
+    public PlayerRestController(GameService gameService, RoundService roundService, CardMapper cardMapper) {
         this.gameService = gameService;
         this.roundService = roundService;
+        this.cardMapper = cardMapper;
     }
 
     @PostMapping("/add")
@@ -27,9 +34,9 @@ public class PlayerRestController {
         return new AddPlayerResponse(playerId.toString());
     }
 
-    @PostMapping("/{id}/cards")
-    public void getCards(@PathVariable String id) {
-        roundService.getPlayerCards(id);
+    @GetMapping("/{id}/cards")
+    public Collection<CardDto> getCards(@PathVariable String id) {
+        return cardMapper.mapToDtos(roundService.getPlayerCards(id));
     }
 
     @PostMapping("/{id}/activation-status")
@@ -37,13 +44,11 @@ public class PlayerRestController {
         gameService.changeActiveStatus(UUID.fromString(id), isActive);
     }
 
-    //TODO consider if id needed for security reasons
     @PostMapping("/{id}/bid")
     public void bid(@PathVariable String id, @RequestParam int amount) {
         roundService.bid(amount);
     }
 
-    //TODO consider if id needed for security reasons
     @PostMapping("/{id}/fold")
     public void fold(@PathVariable String id) {
         roundService.fold();

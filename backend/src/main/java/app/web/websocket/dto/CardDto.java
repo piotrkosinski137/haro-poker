@@ -4,9 +4,6 @@ public class CardDto {
     private String rank;
     private String suit;
 
-    private CardDto() {
-    }
-
     public String getRank() {
         return rank;
     }

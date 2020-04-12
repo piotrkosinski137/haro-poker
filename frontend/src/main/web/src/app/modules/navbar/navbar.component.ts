@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {GamePlayer} from '../../model/game-player';
 import {LocalStorageService} from '../../api/local-storage.service';
-import {GameService} from '../../api/rest/game.service';
+import {GameRestService} from '../../api/rest/game-rest.service';
 import {GamePlayerSocketService} from '../../api/websocket/game-player-socket.service';
 import {GamePlayerRestService} from '../../api/rest/game-player-rest.service';
 
@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private gamePlayerSocketService: GamePlayerSocketService,
               private gamePlayerRestService: GamePlayerRestService,
               private localStorageService: LocalStorageService,
-              private gameService: GameService) {
+              private gameService: GameRestService) {
   }
 
   ngOnInit() {

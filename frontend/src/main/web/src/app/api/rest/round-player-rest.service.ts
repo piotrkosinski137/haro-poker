@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {LocalStorageService} from "../local-storage.service";
-import {RoundPlayer} from "../../model/round-player";
-import {environment} from "../../../environments/environment";
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {LocalStorageService} from '../local-storage.service';
+import {RoundPlayer} from '../../model/round-player';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +17,13 @@ export class RoundPlayerRestService {
   }
 
   bid(amount: number) {
-    let params = new HttpParams().set('amount', String(amount));
-    return this.http.post(environment.PROXY_PATH + "players/" + this.localStorageService.sessionId + "/bid",
-      null, {params: params}).subscribe();
+    const params = new HttpParams().set('amount', String(amount));
+    return this.http.post(environment.PROXY_PATH + 'player/' + this.localStorageService.sessionId + '/bid',
+      null, {params}).subscribe();
   }
 
   fold() {
-    return this.http.post(environment.PROXY_PATH + "players/" + this.localStorageService.sessionId + "/fold",
+    return this.http.post(environment.PROXY_PATH + 'player/' + this.localStorageService.sessionId + '/fold',
       null).subscribe();
   }
 }

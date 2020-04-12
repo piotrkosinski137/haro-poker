@@ -4,7 +4,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {GamePlayer} from '../../model/game-player';
 import {Card} from '../../model/card';
-import {CardsSocketService} from '../../api/websocket/cards-socket.service';
+import {RoundSocketService} from '../../api/websocket/round-socket.service';
 import {GamePlayerSocketService} from '../../api/websocket/game-player-socket.service';
 import {GamePlayerRestService} from '../../api/rest/game-player-rest.service';
 import {RoundPlayerSocketService} from '../../api/websocket/round-player-socket.service';
@@ -22,7 +22,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   gamePlayerSubscription: Subscription;
   roundPlayerSubscription: Subscription;
-  cardSubscription: Subscription;
+  roundSubscription: Subscription;
 
   gamePlayers: GamePlayer[];
   roundPlayers: RoundPlayer[];
@@ -34,13 +34,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
               private gamePlayerSocketService: GamePlayerSocketService,
               private roundPlayerSocketService: RoundPlayerSocketService,
               private localStorageService: LocalStorageService,
-              private cardsService: CardsSocketService,
+              private roundService: RoundSocketService,
               private gameSocketService: GameSocketService) {
   }
 
   ngOnInit(): void {
     localStorage.clear();
-    this.cardSubscription = this.cardsService.getCards().subscribe(cards => this.cards = cards);
+    this.roundSubscription = this.roundService.getCards().subscribe(cards => this.cards = cards);
     this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers().subscribe(players => this.gamePlayers = players);
     this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers().subscribe(players => this.roundPlayers = players);
     this.gameTimestamp$ = this.gameSocketService.getGameTimestamp();
@@ -98,6 +98,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.gamePlayerSubscription.unsubscribe();
     this.roundPlayerSubscription.unsubscribe();
-    this.cardSubscription.unsubscribe();
+    this.roundSubscription.unsubscribe();
   }
 }
