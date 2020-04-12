@@ -6,19 +6,19 @@ import org.springframework.context.ApplicationEvent;
 public class GameChanged extends ApplicationEvent {
 
     private final Blinds blinds;
-    private final long timeStamp;
+    private final long gameTimeStamp;
 
-    public GameChanged(final Object source, final Blinds blinds, long timeStamp) {
+    public GameChanged(final Object source, final Blinds blinds, long gameTimeStamp) {
         super(source);
         this.blinds = blinds;
-        this.timeStamp = timeStamp;
+        this.gameTimeStamp = gameTimeStamp;
     }
 
     public Blinds getBlinds() {
         return blinds;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public long getGameTimeStamp() {
+        return gameTimeStamp;
     }
 }

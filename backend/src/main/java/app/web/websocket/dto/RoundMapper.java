@@ -1,32 +1,24 @@
 package app.web.websocket.dto;
 
-import app.domain.card.Card;
 import app.domain.card.Rank;
 import app.domain.card.Suit;
+import app.domain.round.Round;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 @Component
-public class CardMapper {
+public class RoundMapper { //TODO!
 
     private ModelMapper mapper = new ModelMapper();
 
-    public CardMapper() {
+    public RoundMapper() {
         mapper.addConverter(convertRankToString());
         mapper.addConverter(convertSuitToString());
     }
 
-    public CardDto mapToDto(Card card) {
-        return mapper.map(card, CardDto.class);
-    }
-
-    public Collection<CardDto> mapToDtos(Collection<Card> cards) {
-        return cards.stream().map(this::mapToDto)
-                .collect(Collectors.toSet());
+    public RoundDto mapToDto(Round round) {
+        return mapper.map(round, RoundDto.class);
     }
 
     private AbstractConverter<Rank, String> convertRankToString() {

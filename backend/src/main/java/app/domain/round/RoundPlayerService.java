@@ -55,6 +55,17 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
+    void allIn() {
+        RoundPlayer player = roundPlayers.pollFirst();
+        player.allIn();
+        roundPlayers.addLast(player);
+    }
+
+    //trzeba koniec tury
+    // przynajmniej 1 okrazenie
+
+    // zerowanie round player po kazdej turze
+
     // TODO make proper checks to avoid StackOverflowException
     void setNextPlayer() {
         RoundPlayer player = roundPlayers.getFirst();
@@ -78,7 +89,7 @@ class RoundPlayerService {
                 .sum();
     }
 
-    boolean playersBidsAreEqual() {
+    boolean playersBidsAreEqual() { // sprawdzac jeszcze czy nie dał allina player
         return roundPlayers.stream()
                 .filter(RoundPlayer::isInGame)
                 .map(RoundPlayer::getTurnBid)

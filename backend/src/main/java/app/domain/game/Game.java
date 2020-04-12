@@ -53,7 +53,7 @@ class Game {
         return gamePlayers.size() == 7;
     }
 
-    void changeActiveStatus(UUID id, boolean isActive) { //???? nie powinno tak byc
+    void changeActiveStatus(UUID id, boolean isActive) { //TODO think about not use boolean here
         GamePlayer gamePlayer = gamePlayers.stream().filter(player -> player.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new GamePlayerNotFound(id));

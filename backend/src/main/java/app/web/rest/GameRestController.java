@@ -1,57 +1,46 @@
 package app.web.rest;
 
 import app.domain.game.GameService;
-import app.domain.round.RoundService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.UUID;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/game")
 public class GameRestController {
 
     private final GameService gameService;
-    private final RoundService roundService;
 
-    public GameRestController(GameService gameService, RoundService roundService) {
+    public GameRestController(GameService gameService) {
         this.gameService = gameService;
-        this.roundService = roundService;
     }
 
-    @PostMapping("/players/add")
-    public AddPlayerResponse addPlayer(@RequestParam String playerName) {
-        UUID playerId = gameService.joinToGame(playerName);
-        return new AddPlayerResponse(playerId.toString());
-    }
-
-    @PostMapping("/game/start")
-    public void startRound() {
+    @PostMapping("/start")
+    public void startGame() {
         gameService.startGame();
     }
 
-    @PostMapping("/game/nextStage")
-    public void nextStage() {
-        roundService.startNextStage();
+    @PostMapping("/new-round")
+    public void newRound() {
+        gameService.startRound();
     }
 
-    @PutMapping("/game/blinds/update")
+    @PostMapping("/entry-fee")
+    public void setEntryFee(@RequestParam int entryFee) {
+        gameService.setEntryFee(entryFee);
+    }
+
+    @PostMapping("/{id}/finish")
+    public void pickWinner(@PathVariable String id) {
+        gameService.finishRound(UUID.fromString(id));
+    }
+
+    @PutMapping("/blinds/update")
     public void updateBlinds(@RequestParam int small) {
         gameService.updateBlinds(small);
-    }
-
-    @PostMapping("/players/{id}/activation-status")
-    public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
-        gameService.changeActiveStatus(UUID.fromString(id), isActive);
-    }
-
-    //TODO consider if id needed for security reasons
-    @PostMapping("/players/{id}/bid")
-    public void bid(@PathVariable String id, @RequestParam int amount) {
-        roundService.bid(amount);
-    }
-
-    //TODO consider if id needed for security reasons
-    @PostMapping("/players/{id}/fold")
-    public void fold(@PathVariable String id) {
-        roundService.fold();
     }
 }
