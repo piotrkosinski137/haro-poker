@@ -29,6 +29,6 @@ export class PlayerGameDashboardComponent implements OnInit {
   }
 
   isActive() {
-    return this.gamePlayer.active;
+    return this.roundPlayer !== undefined;
   }
 }
