@@ -14,6 +14,8 @@ export class PlayerGameDashboardComponent implements OnInit {
   gamePlayer: GamePlayer;
   @Input()
   roundPlayer: RoundPlayer;
+  @Input()
+  isAdmin: boolean;
 
   constructor(private localStorageService: LocalStorageService) {
   }
@@ -29,6 +31,6 @@ export class PlayerGameDashboardComponent implements OnInit {
   }
 
   isActive() {
-    return this.gamePlayer.active;
+    return this.roundPlayer !== undefined;
   }
 }

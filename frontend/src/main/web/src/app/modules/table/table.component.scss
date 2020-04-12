@@ -28,19 +28,19 @@
   .player-4-dashboard {
     position: absolute;
     right: 120px;
-    bottom: 40px
+    bottom: 20px
   }
 
   .player-5-dashboard {
     position: absolute;
     left: 515px;
-    bottom: 5px
+    bottom: 10px
   }
 
   .player-6-dashboard {
     position: absolute;
     left: 120px;
-    bottom: 40px
+    bottom: 20px
   }
 
   .player-7-dashboard {
@@ -62,11 +62,13 @@
   }
 
   .round-pot {
-    top: 8%;
+    font-size: 12px;
+    top: 3%;
   }
 
   .turn-pot {
-    top: 58%;
+    font-size: 12px;
+    top: 2%;
   }
 
   .cards {

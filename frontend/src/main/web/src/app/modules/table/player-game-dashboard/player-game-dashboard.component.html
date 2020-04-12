@@ -1,4 +1,4 @@
-<div class="dashboard-container " [ngClass]="{'border-blink' : roundPlayer?.hasTurn}">
+<div class="dashboard-container" [ngClass]="{'border-blink' : roundPlayer?.hasTurn}">
   <p class="turn-bid">{{(roundPlayer?.turnBid).toLocaleString()}}</p>
   <!--TODO when separate channels for each players will be established-->
   <ng-container *ngIf="isSessionPlayer() && isActive() && !roundPlayer?.hasFolded">
@@ -12,6 +12,11 @@
   <div class="dashboard-details" [ngClass]="{'inactive-opacity' : !isActive()}">
     <li class="list-group-item p-1 nick-item"><strong>{{gamePlayer.name}}</strong></li>
     <li class="list-group-item p-1 balance-item">{{(roundPlayer?.balance.toLocaleString()) || 0}}</li>
+    <div class="admin-buttons-container" *ngIf="isAdmin">
+      <button class="btn btn-primary admin-button">
+        <img class="money-bill" src="../../../assets/money-bill.png">
+      </button>
+    </div>
   </div>
 </div>
 <div *ngIf="gamePlayer.isDealer">

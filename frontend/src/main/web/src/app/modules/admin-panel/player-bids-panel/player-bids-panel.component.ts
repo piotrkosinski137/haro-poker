@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {RoundPlayer} from "../../../model/round-player";
-import {GamePlayer} from "../../../model/game-player";
+import {RoundPlayer} from '../../../model/round-player';
+import {GamePlayer} from '../../../model/game-player';
 
 @Component({
   selector: 'app-player-bids-panel',
@@ -14,8 +14,8 @@ export class PlayerBidsPanelComponent implements OnInit {
   roundPlayers: RoundPlayer[];
   @Input()
   gamePlayers: GamePlayer[];
-  roundBidsTotal: number = 0;
-  draftBidsTotal: number = 0;
+  roundBidsTotal = 0;
+  draftBidsTotal = 0;
 
   @Output()
   playerRoundBidsChanged = new EventEmitter<RoundPlayer[]>();
@@ -42,7 +42,7 @@ export class PlayerBidsPanelComponent implements OnInit {
   onRoundBidChange(event$: any) {
     this.draftBidsTotal = 0;
     this.roundPlayers.forEach(player => {
-      this.draftBidsTotal += player.roundBid
+      this.draftBidsTotal += player.roundBid;
     });
   }
 
