@@ -11,7 +11,7 @@
 
 .dashboard-container {
   position: relative;
-  height: 160px;
+  height: 140px;
   width: 144px;
 
   .card-hand {
@@ -40,9 +40,10 @@
     .balance-item {
       background-image: linear-gradient(to right, #E8E8E8, #EAF2F5);
       font-size: 15px;
+      flex: 1;
     }
 
-    .admin-buttons-container {
+    .footer-container {
       display: flex;
 
       .admin-button {

@@ -2,6 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {GamePlayer} from '../../../model/game-player';
 import {RoundPlayer} from '../../../model/round-player';
 import {LocalStorageService} from '../../../api/local-storage.service';
+import {RoundSocketService} from '../../../api/websocket/round-socket.service';
+import {Card} from '../../../model/card';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-player-game-dashboard',
@@ -16,14 +19,13 @@ export class PlayerGameDashboardComponent implements OnInit {
   roundPlayer: RoundPlayer;
   @Input()
   isAdmin: boolean;
+  playerCards$: Observable<Card[]>;
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private localStorageService: LocalStorageService, private roundSocketService: RoundSocketService) {
   }
 
   ngOnInit() {
-    // if (this.localStorageService.isSessionPlayer(this.gamePlayer.id)) {
-    //   // TODO get cards from private channel
-    // }
+    this.playerCards$ = this.roundSocketService.getPlayerCardsSubject();
   }
 
   isSessionPlayer() {

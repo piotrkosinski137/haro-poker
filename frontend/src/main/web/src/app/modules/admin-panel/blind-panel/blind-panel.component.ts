@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GameService} from '../../../api/rest/game.service';
+import {GameRestService} from '../../../api/rest/game-rest.service';
 import {Game} from '../../../model/game';
 
 @Component({
@@ -14,7 +14,7 @@ export class BlindPanelComponent implements OnInit {
   blindInputsEnabled = false;
   buttonEnabled = false;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameRestService) { }
 
   ngOnInit() {
   }

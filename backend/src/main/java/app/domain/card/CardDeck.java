@@ -14,8 +14,9 @@ class CardDeck {
     private final Deque<Card> cardsDeck;
 
     private CardDeck() {
-        this.cardsDeck = initDeck();
-        Collections.shuffle(new ArrayList<>(cardsDeck));
+        List<Card> shuffledCards = new ArrayList<>(initDeck());
+        Collections.shuffle(shuffledCards);
+        this.cardsDeck = new ArrayDeque<>(shuffledCards);
     }
 
     static CardDeck getExistingDeck() {

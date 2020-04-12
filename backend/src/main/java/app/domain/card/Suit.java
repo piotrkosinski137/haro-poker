@@ -12,7 +12,7 @@ public enum Suit {
         this.value = value;
     }
 
-    String getValue() {
+    public String getValue() {
         return value;
     }
 }

@@ -29,7 +29,7 @@ public class Round {
         tableCards.addAll(cards);
     }
 
-    RoundStage getRoundStage() {
+    public RoundStage getRoundStage() {
         return stage;
     }
 

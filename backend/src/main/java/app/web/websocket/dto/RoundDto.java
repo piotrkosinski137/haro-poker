@@ -1,17 +1,18 @@
 package app.web.websocket.dto;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class RoundDto {
-    private List<CardDto> cards;
+    private Collection<CardDto> cards;
     private String stage;
 
-    private RoundDto() {
-        cards = new ArrayList<>();
+    RoundDto(String stage, Collection<CardDto> cards) {
+        this.cards = cards;
+        this.stage = stage;
     }
 
-    public List<CardDto> getCards() {
+    public Collection<CardDto> getCards() {
         return cards;
     }
 
