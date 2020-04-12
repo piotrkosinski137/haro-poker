@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
-import {GamePlayer} from "../../model/game-player";
-import {LocalStorageService} from "../../api/local-storage.service";
-import {GameService} from "../../api/rest/game.service";
-import {GamePlayerSocketService} from "../../api/websocket/game-player-socket.service";
-import {GamePlayerRestService} from "../../api/rest/game-player-rest.service";
+import {Subscription} from 'rxjs';
+import {GamePlayer} from '../../model/game-player';
+import {LocalStorageService} from '../../api/local-storage.service';
+import {GameService} from '../../api/rest/game.service';
+import {GamePlayerSocketService} from '../../api/websocket/game-player-socket.service';
+import {GamePlayerRestService} from '../../api/rest/game-player-rest.service';
 
 @Component({
   selector: 'app-navbar',
@@ -31,8 +31,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.gamePlayerRestService.changeActiveState(!this.player.active);
   }
 
-  onRoundStart() {
-    this.gameService.startGame()
+  onGameStart() {
+    this.gameService.startGame();
   }
 
   isAdmin(tableNumber: number) {
@@ -40,6 +40,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe()
+    this.subscription.unsubscribe();
   }
 }

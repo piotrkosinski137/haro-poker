@@ -11,7 +11,7 @@
 
 .dashboard-container {
   position: relative;
-  height: 140px;
+  height: 160px;
   width: 144px;
 
   .card-hand {
@@ -39,6 +39,31 @@
 
     .balance-item {
       background-image: linear-gradient(to right, #E8E8E8, #EAF2F5);
+      font-size: 15px;
+    }
+
+    .admin-buttons-container {
+      display: flex;
+
+      .admin-button {
+        padding: 2px;
+        background-image: linear-gradient(to left, #445588, #4183c4);
+        flex: 1;
+        .money-bill {
+          width: 60px;
+        }
+        &:hover {
+          background-image: linear-gradient(to right, #445588, #4183c4);
+          box-shadow: 0 2px #666;
+          transform: translateY(-1px);
+        }
+
+        &:active {
+          background-image: linear-gradient(to right, #445588, #4183c4);
+          box-shadow: 0 2px #666;
+          transform: translateY(0px);
+        }
+      }
     }
   }
 }

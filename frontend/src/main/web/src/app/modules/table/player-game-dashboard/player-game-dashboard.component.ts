@@ -14,6 +14,8 @@ export class PlayerGameDashboardComponent implements OnInit {
   gamePlayer: GamePlayer;
   @Input()
   roundPlayer: RoundPlayer;
+  @Input()
+  isAdmin: boolean;
 
   constructor(private localStorageService: LocalStorageService) {
   }

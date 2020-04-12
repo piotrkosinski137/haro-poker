@@ -75,6 +75,10 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.roundPlayers.map(player => player.roundBid).reduce((totalRoundBid, roundBid) => totalRoundBid + roundBid, 0);
   }
 
+  calculateTurnPot() {
+    return this.roundPlayers.map(player => player.turnBid).reduce((totalTurnBid, turnBid) => totalTurnBid + turnBid, 0);
+  }
+
   isPlayerRound() {
     const player = this.getSessionPlayer();
     return player === undefined ? false : player.hasTurn;
@@ -82,6 +86,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getSessionPlayer() {
     return this.roundPlayers.find(player => player.id === this.localStorageService.sessionId);
+  }
+
+  isAdmin() {
+    const roundPlayer = this.getSessionPlayer();
+    if (roundPlayer !== undefined) {
+      return roundPlayer.tableNumber === 1;
+    }
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GameService} from "../../../api/rest/game.service";
-import {Game} from "../../../model/game";
+import {GameService} from '../../../api/rest/game.service';
+import {Game} from '../../../model/game';
 
 @Component({
   selector: 'app-blind-panel',
