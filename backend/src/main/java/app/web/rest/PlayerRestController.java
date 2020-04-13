@@ -4,6 +4,7 @@ import app.domain.game.GameService;
 import app.domain.round.RoundService;
 import app.web.websocket.dto.CardDto;
 import app.web.websocket.dto.CardMapper;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,10 @@ public class PlayerRestController {
     @PostMapping("/{id}/fold")
     public void fold(@PathVariable String id) {
         roundService.fold();
+    }
+
+    @DeleteMapping("{id}/remove")
+    public void removePlayer(@PathVariable String id) {
+        gameService.removePlayer(UUID.fromString(id));
     }
 }

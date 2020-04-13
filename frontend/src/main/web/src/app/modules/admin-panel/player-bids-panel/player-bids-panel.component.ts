@@ -19,6 +19,8 @@ export class PlayerBidsPanelComponent implements OnInit {
 
   @Output()
   playerRoundBidsChanged = new EventEmitter<RoundPlayer[]>();
+  @Output()
+  playerRemoved = new EventEmitter<string>();
 
   constructor() {
   }
@@ -52,5 +54,9 @@ export class PlayerBidsPanelComponent implements OnInit {
 
   getPlayerName(id: string) {
     return this.gamePlayers.find(player => player.id === id).name;
+  }
+
+  onPlayerRemovedClick(id: string) {
+    this.playerRemoved.emit(id);
   }
 }

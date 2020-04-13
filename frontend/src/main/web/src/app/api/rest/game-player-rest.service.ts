@@ -22,4 +22,8 @@ export class GamePlayerRestService {
     this.http.post(environment.PROXY_PATH + 'player/' + this.localStorageService.sessionId + '/activation-status'
       , null, {params}).subscribe();
   }
+
+  removePlayer(id: string) {
+    this.http.delete(environment.PROXY_PATH + 'player/' + id + '/remove').subscribe();
+  }
 }

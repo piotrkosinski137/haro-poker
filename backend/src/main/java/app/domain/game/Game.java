@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 class Game {
 
-    private final Deque<GamePlayer> gamePlayers;
+    private Deque<GamePlayer> gamePlayers;
     private final Blinds blinds;
     private long gameTimeStamp;
     private int entryFee;
@@ -88,5 +88,11 @@ class Game {
 
     void setEntryFee(int entryFee) {
         this.entryFee = entryFee;
+    }
+
+    public void removeGamePlayer(UUID id) {
+        gamePlayers = gamePlayers.stream()
+                .filter(player -> !player.getId().equals(id))
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 }

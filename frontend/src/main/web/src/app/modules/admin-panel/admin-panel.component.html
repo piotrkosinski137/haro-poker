@@ -10,6 +10,7 @@
       <app-player-bids-panel
         [roundPlayers]="roundPlayers"
         [gamePlayers]="gamePlayers"
+        (playerRemoved)="onPlayerRemoved($event)"
       (playerRoundBidsChanged)="onPlayerRoundBidsChanged($event)"></app-player-bids-panel>
     </div>
   </div>
