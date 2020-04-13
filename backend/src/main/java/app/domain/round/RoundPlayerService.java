@@ -64,7 +64,7 @@ class RoundPlayerService {
     //trzeba koniec tury
     // przynajmniej 1 okrazenie
 
-    // zerowanie round player po kazdej turze
+    // zerowanie turnbidów w roundPlayerze po każdym stage
 
     // TODO make proper checks to avoid StackOverflowException
     void setNextPlayer() {
