@@ -61,11 +61,6 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
-    //trzeba koniec tury
-    // przynajmniej 1 okrazenie
-
-    // zerowanie turnbidów w roundPlayerze po każdym stage
-
     // TODO make proper checks to avoid StackOverflowException
     void setNextPlayer() {
         RoundPlayer player = roundPlayers.getFirst();

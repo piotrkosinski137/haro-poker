@@ -117,8 +117,13 @@ public class RoundService {
         if (!roundPlayerService.playersBidsAreEqual()) {
             roundPlayerService.setNextPlayer();
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-        } //else if (roundPlayerService.isBigBlindPlayer() && round.getRoundStage() == RoundStage.INIT) {
+        } //else if (roundPlayerService.isCurrentPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT) {
+        //roundPlayerService.setNextPlayer();
+       // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        //}
         else {
+            //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze????
+            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
             startNextStage();
         }
     }
