@@ -11,12 +11,14 @@ import app.domain.round.exception.RoundNotStarted;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RoundService {
@@ -136,5 +138,9 @@ public class RoundService {
 
     private void putCardsOnTable() {
         round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
+    }
+
+    public void removeRoundPlayer(UUID id) {
+        roundPlayerService.removeRoundPlayer(id);
     }
 }

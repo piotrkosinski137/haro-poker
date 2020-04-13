@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 class RoundPlayerService {
 
-    private final Deque<RoundPlayer> roundPlayers;
+    private Deque<RoundPlayer> roundPlayers;
 
     RoundPlayerService(final Deque<GamePlayer> gamePlayers) {
         this.roundPlayers = convertToRoundPlayers(gamePlayers);
@@ -99,5 +99,11 @@ class RoundPlayerService {
 
     public void setCurrentPlayer() {
         roundPlayers.getFirst().hasTurn(true);
+    }
+
+    public void removeRoundPlayer(UUID id) {
+        roundPlayers = roundPlayers.stream()
+                .filter(player -> !player.getId().equals(id))
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 }

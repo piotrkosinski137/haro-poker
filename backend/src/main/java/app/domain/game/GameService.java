@@ -85,5 +85,12 @@ public class GameService {
         return game.getGameTimeStamp();
     }
 
+    public void removePlayer(UUID id) {
+        game.removeGamePlayer(id);
+        roundService.removeRoundPlayer(id);
+        publisher.publishEvent(new GamePlayersChanged(this, game.getGamePlayers()));
+        publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
+    }
+
     //finishGame (gameSummary)
 }
