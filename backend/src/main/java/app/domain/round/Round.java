@@ -1,8 +1,8 @@
 package app.domain.round;
 
+import static app.domain.round.RoundStage.FINISHED;
 import static app.domain.round.RoundStage.FLOP;
 import static app.domain.round.RoundStage.INIT;
-import static app.domain.round.RoundStage.NOT_STARTED;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
@@ -53,7 +53,7 @@ public class Round {
                 stage = RIVER;
                 break;
             case RIVER:
-                stage = NOT_STARTED;
+                stage = FINISHED;
                 break;
             default:
                 break;

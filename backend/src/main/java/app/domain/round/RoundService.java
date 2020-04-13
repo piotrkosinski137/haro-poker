@@ -8,17 +8,14 @@ import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
 @Service
 public class RoundService {
@@ -54,14 +51,26 @@ public class RoundService {
         return roundPlayerService.getRoundPlayers();
     }
 
-    public void startNextStage() {  //TODO think about this to automatically finish stage
+    public void startNextStage() {  //TODO think about this to automatically finish round
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
         round.changeRoundStage();
+        if (round.getRoundStage() == RoundStage.FINISHED) {
+            showRoundSummary();
+        } else {
+            proceedNewStage();
+        }
+    }
+
+    private void proceedNewStage() {
         putCardsOnTable();
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
         publisher.publishEvent(new RoundChanged(this, round));
+    }
+
+    private void showRoundSummary() {
+        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers(), true));
     }
 
     public synchronized Set<Card> getPlayerCards(final String id) {
@@ -81,6 +90,7 @@ public class RoundService {
         if (Objects.isNull(roundPlayerService)) {
             return new HashSet<>();
         } else {
+
             return roundPlayerService.getRoundPlayers();
         }
     }
@@ -102,13 +112,18 @@ public class RoundService {
 
     private void checkGameConditions() {
         checkNumberOfPlayers();
-  //      if (!roundPlayerService.playersBidsAreEqual()) {
+        if (!roundPlayerService.playersBidsAreEqual()) {
             roundPlayerService.setNextPlayer();
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-//        } //else if (roundPlayerService.isBigBlindPlayer() && round.getRoundStage() == RoundStage.INIT) {
-//        else {
-//            startNextStage();
-//        }
+        } //else if (roundPlayerService.isCurrentPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT) {
+        //roundPlayerService.setNextPlayer();
+       // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        //}
+        else {
+            //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze????
+            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+            startNextStage();
+        }
     }
 
     private void checkNumberOfPlayers() {
