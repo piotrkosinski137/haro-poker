@@ -17,7 +17,7 @@
         <a class="nav-link text-white-50">Start Game</a>
       </li>
       <li class="nav-item" data-toggle="collapse" *ngIf="isAdmin(player?.tableNumber)"
-          data-target=".navbar-collapse.show">
+          data-target=".navbar-collapse.show" (click)="onNewRoundClick()">
         <a class="nav-link text-white-50">Next round</a>
       </li>
     </ul>

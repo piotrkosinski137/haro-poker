@@ -11,6 +11,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(1)"
                                [roundPlayer]="getRoundPlayerByTableNumber(1)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(1)">
     </app-player-game-dashboard>
   </div>
@@ -19,6 +20,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(2)"
                                [roundPlayer]="getRoundPlayerByTableNumber(2)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(2)">
     </app-player-game-dashboard>
   </div>
@@ -26,6 +28,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(3)"
                                [roundPlayer]="getRoundPlayerByTableNumber(3)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(3)">
     </app-player-game-dashboard>
   </div>
@@ -33,6 +36,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(4)"
                                [roundPlayer]="getRoundPlayerByTableNumber(4)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(4)">
     </app-player-game-dashboard>
   </div>
@@ -40,6 +44,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(5)"
                                [roundPlayer]="getRoundPlayerByTableNumber(5)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(5)">
     </app-player-game-dashboard>
   </div>
@@ -47,6 +52,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(6)"
                                [roundPlayer]="getRoundPlayerByTableNumber(6)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(6)">
     </app-player-game-dashboard>
   </div>
@@ -54,6 +60,7 @@
     <app-player-game-dashboard [gamePlayer]="getGamePlayerByTableNumber(7)"
                                [roundPlayer]="getRoundPlayerByTableNumber(7)"
                                [isAdmin]="isAdmin()"
+                               (winnerPicked)="onWinnerPicked($event)"
                                *ngIf="getGamePlayerByTableNumber(7)">
     </app-player-game-dashboard>
   </div>

@@ -58,14 +58,13 @@ public class GameService {
         game.changeActiveStatus(id, isActive);
     }
 
-    /**
-     * Admin ends round and picks winner Balances from roundPlayers are propagated to players
-     */
     public void finishRound(final UUID winnerPlayerId) {
         Deque<RoundPlayer> roundPlayers = roundService.finishRound(winnerPlayerId);
         roundPlayers.forEach(roundPlayer -> gamePlayerService.updateBalance(game.getActivePlayers(), roundPlayers));
+        roundPlayers.forEach(RoundPlayer::clearBids);
         game.rotatePlayers();
         publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+        publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
     public void setEntryFee(final int entryFee) {

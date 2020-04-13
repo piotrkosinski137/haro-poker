@@ -9,7 +9,7 @@ public class GamePlayerService {
 
     public void updateBalance(final Deque<GamePlayer> gamePlayers, final Deque<RoundPlayer> roundPlayers) {
         roundPlayers.forEach(roundPlayer -> gamePlayers.stream()
-                .filter(gamePlayer -> gamePlayer.getId() == roundPlayer.getId())
+                .filter(gamePlayer -> gamePlayer.getId().equals(roundPlayer.getId()))
                 .findFirst()
                 .ifPresent(playerToUpdate -> playerToUpdate.updateBalance(roundPlayer.getBalance())));
     }

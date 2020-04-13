@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private gamePlayerSocketService: GamePlayerSocketService,
               private gamePlayerRestService: GamePlayerRestService,
               private localStorageService: LocalStorageService,
-              private gameService: GameRestService) {
+              private gameRestService: GameRestService) {
   }
 
   ngOnInit() {
@@ -32,11 +32,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   onGameStart() {
-    this.gameService.startGame();
+    this.gameRestService.startGame();
   }
 
   isAdmin(tableNumber: number) {
     return tableNumber === 1;
+  }
+
+  onNewRoundClick() {
+    this.gameRestService.newRound();
   }
 
   ngOnDestroy() {

@@ -32,22 +32,15 @@ public class RoundService {
         round = new Round();
     }
 
-    /**
-     * Entrypoint for each new round:
-     * <p>
-     * - reset round
-     * - set roundPlayers
-     * - give cards to players
-     * - charge blinds
-     */
     public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) {
-        round.changeRoundStage();
+        round.reset();
         roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
         roundPlayerService.setCurrentPlayer();
         giveCardsToPlayers();
         publisher.publishEvent(new RoundChanged(this, round));
+        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
     public Deque<RoundPlayer> finishRound(final UUID winnerPlayerId) {
@@ -55,17 +48,10 @@ public class RoundService {
             throw new RoundNotStarted();
         }
         roundPlayerService.pickWinner(winnerPlayerId);
-        round.changeRoundStage();
         publisher.publishEvent(new RoundChanged(this, round));
         return roundPlayerService.getRoundPlayers();
     }
 
-    /**
-     * Eg. We finished first betting and now:
-     * - three cards will appear on table
-     * - roundStage will change to from Init to Flop
-     * - roundPlayers tourBet will be zero (it contains only money for current stage)
-     */
     public void startNextStage() {  //TODO think about this to automatically finish stage
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
@@ -110,6 +96,8 @@ public class RoundService {
     public void fold() {
         roundPlayerService.fold();
         checkGameConditions();
+        // Change in round triggers fetching cards from player - need to consider different approach to fetch player cards
+        publisher.publishEvent(new RoundChanged(this, round));
     }
 
     private void checkGameConditions() {

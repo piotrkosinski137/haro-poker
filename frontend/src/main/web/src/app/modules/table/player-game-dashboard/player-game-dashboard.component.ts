@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GamePlayer} from '../../../model/game-player';
 import {RoundPlayer} from '../../../model/round-player';
 import {LocalStorageService} from '../../../api/local-storage.service';
@@ -20,6 +20,8 @@ export class PlayerGameDashboardComponent implements OnInit {
   @Input()
   isAdmin: boolean;
   playerCards$: Observable<Card[]>;
+  @Output()
+  winnerPicked = new EventEmitter<string>();
 
   constructor(private localStorageService: LocalStorageService, private roundSocketService: RoundSocketService) {
   }
@@ -34,5 +36,9 @@ export class PlayerGameDashboardComponent implements OnInit {
 
   isActive() {
     return this.roundPlayer !== undefined;
+  }
+
+  onPickWinnerClick(id: string) {
+    this.winnerPicked.emit(id);
   }
 }

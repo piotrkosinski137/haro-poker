@@ -11,6 +11,7 @@ import {RoundPlayerSocketService} from '../../api/websocket/round-player-socket.
 import {RoundPlayer} from '../../model/round-player';
 import {LocalStorageService} from '../../api/local-storage.service';
 import {GameSocketService} from '../../api/websocket/game-socket.service';
+import {GameRestService} from '../../api/rest/game-rest.service';
 
 @Component({
   selector: 'app-table',
@@ -30,17 +31,18 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   gameTimestamp$: Observable<number>;
 
   constructor(private modalService: NgbModal,
+              private localStorageService: LocalStorageService,
               private gamePlayerRestService: GamePlayerRestService,
+              private gameRestService: GameRestService,
               private gamePlayerSocketService: GamePlayerSocketService,
               private roundPlayerSocketService: RoundPlayerSocketService,
-              private localStorageService: LocalStorageService,
-              private roundService: RoundSocketService,
+              private roundSocketService: RoundSocketService,
               private gameSocketService: GameSocketService) {
   }
 
   ngOnInit(): void {
     localStorage.clear();
-    this.roundSubscription = this.roundService.getCards().subscribe(cards => this.cards = cards);
+    this.roundSubscription = this.roundSocketService.getCards().subscribe(cards => this.cards = cards);
     this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers().subscribe(players => this.gamePlayers = players);
     this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers().subscribe(players => this.roundPlayers = players);
     this.gameTimestamp$ = this.gameSocketService.getGameTimestamp();
@@ -99,5 +101,9 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gamePlayerSubscription.unsubscribe();
     this.roundPlayerSubscription.unsubscribe();
     this.roundSubscription.unsubscribe();
+  }
+
+  onWinnerPicked(id: string) {
+    this.gameRestService.finishRound(id);
   }
 }

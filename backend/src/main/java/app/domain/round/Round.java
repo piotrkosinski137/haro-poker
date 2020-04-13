@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class Round {
 
-    private final Set<Card> tableCards;
+    private Set<Card> tableCards;
     private RoundStage stage;
 
     Round() {
@@ -31,6 +31,11 @@ public class Round {
 
     public RoundStage getRoundStage() {
         return stage;
+    }
+
+    void reset() {
+      stage = INIT;
+      tableCards = new HashSet<>();
     }
 
     void changeRoundStage() {

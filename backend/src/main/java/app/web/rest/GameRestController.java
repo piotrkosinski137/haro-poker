@@ -24,7 +24,7 @@ public class GameRestController {
         gameService.startGame();
     }
 
-    @PostMapping("/new-round")
+    @PostMapping("/round/new")
     public void newRound() {
         gameService.startRound();
     }
@@ -34,8 +34,8 @@ public class GameRestController {
         gameService.setEntryFee(entryFee);
     }
 
-    @PostMapping("/{id}/finish")
-    public void pickWinner(@PathVariable String id) {
+    @PostMapping("/round/finish/{id}")
+    public void finishRound(@PathVariable String id) {
         gameService.finishRound(UUID.fromString(id));
     }
 
