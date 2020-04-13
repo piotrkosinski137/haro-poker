@@ -17,6 +17,10 @@ export class GameRestService {
     return this.http.post(environment.PROXY_PATH + 'game/start', null).subscribe();
   }
 
+  finishRound(id: string) {
+    return this.http.post(environment.PROXY_PATH + 'game/round/finish/' + id, null).subscribe();
+  }
+
   getPlayerCards(): Observable<Card[]> {
     const id = this.localStorageService.sessionId;
     if (id) {
@@ -28,5 +32,9 @@ export class GameRestService {
     const params = new HttpParams().set('small', String(small));
     return this.http.put(environment.PROXY_PATH + 'game/blinds/update', null,
       {params}).subscribe();
+  }
+
+  newRound() {
+    return this.http.post(environment.PROXY_PATH + 'game/round/new', null).subscribe();
   }
 }

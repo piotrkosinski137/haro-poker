@@ -11,10 +11,11 @@ public class RoundPlayer {
 
     private final UUID id;
     private int balance;
-    private final Set<Card> cardsInHand;
+    private Set<Card> cardsInHand;
     private int turnBid;
     private int roundBid;
-    private boolean outOfBidding;
+    private boolean hasFolded;
+    private boolean isAllIn;
     private Position playerPosition;
     private boolean hasTurn;
     private final Integer tableNumber;
@@ -59,16 +60,22 @@ public class RoundPlayer {
         roundBid += balance;
         balance = 0;
         hasTurn = false;
-        outOfBidding = true;
+        isAllIn = true;
     }
 
     void fold() {
-        outOfBidding = true;
+        hasFolded = true;
         hasTurn = false;
+        cardsInHand = new HashSet<>();
     }
 
     void prepareForNextStage() {
         turnBid = 0;
+    }
+
+    public void clearBids() {
+        turnBid = 0;
+        roundBid = 0;
     }
 
     void winMoney(final int money) {
@@ -76,7 +83,7 @@ public class RoundPlayer {
     }
 
     boolean isInGame() {
-        return !outOfBidding;
+        return !hasFolded || !isAllIn;
     }
 
     boolean hasNoFunds() {

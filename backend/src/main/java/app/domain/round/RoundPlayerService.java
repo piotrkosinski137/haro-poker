@@ -44,7 +44,7 @@ class RoundPlayerService {
 
     void pickWinner(UUID playerId) {
         roundPlayers.stream()
-                .filter(player -> player.getId() == playerId)
+                .filter(player -> player.getId().equals(playerId))
                 .findFirst()
                 .ifPresent(player -> player.winMoney(calculateTotalPot()));
     }

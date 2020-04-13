@@ -12,7 +12,7 @@
     <li class="list-group-item p-1 nick-item"><strong>{{gamePlayer.name}}</strong></li>
     <div class="footer-container">
       <li class="list-group-item p-1 balance-item">{{(roundPlayer?.balance.toLocaleString()) || 0}}</li>
-      <button class="btn btn-primary admin-button" *ngIf="isAdmin">
+      <button class="btn btn-primary admin-button" *ngIf="isAdmin" (click)="onPickWinnerClick(gamePlayer.id)">
         <img class="money-bill" src="../../../assets/money-bill.png">
       </button>
     </div>
