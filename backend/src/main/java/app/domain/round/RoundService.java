@@ -98,8 +98,6 @@ public class RoundService {
     public void fold() {
         roundPlayerService.fold();
         checkGameConditions();
-        // Change in round triggers fetching cards from player - need to consider different approach to fetch player cards
-        publisher.publishEvent(new RoundChanged(this, round));
     }
 
     private void checkGameConditions() {
