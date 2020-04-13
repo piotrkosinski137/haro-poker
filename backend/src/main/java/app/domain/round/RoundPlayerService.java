@@ -64,7 +64,7 @@ class RoundPlayerService {
     // TODO make proper checks to avoid StackOverflowException
     void setNextPlayer() {
         RoundPlayer player = roundPlayers.getFirst();
-        if (!player.isInGame() || player.hasNoFunds()) {
+        if (!player.isInGame()) {
             roundPlayers.addLast(roundPlayers.pollFirst());
             setNextPlayer();
         } else {
@@ -90,10 +90,6 @@ class RoundPlayerService {
                 .map(RoundPlayer::getTurnBid)
                 .distinct()
                 .count() == 1;
-    }
-
-    public void setCurrentPlayer() {
-        roundPlayers.getFirst().hasTurn(true);
     }
 
     public void removeRoundPlayer(UUID id) {

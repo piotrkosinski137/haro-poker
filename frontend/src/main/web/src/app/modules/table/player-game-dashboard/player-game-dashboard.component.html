@@ -18,12 +18,12 @@
     </div>
   </div>
 </div>
-<div *ngIf="gamePlayer.isDealer">
-  <img class="chip-img player-{{gamePlayer.tableNumber}}-chip dealer-chip">
+<div *ngIf="roundPlayer?.playerPosition === 'DEALER'">
+  <img class="chip-img player-{{roundPlayer.tableNumber}}-chip dealer-chip">
 </div>
-<div *ngIf="gamePlayer.hasSmallBlind">
-  <img class="chip-img player-{{gamePlayer.tableNumber}}-chip small-blind-chip">
+<div *ngIf="roundPlayer?.playerPosition === 'SMALL_BLIND'">
+  <img class="chip-img player-{{roundPlayer.tableNumber}}-chip small-blind-chip">
 </div>
-<div *ngIf="gamePlayer.hasBigBlind">
-  <img class="chip-img player-{{gamePlayer.tableNumber}}-chip big-blind-chip">
+<div *ngIf="roundPlayer?.playerPosition === 'BIG_BLIND'">
+  <img class="chip-img player-{{roundPlayer.tableNumber}}-chip big-blind-chip">
 </div>

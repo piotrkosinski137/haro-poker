@@ -27,7 +27,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   gamePlayers: GamePlayer[];
   roundPlayers: RoundPlayer[];
-  cards: Card[];
+  cards: Card[] = [];
   gameTimestamp$: Observable<number>;
 
   constructor(private modalService: NgbModal,
@@ -42,10 +42,22 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     localStorage.clear();
-    this.roundSubscription = this.roundSocketService.getCards().subscribe(cards => this.cards = cards);
+    this.roundSubscription = this.roundSocketService.getCards().subscribe(cards => this.addNewCards(cards));
     this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers().subscribe(players => this.gamePlayers = players);
     this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers().subscribe(players => this.roundPlayers = players);
     this.gameTimestamp$ = this.gameSocketService.getGameTimestamp();
+  }
+
+  addNewCards(cardsBatch: Card[]) {
+    if (cardsBatch.length < this.cards.length) {
+      this.cards = cardsBatch;
+    } else {
+      for (const batchCard of cardsBatch) {
+        if (this.cards.find(card => card.suit === batchCard.suit && card.rank === batchCard.rank) === undefined) {
+          this.cards.push(batchCard);
+        }
+      }
+    }
   }
 
   ngAfterViewInit() {
@@ -62,7 +74,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMaxBet() {
-    return this.roundPlayers.map(player => player.roundBid).reduce((prev, curr) => (prev > curr) ? prev : curr);
+    return this.roundPlayers.map(player => player.turnBid).reduce((prev, curr) => (prev > curr) ? prev : curr);
   }
 
   getGamePlayerByTableNumber(tableNumber: number) {

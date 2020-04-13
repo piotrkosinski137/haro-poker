@@ -15,7 +15,6 @@ public class RoundPlayer {
     private int turnBid;
     private int roundBid;
     private boolean hasFolded;
-    private boolean isAllIn;
     private Position playerPosition;
     private boolean hasTurn;
     private final Integer tableNumber;
@@ -60,7 +59,6 @@ public class RoundPlayer {
         roundBid += balance;
         balance = 0;
         hasTurn = false;
-        isAllIn = true;
     }
 
     void fold() {
@@ -83,11 +81,7 @@ public class RoundPlayer {
     }
 
     boolean isInGame() {
-        return !hasFolded || !isAllIn;
-    }
-
-    boolean hasNoFunds() {
-        return balance == 0;
+        return !hasFolded && balance > 0;
     }
 
     int getTurnBid() {
