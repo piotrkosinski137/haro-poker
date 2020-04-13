@@ -18,8 +18,10 @@ export class GameRestService {
   }
 
   getPlayerCards(): Observable<Card[]> {
-    return this.http.get<Card[]>(environment.PROXY_PATH + 'player/' +
-      this.localStorageService.sessionId + '/cards');
+    const id = this.localStorageService.sessionId;
+    if (id) {
+      return this.http.get<Card[]>(environment.PROXY_PATH + 'player/' + id + '/cards');
+    }
   }
 
   updateBlinds(small: number) {
