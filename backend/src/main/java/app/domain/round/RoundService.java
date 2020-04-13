@@ -36,7 +36,7 @@ public class RoundService {
         roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
-        roundPlayerService.setCurrentPlayer();
+        roundPlayerService.setNextPlayer();
         giveCardsToPlayers();
         publisher.publishEvent(new RoundChanged(this, round));
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
@@ -47,7 +47,6 @@ public class RoundService {
             throw new RoundNotStarted();
         }
         roundPlayerService.pickWinner(winnerPlayerId);
-        publisher.publishEvent(new RoundChanged(this, round));
         return roundPlayerService.getRoundPlayers();
     }
 
@@ -120,9 +119,10 @@ public class RoundService {
        // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         //}
         else {
-            //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze????
-            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+            //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze???? Tak ale do testów UI bierze na razie następnego wolnego
+            roundPlayerService.setNextPlayer(); // TODO
             startNextStage();
+            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         }
     }
 

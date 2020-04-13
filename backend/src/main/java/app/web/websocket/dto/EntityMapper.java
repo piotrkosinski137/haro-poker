@@ -2,6 +2,7 @@ package app.web.websocket.dto;
 
 import app.domain.card.Rank;
 import app.domain.card.Suit;
+import app.domain.round.Position;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
@@ -23,6 +24,7 @@ public class EntityMapper {
         mapper.addConverter(convertUUIDtoString());
         mapper.addConverter(convertRankToString());
         mapper.addConverter(convertSuitToString());
+        mapper.addConverter(convertPositionToString());
     }
 
     private static AbstractConverter<UUID, String> convertUUIDtoString() {
@@ -48,6 +50,15 @@ public class EntityMapper {
             @Override
             protected String convert(Suit suit) {
                 return suit.getValue();
+            }
+        };
+    }
+
+    private static AbstractConverter<Position, String> convertPositionToString() {
+        return new AbstractConverter<>() {
+            @Override
+            protected String convert(Position position) {
+                return position.name();
             }
         };
     }

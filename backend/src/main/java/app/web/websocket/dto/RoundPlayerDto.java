@@ -12,6 +12,7 @@ public class RoundPlayerDto {
     private int roundBid;
     private boolean hasTurn;
     private boolean hasFolded;
+    private String playerPosition;
 
     private RoundPlayerDto() {
     }
@@ -80,4 +81,11 @@ public class RoundPlayerDto {
         this.hasFolded = hasFolded;
     }
 
+    public String getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(String playerPosition) {
+        this.playerPosition = playerPosition;
+    }
 }

@@ -29,7 +29,7 @@ public class GameEventListener {
 
     @EventListener
     public void handleRoundPlayersChange(RoundPlayersChanged event) {
-        if (event.isWithCards()){
+        if (event.isWithCards()) {
             template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtosWithCards(event.getRoundPlayers()));
         } else {
             template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(event.getRoundPlayers()));

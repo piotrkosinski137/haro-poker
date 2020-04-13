@@ -4,7 +4,6 @@ public class GamePlayerDto {
     private String id;
     private Integer tableNumber;
     private String name;
-    private int playerPosition;
     private boolean active;
 
     private GamePlayerDto() {
@@ -36,14 +35,6 @@ public class GamePlayerDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getPlayerPosition() {
-        return playerPosition;
-    }
-
-    public void setPlayerPosition(int playerPosition) {
-        this.playerPosition = playerPosition;
     }
 
     public boolean isActive() {
