@@ -28,7 +28,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   onChangePlayerActiveStatusClick() {
-    this.gamePlayerRestService.changeActiveState(!this.player.active);
+    if (confirm('Would you like to be ' + this.manageActiveWord(!this.player.active) + ' in next round?')) {
+      this.gamePlayerRestService.changeActiveState(!this.player.active);
+      this.player.active = !this.player.active;
+    }
+  }
+
+  manageActiveWord(active: boolean) {
+    return active ? 'ACTIVE' : 'INACTIVE';
   }
 
   onGameStart() {
