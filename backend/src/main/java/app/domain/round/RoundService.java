@@ -70,6 +70,7 @@ public class RoundService {
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
         putProperPlayerOnTop();
         publisher.publishEvent(new RoundChanged(this, round));
+        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
     private void putProperPlayerOnTop() {
@@ -133,7 +134,6 @@ public class RoundService {
             //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze???? Tak ale do testów UI bierze na razie następnego wolnego
             roundPlayerService.setNextPlayer(); // TODO
             startNextStage();
-            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         }
     }
 
