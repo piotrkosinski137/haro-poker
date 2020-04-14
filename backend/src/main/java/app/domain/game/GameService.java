@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.UUID;
+
+import app.web.rest.dto.UpdatePlayerBalanceRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -88,6 +90,16 @@ public class GameService {
         game.removeGamePlayer(id);
         roundService.removeRoundPlayer(id);
         publisher.publishEvent(new GamePlayersChanged(this, game.getGamePlayers()));
+        publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
+    }
+
+    public void manualFinishRound(UpdatePlayerBalanceRequest updateBalances) {
+        roundService.updatePlayersBalance(updateBalances);
+        Collection<RoundPlayer> roundPlayers = roundService.getPlayers();
+        roundPlayers.forEach(roundPlayer -> gamePlayerService.updateBalance(game.getActivePlayers(), roundPlayers));
+        roundPlayers.forEach(RoundPlayer::clearBids);
+        game.rotatePlayers();
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
         publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
