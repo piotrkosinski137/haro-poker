@@ -19,7 +19,8 @@ export class GamePlayerSocketService {
   constructor(private localStorageService: LocalStorageService) {
     this.messagingService = new MessagingService(environment.WS_PATH + '/game', '/topic/game-players');
     this.messagingService.stream().subscribe((message: Message) => {
-      console.log('When subscribed, it loads gamePlayers from backend');
+      console.log('GAME_PLAYER CAME:');
+      console.log(message.body);
       this.gamePlayersSubject.next([...JSON.parse(message.body)]);
     });
   }

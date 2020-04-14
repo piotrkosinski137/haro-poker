@@ -21,7 +21,8 @@ export class RoundSocketService {
   constructor(private gameRestService: GameRestService) {
     this.messagingService = new MessagingService(environment.WS_PATH + '/game', '/topic/round');
     this.messagingService.stream().subscribe((message: Message) => {
-      console.log('When subscribed, it loads round from backend');
+      console.log('ROUND CAME:');
+      console.log(message.body);
 
       if (JSON.parse(message.body).stage !== 'NOT_STARTED') {
         this.gameRestService.getPlayerCards().subscribe(cards => {

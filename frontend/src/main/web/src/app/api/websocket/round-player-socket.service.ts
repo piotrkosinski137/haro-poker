@@ -16,7 +16,8 @@ export class RoundPlayerSocketService {
   constructor() {
     this.messagingService = new MessagingService(environment.WS_PATH + '/game', '/topic/round-players');
     this.messagingService.stream().subscribe((message: Message) => {
-      console.log('When subscribed, it loads roundPlayers from backend');
+      console.log('ROUND_PLAYERS CAME:');
+      console.log(message.body);
       this.roundPlayersSubject.next([...JSON.parse(message.body)]);
     });
   }

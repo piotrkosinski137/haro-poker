@@ -1,22 +1,22 @@
-import { StompService, StompConfig, StompState } from "@stomp/ng2-stompjs";
-import { Message } from "@stomp/stompjs";
-import { Observable, BehaviorSubject } from "rxjs";
+import { StompService, StompConfig, StompState } from '@stomp/ng2-stompjs';
+import { Message } from '@stomp/stompjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 export class MessagingService {
   private messages: Observable<Message>;
   private stompService: StompService;
 
   constructor(socketUrl, responsePath: string) {
-    let stompConfig: StompConfig = {
+    const stompConfig: StompConfig = {
       url: socketUrl,
       headers: {
-        login: "",
-        passcode: ""
+        login: '',
+        passcode: ''
       },
       heartbeat_in: 0,
       heartbeat_out: 20000,
       reconnect_delay: 5000,
-      debug: true
+      debug: false
     };
     this.stompService = new StompService(stompConfig);
     this.messages = this.stompService.subscribe(responsePath);

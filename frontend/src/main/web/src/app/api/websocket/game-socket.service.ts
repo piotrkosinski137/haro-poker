@@ -19,6 +19,9 @@ export class GameSocketService {
   constructor() {
     this.gameMessagingService = new MessagingService(environment.WS_PATH + '/game', '/topic/game');
     this.gameMessagingService.stream().subscribe((message: Message) => {
+      console.log('GAME CAME:');
+      console.log(message.body);
+
       this.gameSubject.next(new Game(
         JSON.parse(message.body).smallBlind,
         JSON.parse(message.body).bigBlind,
