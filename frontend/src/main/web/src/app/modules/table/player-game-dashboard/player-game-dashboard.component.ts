@@ -41,4 +41,10 @@ export class PlayerGameDashboardComponent implements OnInit {
   onPickWinnerClick(id: string) {
     this.winnerPicked.emit(id);
   }
+
+  containsCards() {
+    if (this.isActive()) {
+      return this.roundPlayer.cardsInHand.length > 0;
+    }
+  }
 }

@@ -1,12 +1,11 @@
 package app.web.websocket.dto;
 
-import app.domain.card.Card;
 import java.util.Set;
 
 public class RoundPlayerDto {
     private String id;
     private Integer tableNumber;
-    private Set<Card> cardsInHand;
+    private Set<CardDto> cardsInHand;
     private int balance;
     private int turnBid;
     private int roundBid;
@@ -33,11 +32,11 @@ public class RoundPlayerDto {
         this.tableNumber = tableNumber;
     }
 
-    public Set<Card> getCardsInHand() {
+    public Set<CardDto> getCardsInHand() {
         return cardsInHand;
     }
 
-    public void setCardsInHand(Set<Card> cardsInHand) {
+    public void setCardsInHand(Set<CardDto> cardsInHand) {
         this.cardsInHand = cardsInHand;
     }
 
