@@ -45,7 +45,6 @@ public class GameService {
         startRound();
         game.setGameTimeStamp(Instant.now().toEpochMilli());
         publisher.publishEvent(new GameChanged(this, getBlinds(), game.getGameTimeStamp()));
-        publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
     public void startRound() {
