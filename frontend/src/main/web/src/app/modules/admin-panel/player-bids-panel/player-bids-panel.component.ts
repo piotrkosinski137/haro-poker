@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RoundPlayer} from '../../../model/round-player';
 import {GamePlayer} from '../../../model/game-player';
 
@@ -7,29 +7,30 @@ import {GamePlayer} from '../../../model/game-player';
   templateUrl: './player-bids-panel.component.html',
   styleUrls: ['./player-bids-panel.component.scss']
 })
-export class PlayerBidsPanelComponent implements OnInit {
+export class PlayerBidsPanelComponent {
 
-  balanceInputEnabled = false;
-  @Input()
-  roundPlayers: RoundPlayer[];
+  _roundPlayers: RoundPlayer[];
+  @Input() set roundPlayers(players: RoundPlayer[]) {
+    this.roundBidsTotal = 0;
+    this.draftBidsTotal = 0;
+    players.forEach(player => {
+      this.roundBidsTotal += player.roundBid;
+      this.draftBidsTotal += player.roundBid;
+    });
+    this._roundPlayers = players;
+  }
   @Input()
   gamePlayers: GamePlayer[];
-  roundBidsTotal = 0;
-  draftBidsTotal = 0;
-
   @Output()
   playerRoundBidsChanged = new EventEmitter<RoundPlayer[]>();
   @Output()
   playerRemoved = new EventEmitter<string>();
 
-  constructor() {
-  }
+  roundBidsTotal = 0;
+  draftBidsTotal = 0;
+  balanceInputEnabled = false;
 
-  ngOnInit() {
-    this.roundPlayers.forEach(player => {
-      this.roundBidsTotal += player.roundBid;
-      this.draftBidsTotal += player.roundBid;
-    });
+  constructor() {
   }
 
   enableBalanceInputs() {
@@ -38,12 +39,12 @@ export class PlayerBidsPanelComponent implements OnInit {
 
   onRoundBidsChangeSubmitted() {
     this.balanceInputEnabled = false;
-    this.playerRoundBidsChanged.emit(this.roundPlayers);
+    this.playerRoundBidsChanged.emit(this._roundPlayers);
   }
 
   onRoundBidChange(event$: any) {
     this.draftBidsTotal = 0;
-    this.roundPlayers.forEach(player => {
+    this._roundPlayers.forEach(player => {
       this.draftBidsTotal += player.roundBid;
     });
   }

@@ -2,12 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {RoundPlayerSocketService} from '../../api/websocket/round-player-socket.service';
 import {RoundPlayer} from '../../model/round-player';
-import {RoundPlayerRestService} from '../../api/rest/round-player-rest.service';
 import {GamePlayer} from '../../model/game-player';
 import {GamePlayerSocketService} from '../../api/websocket/game-player-socket.service';
 import {GameSocketService} from '../../api/websocket/game-socket.service';
 import {Game} from '../../model/game';
 import {GamePlayerRestService} from '../../api/rest/game-player-rest.service';
+import {GameRestService} from '../../api/rest/game-rest.service';
+import {PlayerMoney} from '../../model/player-money';
 
 @Component({
   selector: 'app-admin-panel',
@@ -27,7 +28,7 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
               private gamePlayerSocketService: GamePlayerSocketService,
               private gameSocketService: GameSocketService,
               private gamePlayerRestService: GamePlayerRestService,
-              private roundPlayerRestService: RoundPlayerRestService) {
+              private gameRestService: GameRestService) {
   }
 
   ngOnInit() {
@@ -40,7 +41,8 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   }
 
   onPlayerRoundBidsChanged(roundPlayers: RoundPlayer[]) {
-    this.roundPlayerRestService.manualRoundBidsUpdate(roundPlayers);
+    this.gameRestService.manualUpdateBalances(
+      roundPlayers.map(player => new PlayerMoney(player.id, player.roundBid)));
   }
 
   ngOnDestroy() {

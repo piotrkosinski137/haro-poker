@@ -6,6 +6,7 @@ import {Card} from '../../model/card';
 import {LocalStorageService} from '../local-storage.service';
 import {GamePlayerSocketService} from '../websocket/game-player-socket.service';
 import {switchMap} from 'rxjs/operators';
+import {PlayerMoney} from '../../model/player-money';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,10 @@ export class GameRestService {
 
   finishRound(id: string) {
     return this.http.post(environment.PROXY_PATH + 'game/round/finish/' + id, null).subscribe();
+  }
+
+  manualUpdateBalances(money: PlayerMoney[]) {
+    return this.http.put(environment.PROXY_PATH + 'game/admin/round-bids/update', {playerMoney: money}).subscribe();
   }
 
   getPlayerCards(): Observable<Card[]> {

@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import app.web.rest.dto.PlayerMoney;
+import app.web.rest.dto.UpdatePlayerBalanceRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -143,5 +146,15 @@ public class RoundService {
 
     public void removeRoundPlayer(UUID id) {
         roundPlayerService.removeRoundPlayer(id);
+    }
+
+    public void updatePlayersBalance(UpdatePlayerBalanceRequest updateBalances) {
+        roundPlayerService.getRoundPlayers().forEach(player -> player.winMoney(
+                updateBalances.getPlayerMoney().stream()
+                .filter(updateBalance -> updateBalance.getPlayerId().equals(player.getId().toString()))
+                .findFirst()
+                .orElse(new PlayerMoney())
+                .getMoney()
+        ));
     }
 }

@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <ng-container *ngFor="let player of roundPlayers">
+      <ng-container *ngFor="let player of _roundPlayers">
         <div class="form-group row">
           <label [for]="player.tableNumber" class="col-5 col-form-label">{{getPlayerName(player.id)}}: </label>
           <div class="col-4">
