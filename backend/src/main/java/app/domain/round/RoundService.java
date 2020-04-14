@@ -65,7 +65,16 @@ public class RoundService {
     private void proceedNewStage() {
         putCardsOnTable();
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
+        putProperPlayerOnTop();
         publisher.publishEvent(new RoundChanged(this, round));
+    }
+
+    private void putProperPlayerOnTop() {
+        do {
+            roundPlayerService.setNextPlayer();
+        }
+        while (!roundPlayerService.getRoundPlayers().getFirst().getPlayerPosition().equals(Position.BIG_BLIND));
+        roundPlayerService.setNextPlayer();
     }
 
     private void showRoundSummary() {
