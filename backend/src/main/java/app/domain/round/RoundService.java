@@ -73,8 +73,7 @@ public class RoundService {
         do {
             roundPlayerService.setNextPlayer();
         }
-        while (!roundPlayerService.getRoundPlayers().getFirst().getPlayerPosition().equals(Position.BIG_BLIND));
-        roundPlayerService.setNextPlayer();
+        while (!roundPlayerService.getRoundPlayers().getFirst().getPlayerPosition().equals(Position.SMALL_BLIND));
     }
 
     private void showRoundSummary() {
