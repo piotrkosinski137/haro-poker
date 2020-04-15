@@ -96,6 +96,14 @@ public class RoundPlayer {
         this.hasTurn = hasTurn;
     }
 
+    public void hasTurn(boolean hasTurn) {
+        this.hasTurn = hasTurn;
+    }
+
+    public Position getPlayerPosition() {
+        return playerPosition;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -111,13 +119,5 @@ public class RoundPlayer {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public void hasTurn(boolean hasTurn) {
-        this.hasTurn = hasTurn;
-    }
-
-    public Position getPlayerPosition() {
-        return playerPosition;
     }
 }

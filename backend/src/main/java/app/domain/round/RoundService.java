@@ -10,6 +10,7 @@ import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
+import java.util.stream.Collectors;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class RoundService {
         return roundPlayerService.getRoundPlayers();
     }
 
-    public void startNextStage() {  //TODO think about this to automatically finish round
+    public void startNextStage() {
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
@@ -68,18 +69,9 @@ public class RoundService {
     private void proceedNewStage() {
         putCardsOnTable();
         roundPlayerService.getRoundPlayers().forEach(RoundPlayer::prepareForNextStage);
-        putProperPlayerOnTop();
+        roundPlayerService.putProperPlayerOnTop();
         publisher.publishEvent(new RoundChanged(this, round));
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-    }
-
-    private void putProperPlayerOnTop() {
-        //TODO bug case: two players, player on small blind gives all in. Loop will never find "isInGame" with Position.SMALL_BLIND.
-        //TODO need to reconsider allIn flag
-//        do {
-//        roundPlayerService.setNextPlayer();
-//        }
-//        while (!roundPlayerService.getRoundPlayers().getFirst().getPlayerPosition().equals(Position.SMALL_BLIND));
     }
 
     private void showRoundSummary() {
@@ -99,7 +91,6 @@ public class RoundService {
     }
 
     public Collection<RoundPlayer> getPlayers() {
-        //TODO either RoundPlayerService will be initialized during application startup or I need a flag to check if game has started or not
         if (Objects.isNull(roundPlayerService)) {
             return new HashSet<>();
         } else {
@@ -125,7 +116,7 @@ public class RoundService {
 
     private void checkGameConditions() {
         checkNumberOfPlayers();
-        if (!roundPlayerService.playersBidsAreEqual()) {
+        if (!roundPlayerService.playersBidsAreEqual() || roundPlayerService.calculateTurnPot() == 0) {
             roundPlayerService.setNextPlayer();
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         } //else if (roundPlayerService.isCurrentPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT) {
@@ -133,14 +124,13 @@ public class RoundService {
         // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         //}
         else {
-            //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze???? Tak ale do testów UI bierze na razie następnego wolnego
-            roundPlayerService.setNextPlayer(); // TODO
             startNextStage();
         }
     }
 
     private void checkNumberOfPlayers() {
-        if (roundPlayerService.getRoundPlayers().size() == 1) {
+        final int playersInGame = roundPlayerService.getRoundPlayers().stream().filter(RoundPlayer::isInGame).collect(Collectors.toSet()).size();
+        if (playersInGame ==1) {
             final UUID id = roundPlayerService.getRoundPlayers().getFirst().getId();
             finishRound(id);
         }
