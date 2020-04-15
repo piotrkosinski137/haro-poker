@@ -11,10 +11,10 @@ import {PlayerGameDashboardComponent} from './modules/table/player-game-dashboar
 import {AdminPanelComponent} from './modules/admin-panel/admin-panel.component';
 import {BlindPanelComponent} from './modules/admin-panel/blind-panel/blind-panel.component';
 import {PlayerBidsPanelComponent} from './modules/admin-panel/player-bids-panel/player-bids-panel.component';
-import {NavbarComponent} from './modules/navbar/navbar.component';
 import {GamePlayerSocketService} from './api/websocket/game-player-socket.service';
 import {GamePlayerRestService} from './api/rest/game-player-rest.service';
 import { TimerComponent } from './modules/table/timer/timer.component';
+import {NavbarComponent} from './modules/table/navbar/navbar.component';
 
 @NgModule({
   declarations: [

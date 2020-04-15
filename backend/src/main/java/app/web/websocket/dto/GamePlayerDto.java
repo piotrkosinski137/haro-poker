@@ -5,6 +5,7 @@ public class GamePlayerDto {
     private Integer tableNumber;
     private String name;
     private boolean active;
+    private int balance;
 
     private GamePlayerDto() {
     }
@@ -43,5 +44,13 @@ public class GamePlayerDto {
 
     public void setIsActive(boolean isActive) {
         this.active = isActive;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 }

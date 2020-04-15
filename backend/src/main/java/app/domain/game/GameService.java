@@ -102,5 +102,10 @@ public class GameService {
         publisher.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers()));
     }
 
+    public void buyIn(UUID playerId) {
+        game.buyIn(playerId);
+        publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
+    }
+
     //finishGame (gameSummary)
 }

@@ -4,9 +4,9 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {Card} from '../../model/card';
 import {LocalStorageService} from '../local-storage.service';
-import {GamePlayerSocketService} from '../websocket/game-player-socket.service';
 import {switchMap} from 'rxjs/operators';
 import {PlayerMoney} from '../../model/player-money';
+import {RoundPlayerSocketService} from '../websocket/round-player-socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ import {PlayerMoney} from '../../model/player-money';
 export class GameRestService {
 
   constructor(private http: HttpClient, private localStorageService: LocalStorageService,
-              private gamePlayerSocketService: GamePlayerSocketService) {
+              private roundPlayerSocketService: RoundPlayerSocketService) {
   }
 
   startGame() {
@@ -30,11 +30,10 @@ export class GameRestService {
   }
 
   getPlayerCards(): Observable<Card[]> {
-    return this.gamePlayerSocketService.getSessionPlayer().pipe(switchMap(
-      gamePlayer => {
-        const id = this.localStorageService.sessionId;
-        if (id && gamePlayer.active) {
-          return this.http.get<Card[]>(environment.PROXY_PATH + 'player/' + id + '/cards');
+    return this.roundPlayerSocketService.getSessionPlayer().pipe(switchMap(
+      roundPlayer => {
+        if (roundPlayer) {
+          return this.http.get<Card[]>(environment.PROXY_PATH + 'player/' + roundPlayer.id + '/cards');
         } else {
           return EMPTY;
         }

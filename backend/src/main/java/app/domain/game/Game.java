@@ -83,9 +83,7 @@ class Game {
     }
 
     void changeActiveStatus(UUID id, boolean isActive) { //TODO think about not use boolean here
-        GamePlayer gamePlayer = gamePlayers.stream().filter(player -> player.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new GamePlayerNotFound(id));
+        GamePlayer gamePlayer = findPlayerById(id);
         gamePlayer.setActive(isActive);
     }
 
@@ -123,5 +121,16 @@ class Game {
         gamePlayers = gamePlayers.stream()
                 .filter(player -> !player.getId().equals(id))
                 .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    public void buyIn(UUID id) {
+        GamePlayer player = findPlayerById(id);
+        player.buyIn();
+    }
+
+    private GamePlayer findPlayerById(UUID id) {
+        return gamePlayers.stream().filter(player -> player.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new GamePlayerNotFound(id));
     }
 }

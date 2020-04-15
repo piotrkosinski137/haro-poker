@@ -1,10 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {GamePlayer} from '../../model/game-player';
-import {LocalStorageService} from '../../api/local-storage.service';
-import {GameRestService} from '../../api/rest/game-rest.service';
-import {GamePlayerSocketService} from '../../api/websocket/game-player-socket.service';
-import {GamePlayerRestService} from '../../api/rest/game-player-rest.service';
+import {GamePlayer} from '../../../model/game-player';
+import {GamePlayerSocketService} from '../../../api/websocket/game-player-socket.service';
+import {GamePlayerRestService} from '../../../api/rest/game-player-rest.service';
+import {LocalStorageService} from '../../../api/local-storage.service';
+import {GameRestService} from '../../../api/rest/game-rest.service';
+
 
 @Component({
   selector: 'app-navbar',
@@ -52,5 +53,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  onBuyInClick() {
+    this.gamePlayerRestService.buyIn();
+  }
+
+  hasZeroBalance() {
+    if (this.player) {
+      return this.player.balance === 0;
+    }
   }
 }

@@ -4,6 +4,7 @@ export class GamePlayer {
               public tableNumber: number,
               public name: string,
               public active: boolean,
+              public balance: number
   ) {
   }
 }
