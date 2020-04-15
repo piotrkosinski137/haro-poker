@@ -8,17 +8,17 @@ import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
+import app.web.rest.dto.PlayerMoney;
+import app.web.rest.dto.UpdatePlayerBalanceRequest;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
-import app.web.rest.dto.PlayerMoney;
-import app.web.rest.dto.UpdatePlayerBalanceRequest;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
 
 @Service
 public class RoundService {
@@ -74,10 +74,12 @@ public class RoundService {
     }
 
     private void putProperPlayerOnTop() {
-        do {
-            roundPlayerService.setNextPlayer();
-        }
-        while (!roundPlayerService.getRoundPlayers().getFirst().getPlayerPosition().equals(Position.SMALL_BLIND));
+        //TODO bug case: two players, player on small blind gives all in. Loop will never find "isInGame" with Position.SMALL_BLIND.
+        //TODO need to reconsider allIn flag
+//        do {
+//        roundPlayerService.setNextPlayer();
+//        }
+//        while (!roundPlayerService.getRoundPlayers().getFirst().getPlayerPosition().equals(Position.SMALL_BLIND));
     }
 
     private void showRoundSummary() {
@@ -128,7 +130,7 @@ public class RoundService {
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         } //else if (roundPlayerService.isCurrentPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT) {
         //roundPlayerService.setNextPlayer();
-       // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         //}
         else {
             //zerowanie kolejki graczy ale ktory powinien zaczynac? pierwszy po dilerze???? Tak ale do testów UI bierze na razie następnego wolnego
@@ -159,10 +161,10 @@ public class RoundService {
     public void updatePlayersBalance(UpdatePlayerBalanceRequest updateBalances) {
         roundPlayerService.getRoundPlayers().forEach(player -> player.winMoney(
                 updateBalances.getPlayerMoney().stream()
-                .filter(updateBalance -> updateBalance.getPlayerId().equals(player.getId().toString()))
-                .findFirst()
-                .orElse(new PlayerMoney())
-                .getMoney()
+                        .filter(updateBalance -> updateBalance.getPlayerId().equals(player.getId().toString()))
+                        .findFirst()
+                        .orElse(new PlayerMoney())
+                        .getMoney()
         ));
     }
 }

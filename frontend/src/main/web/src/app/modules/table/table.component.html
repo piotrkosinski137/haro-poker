@@ -1,4 +1,5 @@
 <div class="table-container">
+  <app-navbar></app-navbar>
   <app-timer [gameTimestamp]="(gameTimestamp$ | async)"></app-timer>
   <p class="label round-pot">Round Pot: {{calculateRoundPot()}}</p>
   <div class="cards">

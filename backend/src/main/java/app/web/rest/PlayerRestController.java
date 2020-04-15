@@ -55,6 +55,11 @@ public class PlayerRestController {
         roundService.fold();
     }
 
+    @PostMapping("/{id}/buy-in")
+    public void buyIn(@PathVariable String id) {
+        gameService.buyIn(UUID.fromString(id));
+    }
+
     @DeleteMapping("{id}/remove")
     public void removePlayer(@PathVariable String id) {
         gameService.removePlayer(UUID.fromString(id));

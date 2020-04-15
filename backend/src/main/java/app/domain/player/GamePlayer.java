@@ -9,12 +9,13 @@ public class GamePlayer {
     private final String name;
     private int balance;
     private boolean active;
+    private final int INIT_BALANCE = 10000;
 
     GamePlayer(final String name, final Integer tableNumber) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.tableNumber = tableNumber;
-        balance = 10000;
+        balance = INIT_BALANCE;
         active = true;
     }
 
@@ -39,6 +40,11 @@ public class GamePlayer {
         checkIfPlayerIsActive();
     }
 
+    public void buyIn() {
+        balance = INIT_BALANCE;
+        activatePlayer();
+    }
+
     public String getName() {
         return name;
     }
@@ -49,10 +55,9 @@ public class GamePlayer {
 
     void deactivatePlayer(){ active = false;}
 
-    void activatePlayer(){ active = true;}
+    public void activatePlayer(){ active = true;}
 
     private void checkIfPlayerIsActive() {
         active = balance > 0;
     }
-
 }
