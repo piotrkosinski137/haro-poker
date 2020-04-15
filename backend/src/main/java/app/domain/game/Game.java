@@ -3,6 +3,7 @@ package app.domain.game;
 import app.domain.game.exceptions.GameIsFull;
 import app.domain.game.exceptions.GamePlayerNotFound;
 import app.domain.player.GamePlayer;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class Game {
 
@@ -26,9 +28,36 @@ class Game {
     }
 
     UUID addPlayer(GamePlayer gamePlayer) {
-        gamePlayers.addLast(gamePlayer);
+        if (gamePlayers.isEmpty()) {
+            gamePlayers.add(gamePlayer);
+        } else {
+            int firstTableNumber = gamePlayers.getFirst().getTableNumber();
+            int tableNumberAfterNewOne = getTableNumberAfter(gamePlayer.getTableNumber());
+            movePlayersInReferenceTo(tableNumberAfterNewOne);
+            gamePlayers.addFirst(gamePlayer);
+            movePlayersInReferenceTo(firstTableNumber);
+        }
         return gamePlayer.getId();
+    }
 
+    private void movePlayersInReferenceTo(int tableNumberAfterNewOne) {
+        while (gamePlayers.getFirst().getTableNumber() != tableNumberAfterNewOne) {
+            gamePlayers.addLast(gamePlayers.pollFirst());
+        }
+    }
+
+    private int getTableNumberAfter(Integer tableNumber) {
+        List<Integer> sortedTableNumbers = Stream.concat(Stream.of(tableNumber), gamePlayers.stream()
+                .map(GamePlayer::getTableNumber))
+                .sorted()
+                .collect(Collectors.toList());
+
+        int newTableNumberIndex = sortedTableNumbers.indexOf(tableNumber);
+        if (newTableNumberIndex == sortedTableNumbers.size() - 1) {
+            return sortedTableNumbers.get(0);
+        } else {
+            return sortedTableNumbers.get(newTableNumberIndex + 1);
+        }
     }
 
     Blinds getBlinds() {

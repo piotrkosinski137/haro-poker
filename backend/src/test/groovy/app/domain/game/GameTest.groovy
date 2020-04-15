@@ -1,52 +1,50 @@
 package app.domain.game
 
-import app.domain.game.exceptions.GameIsFull
+
+import app.domain.player.GamePlayer
+import spock.lang.Shared
 import spock.lang.Specification
 
 class GameTest extends Specification {
 
-    def game = new Game()
+    @Shared
+            gamePlayer1 = new GamePlayer("Piotr1", 1)
+    @Shared
+            gamePlayer2 = new GamePlayer("Piotr2", 2)
+    @Shared
+            gamePlayer3 = new GamePlayer("Piotr3", 3)
+    @Shared
+            gamePlayer4 = new GamePlayer("Piotr4", 4)
+    @Shared
+            gamePlayer5 = new GamePlayer("Piotr5", 5)
+    @Shared
+            gamePlayer6 = new GamePlayer("Piotr6", 6)
+    @Shared
+            gamePlayer7 = new GamePlayer("Piotr7", 7)
 
-    def "should add player with correctly assigned table number"() {
+
+    def "should correctly add player to the game"() {
         given:
-        def playerName1 = "player1"
-        def playerName2 = "player2"
+        def game = [gamePlayers: gamePlayers as ArrayDeque<GamePlayer>] as Game
 
-        when: "first player is added"
-        game.addPlayer(playerName1)
-
-        then:
-        with(game.getGamePlayers()) {
-            size() == 1
-            stream().filter({ player -> player.getTableNumber() == 1 })
-                    .findFirst()
-                    .isPresent()
-        }
-
-        when: "second player is added"
-        game.addPlayer(playerName2)
-
-        then:
-        with(game.getGamePlayers()) {
-            size() == 2
-            stream().filter({ player -> player.getTableNumber() == 2 })
-                    .findFirst()
-                    .isPresent()
-        }
-    }
-
-    def "should fail when game is full"() {
         when:
-        game.addPlayer("player1")
-        game.addPlayer("player2")
-        game.addPlayer("player3")
-        game.addPlayer("player4")
-        game.addPlayer("player5")
-        game.addPlayer("player6")
-        game.addPlayer("player7")
-        game.addPlayer("player8")
+        game.addPlayer(newPlayer)
 
         then:
-        thrown GameIsFull
+        game.gamePlayers as ArrayList == gameAfter as ArrayList
+
+        where:
+        gamePlayers                                          | newPlayer   | gameAfter
+        [gamePlayer2, gamePlayer3]                           | gamePlayer1 | [gamePlayer2, gamePlayer3, gamePlayer1]
+        [gamePlayer1, gamePlayer3]                           | gamePlayer2 | [gamePlayer1, gamePlayer2, gamePlayer3]
+        []                                                   | gamePlayer1 | [gamePlayer1]
+        [gamePlayer4, gamePlayer5, gamePlayer6]              | gamePlayer3 | [gamePlayer4, gamePlayer5,
+                                                                              gamePlayer6, gamePlayer3]
+        [gamePlayer6, gamePlayer7, gamePlayer1, gamePlayer2] | gamePlayer3 | [gamePlayer6, gamePlayer7,
+                                                                              gamePlayer1, gamePlayer2, gamePlayer3]
+        [gamePlayer6, gamePlayer1, gamePlayer2, gamePlayer3,
+         gamePlayer4, gamePlayer5]                           | gamePlayer7 | [gamePlayer6, gamePlayer7, gamePlayer1,
+                                                                              gamePlayer2, gamePlayer3, gamePlayer4,
+                                                                              gamePlayer5]
     }
 }
