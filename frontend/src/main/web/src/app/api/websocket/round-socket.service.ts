@@ -24,7 +24,7 @@ export class RoundSocketService {
       console.log('ROUND CAME:');
       console.log(message.body);
 
-      if (JSON.parse(message.body).stage !== 'NOT_STARTED') {
+      if (JSON.parse(message.body).stage === 'INIT') {
         this.gameRestService.getPlayerCards().subscribe(cards => {
           this.playerCardsSubject.next(cards);
         });
