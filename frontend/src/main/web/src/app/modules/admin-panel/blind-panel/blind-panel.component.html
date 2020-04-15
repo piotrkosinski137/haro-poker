@@ -10,7 +10,7 @@
           <input type="number" class="form-control"
                  id="small-blind" [disabled]=!blindInputsEnabled
                  step="50" min="0" max="100000" #small
-                 [value]="game?.smallBlind">
+                 [(ngModel)]="game.smallBlind">
         </div>
       </div>
     </div>
@@ -20,13 +20,13 @@
         <div (click)="enableBlindInputs()">
           <input type="number" class="form-control"
                  id="big-blind" disabled
-                 [value]="game?.bigBlind">
+                 [value]="game?.smallBlind * 2">
         </div>
       </div>
     </div>
     <button class="btn btn-primary mt-2 text-white btn-disabled"
             [disabled]="!buttonEnabled"
-            (click)="onChangeBlindClick(small.value)">Submit
+            (click)="onChangeBlindClick()">Submit
     </button>
   </div>
 </div>

@@ -40,7 +40,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   onGameStart() {
-    this.gameRestService.startGame();
+    if (confirm('Would you like to start new game? Previous game progress will be lost')) {
+      this.gameRestService.startGame();
+    }
   }
 
   isAdmin(tableNumber: number) {

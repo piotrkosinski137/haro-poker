@@ -94,25 +94,6 @@
             <version>${modelmapper.version}</version>
         </dependency>
         <dependency>
-            <artifactId>h2</artifactId>
-            <groupId>com.h2database</groupId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <artifactId>junit-jupiter</artifactId>
-            <groupId>org.junit.jupiter</groupId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <artifactId>junit-jupiter-api</artifactId>
-            <groupId>org.junit.jupiter</groupId>
-        </dependency>
-        <dependency>
-            <artifactId>hamcrest-library</artifactId>
-            <groupId>org.hamcrest</groupId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <version>${spock-core.version}</version>
@@ -121,7 +102,6 @@
     </dependencies>
 
     <modelVersion>4.0.0</modelVersion>
-
 
     <parent>
         <artifactId>haro-poker</artifactId>

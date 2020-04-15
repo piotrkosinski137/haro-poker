@@ -45,17 +45,16 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
       roundPlayers.map(player => new PlayerMoney(player.id, player.roundBid)));
   }
 
-  ngOnDestroy() {
-    this.roundPlayerSubscription.unsubscribe();
-    this.gamePlayerSubscription.unsubscribe();
-    this.gameSubscription.unsubscribe();
-  }
-
   onPlayerRemoved(id: string) {
-
     if (confirm('Are you sure to remove player ' +
       this.gamePlayers.find(player => player.id === id).name)) {
       this.gamePlayerRestService.removePlayer(id);
     }
+  }
+
+  ngOnDestroy() {
+    this.roundPlayerSubscription.unsubscribe();
+    this.gamePlayerSubscription.unsubscribe();
+    this.gameSubscription.unsubscribe();
   }
 }

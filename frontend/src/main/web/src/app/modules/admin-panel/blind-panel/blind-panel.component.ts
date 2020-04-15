@@ -19,10 +19,10 @@ export class BlindPanelComponent implements OnInit {
   ngOnInit() {
   }
 
-  onChangeBlindClick(small: string) {
+  onChangeBlindClick() {
     this.blindInputsEnabled = false;
     this.buttonEnabled = false;
-    this.gameService.updateBlinds(+small);
+    this.gameService.updateBlinds(this.game.smallBlind);
   }
 
   enableBlindInputs() {
