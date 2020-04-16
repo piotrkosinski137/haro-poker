@@ -78,13 +78,20 @@ class RoundPlayerService {
     }
 
     void putProperPlayerOnTop() {
-        RoundPlayer player = roundPlayers.getFirst();
-        if (!player.getPlayerPosition().equals(Position.SMALL_BLIND)) {
+        if (!isPlayerOnSmallBlind()) {
             roundPlayers.addLast(roundPlayers.pollFirst());
             putProperPlayerOnTop();
         } else {
             getFirstPlayerInGame();
         }
+    }
+
+    boolean isPlayerOnSmallBlind() {
+        return roundPlayers.getFirst().getPlayerPosition().equals(SMALL_BLIND);
+    }
+
+    boolean isPlayerOnDealer() {
+        return roundPlayers.getFirst().getPlayerPosition().equals(DEALER);
     }
 
     private void getFirstPlayerInGame() {
@@ -122,4 +129,6 @@ class RoundPlayerService {
                 .filter(player -> !player.getId().equals(id))
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
+
+
 }

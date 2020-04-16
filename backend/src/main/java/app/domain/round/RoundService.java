@@ -10,16 +10,15 @@ import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
-import java.util.stream.Collectors;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
 @Service
 public class RoundService {
@@ -116,21 +115,18 @@ public class RoundService {
 
     private void checkGameConditions() {
         checkNumberOfPlayers();
-        if (!roundPlayerService.playersBidsAreEqual() || roundPlayerService.calculateTurnPot() == 0) {
+        if (!roundPlayerService.playersBidsAreEqual() || (roundPlayerService.calculateTurnPot() == 0 && !roundPlayerService.isPlayerOnDealer()) ||
+        (roundPlayerService.isPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT)) {
             roundPlayerService.setNextPlayer();
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-        } //else if (roundPlayerService.isCurrentPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT) {
-        //roundPlayerService.setNextPlayer();
-        // publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-        //}
-        else {
+        } else {
             startNextStage();
         }
     }
 
     private void checkNumberOfPlayers() {
         final int playersInGame = roundPlayerService.getRoundPlayers().stream().filter(RoundPlayer::isInGame).collect(Collectors.toSet()).size();
-        if (playersInGame ==1) {
+        if (playersInGame == 1) {
             final UUID id = roundPlayerService.getRoundPlayers().getFirst().getId();
             finishRound(id);
         }
