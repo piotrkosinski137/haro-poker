@@ -29,7 +29,7 @@ class RoundPlayerService {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    void chargeBlinds(final Blinds blinds) { //TODO think about this
+    void chargeBlinds(final Blinds blinds) {
         managePosition(DEALER, 0);
         managePosition(SMALL_BLIND, blinds.getSmall());
         managePosition(BIG_BLIND, blinds.getBig());
@@ -61,7 +61,12 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
-    // TODO make proper checks to avoid StackOverflowException
+    void fold() {
+        RoundPlayer player = roundPlayers.pollFirst();
+        player.fold();
+        roundPlayers.addLast(player);
+    }
+
     void setNextPlayer() {
         RoundPlayer player = roundPlayers.getFirst();
         if (!player.isInGame()) {
@@ -72,10 +77,31 @@ class RoundPlayerService {
         }
     }
 
-    void fold() {
-        RoundPlayer player = roundPlayers.pollFirst();
-        player.fold();
-        roundPlayers.addLast(player);
+    void putProperPlayerOnTop() {
+        if (!isPlayerOnSmallBlind()) {
+            roundPlayers.addLast(roundPlayers.pollFirst());
+            putProperPlayerOnTop();
+        } else {
+            getFirstPlayerInGame();
+        }
+    }
+
+    boolean isPlayerOnSmallBlind() {
+        return roundPlayers.getFirst().getPlayerPosition().equals(SMALL_BLIND);
+    }
+
+    boolean isPlayerOnDealer() {
+        return roundPlayers.getFirst().getPlayerPosition().equals(DEALER);
+    }
+
+    private void getFirstPlayerInGame() {
+        RoundPlayer player = roundPlayers.getFirst();
+        if (player.isInGame()) {
+            player.setHasTurn(true);
+        } else {
+            roundPlayers.addLast(roundPlayers.pollFirst());
+            getFirstPlayerInGame();
+        }
     }
 
     int calculateTotalPot() {
@@ -84,7 +110,13 @@ class RoundPlayerService {
                 .sum();
     }
 
-    boolean playersBidsAreEqual() { // sprawdzac jeszcze czy nie dał allina player
+    int calculateTurnPot() {
+        return roundPlayers.stream()
+                .mapToInt(RoundPlayer::getTurnBid)
+                .sum();
+    }
+
+    boolean playersBidsAreEqual() {
         return roundPlayers.stream()
                 .filter(RoundPlayer::isInGame)
                 .map(RoundPlayer::getTurnBid)
@@ -97,4 +129,6 @@ class RoundPlayerService {
                 .filter(player -> !player.getId().equals(id))
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
+
+
 }
