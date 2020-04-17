@@ -39,7 +39,7 @@ public class RoundService {
         roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
-        roundPlayerService.setNextPlayer();
+        roundPlayerService.giveTurnToCurrentPlayer();
         giveCardsToPlayers();
         publisher.publishEvent(new RoundChanged(this, round));
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
@@ -103,33 +103,42 @@ public class RoundService {
         checkGameConditions();
     }
 
-    public void allIn() {
-        roundPlayerService.allIn();
-        checkGameConditions();
-    }
-
     public void fold() {
         roundPlayerService.fold();
         checkGameConditions();
     }
 
     private void checkGameConditions() {
-        checkNumberOfPlayers();
-        if (!roundPlayerService.playersBidsAreEqual() || (roundPlayerService.calculateTurnPot() == 0 && !roundPlayerService.isPlayerOnDealer()) ||
-        (roundPlayerService.isPlayerOnSmallBlind() && round.getRoundStage() == RoundStage.INIT)) {
-            roundPlayerService.setNextPlayer();
+        if (!finishRoundIfOnlyOnePlayerLeft()) {
+            proceedBidingOrder();
+        }
+    }
+
+    private void proceedBidingOrder() {
+        if (!roundPlayerService.playersBidsAreEqual() || isInitRoundAndBigBlindBiding() || isNotAllPlayersBade()) {
+            roundPlayerService.giveTurnToCurrentPlayer();
             publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         } else {
             startNextStage();
         }
     }
 
-    private void checkNumberOfPlayers() {
+    private boolean isNotAllPlayersBade() {
+        return roundPlayerService.calculateTurnPot() == 0 && !roundPlayerService.isPlayerOnSmallBlind();
+    }
+
+    private boolean isInitRoundAndBigBlindBiding() {
+        return roundPlayerService.isPlayerOnBigBlind() && round.getRoundStage() == RoundStage.INIT;
+    }
+
+    private boolean finishRoundIfOnlyOnePlayerLeft() {
         final int playersInGame = roundPlayerService.getRoundPlayers().stream().filter(RoundPlayer::isInGame).collect(Collectors.toSet()).size();
         if (playersInGame == 1) {
             final UUID id = roundPlayerService.getRoundPlayers().getFirst().getId();
             finishRound(id);
+            return true;
         }
+        return false;
     }
 
     private void giveCardsToPlayers() {

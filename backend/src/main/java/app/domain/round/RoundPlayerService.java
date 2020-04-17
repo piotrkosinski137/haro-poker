@@ -51,7 +51,12 @@ class RoundPlayerService {
 
     void bid(int amount) {
         RoundPlayer player = roundPlayers.pollFirst();
-        player.bid(amount);
+        if (player.getBalance() > amount) {
+            player.bid(amount);
+        } else {
+            allIn();
+        }
+
         roundPlayers.addLast(player);
     }
 
@@ -67,11 +72,11 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
-    void setNextPlayer() {
+    void giveTurnToCurrentPlayer() {
         RoundPlayer player = roundPlayers.getFirst();
         if (!player.isInGame()) {
             roundPlayers.addLast(roundPlayers.pollFirst());
-            setNextPlayer();
+            giveTurnToCurrentPlayer();
         } else {
             player.setHasTurn(true);
         }
@@ -90,8 +95,8 @@ class RoundPlayerService {
         return roundPlayers.getFirst().getPlayerPosition().equals(SMALL_BLIND);
     }
 
-    boolean isPlayerOnDealer() {
-        return roundPlayers.getFirst().getPlayerPosition().equals(DEALER);
+    boolean isPlayerOnBigBlind() {
+        return roundPlayers.getFirst().getPlayerPosition().equals(BIG_BLIND);
     }
 
     private void getFirstPlayerInGame() {
