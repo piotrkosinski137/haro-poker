@@ -53,15 +53,13 @@ class RoundPlayerService {
         RoundPlayer player = roundPlayers.pollFirst();
         if (player.getBalance() > amount) {
             player.bid(amount);
+            roundPlayers.addLast(player);
         } else {
-            allIn();
+            allIn(player);
         }
-
-        roundPlayers.addLast(player);
     }
 
-    void allIn() {
-        RoundPlayer player = roundPlayers.pollFirst();
+    void allIn(RoundPlayer player) {
         player.allIn();
         roundPlayers.addLast(player);
     }
@@ -99,6 +97,10 @@ class RoundPlayerService {
         return roundPlayers.getFirst().getPlayerPosition().equals(BIG_BLIND);
     }
 
+    boolean isPlayerBidEqualsBigBlind() {
+        return roundPlayers.getFirst().getTurnBid() == 200; //TODO
+    }
+
     private void getFirstPlayerInGame() {
         RoundPlayer player = roundPlayers.getFirst();
         if (player.isInGame()) {
@@ -129,11 +131,9 @@ class RoundPlayerService {
                 .count() == 1;
     }
 
-    public void removeRoundPlayer(UUID id) {
+    void removeRoundPlayer(UUID id) {
         roundPlayers = roundPlayers.stream()
                 .filter(player -> !player.getId().equals(id))
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
-
-
 }

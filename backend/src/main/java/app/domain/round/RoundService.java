@@ -128,17 +128,11 @@ public class RoundService {
     }
 
     private boolean isInitRoundAndBigBlindBiding() {
-        return roundPlayerService.isPlayerOnBigBlind() && round.getRoundStage() == RoundStage.INIT;
+        return roundPlayerService.isPlayerOnBigBlind() && round.getRoundStage() == RoundStage.INIT && roundPlayerService.isPlayerBidEqualsBigBlind();
     }
 
     private boolean finishRoundIfOnlyOnePlayerLeft() {
-        final int playersInGame = roundPlayerService.getRoundPlayers().stream().filter(RoundPlayer::isInGame).collect(Collectors.toSet()).size();
-        if (playersInGame == 1) {
-            final UUID id = roundPlayerService.getRoundPlayers().getFirst().getId();
-            finishRound(id);
-            return true;
-        }
-        return false;
+       return roundPlayerService.getRoundPlayers().stream().filter(RoundPlayer::isInGame).collect(Collectors.toSet()).size() ==1;
     }
 
     private void giveCardsToPlayers() {
