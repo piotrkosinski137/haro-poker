@@ -45,6 +45,11 @@ public class PlayerRestController {
         gameService.changeActiveStatus(UUID.fromString(id), isActive);
     }
 
+    @PostMapping("/{id}/all-in")
+    public void allIn(@PathVariable String id) {
+        roundService.allIn();
+    }
+
     @PostMapping("/{id}/bid")
     public void bid(@PathVariable String id, @RequestParam int amount) {
         roundService.bid(amount);
