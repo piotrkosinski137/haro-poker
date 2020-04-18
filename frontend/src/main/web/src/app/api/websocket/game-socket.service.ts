@@ -4,7 +4,6 @@ import {Message} from '@stomp/stompjs';
 import {environment} from '../../../environments/environment';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Game} from '../../model/game';
-import {map} from 'rxjs/operators';
 
 
 @Injectable({
@@ -33,7 +32,11 @@ export class GameSocketService {
     return this.gameSubject.asObservable();
   }
 
-  getGameTimestamp() {
-    return this.getGame().pipe(map(game => game.gameTimeStamp));
-  }
+  // getBigBlind(): Observable<number> {
+  //   return this.gameSubject.pipe(map(game => game.bigBlind));
+  // }
+  //
+  // getGameTimestamp() {
+  //   return this.getGame().pipe(map(game => game.gameTimeStamp));
+  // }
 }

@@ -162,7 +162,7 @@ public class RoundService {
     }
 
     private boolean playerCalledAllIn() {
-        RoundPlayer currentPlayer = roundPlayerService.getCurrentPlayer();
+        RoundPlayer currentPlayer = roundPlayerService.getFirstPlayerInGame();
         return currentPlayer.getBalance() == 0 || playerBidHighestAllIn(currentPlayer);
     }
 

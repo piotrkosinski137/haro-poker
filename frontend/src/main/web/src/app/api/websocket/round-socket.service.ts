@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {Message} from '@stomp/stompjs';
 import {Card} from '../../model/card';
 import {MessagingService} from './messaging.service';
 import {Round} from '../../model/round';
 import {RoundStage} from '../../model/round-stage';
-import {map} from 'rxjs/operators';
 import {GameRestService} from '../rest/game-rest.service';
 
 @Injectable({
@@ -37,8 +36,8 @@ export class RoundSocketService {
     });
   }
 
-  getCards(): Observable<Card[]> {
-    return this.roundSubject.pipe(map(round => round.cards));
+  getRoundSubject() {
+    return this.roundSubject;
   }
 
   getPlayerCardsSubject() {

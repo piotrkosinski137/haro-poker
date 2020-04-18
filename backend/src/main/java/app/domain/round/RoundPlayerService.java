@@ -102,7 +102,7 @@ class RoundPlayerService {
         return roundPlayers.getFirst().getPlayerPosition().equals(SMALL_BLIND);
     }
 
-    private void getFirstPlayerInGame() {
+    RoundPlayer getFirstPlayerInGame() {
         RoundPlayer player = roundPlayers.getFirst();
         if (player.isInGame()) {
             player.setHasTurn(true);
@@ -110,6 +110,7 @@ class RoundPlayerService {
             roundPlayers.addLast(roundPlayers.pollFirst());
             getFirstPlayerInGame();
         }
+        return player;
     }
 
     int calculateTotalPot() {
@@ -137,7 +138,6 @@ class RoundPlayerService {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-
     public boolean allHadTurnInStage() {
         return roundPlayers.stream().allMatch(RoundPlayer::madeMoveInStage);
     }
@@ -146,7 +146,4 @@ class RoundPlayerService {
         roundPlayers.forEach(RoundPlayer::prepareForNextStage);
     }
 
-    public RoundPlayer getCurrentPlayer() {
-        return roundPlayers.getFirst();
-    }
 }

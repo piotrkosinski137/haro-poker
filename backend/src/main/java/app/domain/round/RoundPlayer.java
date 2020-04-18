@@ -50,9 +50,13 @@ public class RoundPlayer {
     }
 
     void chargeBlind(final int blind) {
-        turnBid += blind;
-        roundBid += blind;
-        balance -= blind;
+        if (blind >= balance) {
+            allIn();
+        } else {
+            turnBid += blind;
+            roundBid += blind;
+            balance -= blind;
+        }
     }
 
     void bid(final int bid) {
