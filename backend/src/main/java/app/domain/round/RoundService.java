@@ -126,6 +126,21 @@ public class RoundService {
         }
     }
 
+    private boolean isOnePlayerInGame() {
+        return roundPlayerService.getRoundPlayers().stream()
+                .filter(RoundPlayer::isInGame)
+                .collect(Collectors.toSet()).size() == 1;
+    }
+
+    private void handleLastPlayerAction() {
+        if (playerCalledAllIn()) {
+            showRoundSummary();
+        } else {
+            roundPlayerService.giveTurnToCurrentPlayer();
+            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        }
+    }
+
     private void handleMultiplePlayersAction() {
         if (isStageOver()) {
             if (round.getRoundStage() == RoundStage.RIVER) {
@@ -146,15 +161,6 @@ public class RoundService {
         return roundPlayerService.playersBidsAreEqual() && allHadTurn();
     }
 
-    private void handleLastPlayerAction() {
-        if (playerCalledAllIn()) {
-            showRoundSummary();
-        } else {
-            roundPlayerService.giveTurnToCurrentPlayer();
-            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-        }
-    }
-
     private boolean playerCalledAllIn() {
         RoundPlayer currentPlayer = roundPlayerService.getCurrentPlayer();
         return currentPlayer.getBalance() == 0 || playerBidHighestAllIn(currentPlayer);
@@ -163,12 +169,6 @@ public class RoundService {
     private boolean playerBidHighestAllIn(RoundPlayer currentPlayer) {
         return getPlayersWithAllIn().stream()
                 .allMatch(player -> currentPlayer.getRoundBid() >= player.getRoundBid());
-    }
-
-    public boolean isOnePlayerInGame() {
-        return roundPlayerService.getRoundPlayers().stream()
-                .filter(RoundPlayer::isInGame)
-                .collect(Collectors.toSet()).size() == 1;
     }
 
     public List<RoundPlayer> getPlayersWithAllIn() {
