@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {GamePlayer} from '../../model/game-player';
@@ -12,6 +12,8 @@ import {RoundPlayer} from '../../model/round-player';
 import {LocalStorageService} from '../../api/local-storage.service';
 import {GameSocketService} from '../../api/websocket/game-socket.service';
 import {GameRestService} from '../../api/rest/game-rest.service';
+import {RoundStage} from '../../model/round-stage';
+import {Game} from '../../model/game';
 
 @Component({
   selector: 'app-table',
@@ -24,11 +26,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   gamePlayerSubscription: Subscription;
   roundPlayerSubscription: Subscription;
   roundSubscription: Subscription;
+  gameSubscription: Subscription;
 
   gamePlayers: GamePlayer[];
   roundPlayers: RoundPlayer[];
   cards: Card[] = [];
-  gameTimestamp$: Observable<number>;
+  roundStage: RoundStage = RoundStage.NOT_STARTED;
+  game: Game;
 
   constructor(private modalService: NgbModal,
               private localStorageService: LocalStorageService,
@@ -42,10 +46,13 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     localStorage.clear();
-    this.roundSubscription = this.roundSocketService.getCards().subscribe(cards => this.addNewCards(cards));
+    this.roundSubscription = this.roundSocketService.getRoundSubject().subscribe(round => {
+      this.addNewCards(round.cards);
+      this.roundStage = round.stage;
+    });
     this.gamePlayerSubscription = this.gamePlayerSocketService.getGamePlayers().subscribe(players => this.gamePlayers = players);
     this.roundPlayerSubscription = this.roundPlayerSocketService.getRoundPlayers().subscribe(players => this.roundPlayers = players);
-    this.gameTimestamp$ = this.gameSocketService.getGameTimestamp();
+    this.gameSubscription = this.gameSocketService.getGame().subscribe(game => this.game = game);
   }
 
   addNewCards(cardsBatch: Card[]) {
@@ -74,7 +81,12 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMaxBet() {
-    return this.roundPlayers.map(player => player.turnBid).reduce((prev, curr) => (prev > curr) ? prev : curr);
+    const highestBid = this.roundPlayers.map(player => player.turnBid).reduce((prev, curr) => (prev > curr) ? prev : curr);
+    if (this.roundStage === RoundStage.INIT && this.game.bigBlind > highestBid) {
+      return this.game.bigBlind;
+    } else {
+      return highestBid;
+    }
   }
 
   getGamePlayerByTableNumber(tableNumber: number) {
@@ -121,5 +133,6 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gamePlayerSubscription.unsubscribe();
     this.roundPlayerSubscription.unsubscribe();
     this.roundSubscription.unsubscribe();
+    this.gameSubscription.unsubscribe();
   }
 }
