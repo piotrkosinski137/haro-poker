@@ -1,6 +1,7 @@
 package app.domain.round;
 
 import app.domain.card.Card;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class RoundPlayer {
     private Position playerPosition;
     private boolean hasTurn;
     private final Integer tableNumber;
+    private boolean madeMoveInStage;
 
     RoundPlayer(final UUID id, final int balance, final Integer tableNumber) {
         cardsInHand = new HashSet<>();
@@ -47,11 +49,18 @@ public class RoundPlayer {
         this.playerPosition = position;
     }
 
+    void chargeBlind(final int blind) {
+        turnBid += blind;
+        roundBid += blind;
+        balance -= blind;
+    }
+
     void bid(final int bid) {
         turnBid += bid;
         roundBid += bid;
         balance -= bid;
         hasTurn = false;
+        madeMoveInStage = true;
     }
 
     void allIn() {
@@ -59,15 +68,20 @@ public class RoundPlayer {
         roundBid += balance;
         balance = 0;
         hasTurn = false;
+        madeMoveInStage = true;
     }
 
     void fold() {
         hasFolded = true;
         hasTurn = false;
         cardsInHand = new HashSet<>();
+        madeMoveInStage = true;
     }
 
     void prepareForNextStage() {
+        if (balance > 0 && !hasFolded) {
+            madeMoveInStage = false;
+        }
         turnBid = 0;
     }
 
@@ -84,6 +98,10 @@ public class RoundPlayer {
         return !hasFolded && balance > 0;
     }
 
+    boolean hasAllIn() {
+        return balance == 0;
+    }
+
     int getTurnBid() {
         return turnBid;
     }
@@ -96,12 +114,12 @@ public class RoundPlayer {
         this.hasTurn = hasTurn;
     }
 
-    public void hasTurn(boolean hasTurn) {
-        this.hasTurn = hasTurn;
-    }
-
     public Position getPlayerPosition() {
         return playerPosition;
+    }
+
+    public boolean madeMoveInStage() {
+        return madeMoveInStage;
     }
 
     @Override
@@ -119,5 +137,9 @@ public class RoundPlayer {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void setMadeMoveInStage(boolean madeMoveInStage) {
+        this.madeMoveInStage = madeMoveInStage;
     }
 }

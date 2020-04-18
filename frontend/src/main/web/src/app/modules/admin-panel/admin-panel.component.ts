@@ -57,4 +57,8 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     this.gamePlayerSubscription.unsubscribe();
     this.gameSubscription.unsubscribe();
   }
+
+  onManualNextRound() {
+    this.gameRestService.manualNextRound();
+  }
 }

@@ -1,15 +1,16 @@
 package app.domain.round;
 
-import static app.domain.round.Position.BIG_BLIND;
-import static app.domain.round.Position.DEALER;
-import static app.domain.round.Position.SMALL_BLIND;
-
 import app.domain.game.Blinds;
 import app.domain.player.GamePlayer;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static app.domain.round.Position.BIG_BLIND;
+import static app.domain.round.Position.DEALER;
+import static app.domain.round.Position.SMALL_BLIND;
 
 class RoundPlayerService {
 
@@ -38,7 +39,7 @@ class RoundPlayerService {
     private void managePosition(Position position, int blind) {
         RoundPlayer player = roundPlayers.pollFirst();
         player.setPlayerPosition(position);
-        player.bid(blind);
+        player.chargeBlind(blind);
         roundPlayers.addLast(player);
     }
 
@@ -58,7 +59,14 @@ class RoundPlayerService {
     void allIn() {
         RoundPlayer player = roundPlayers.pollFirst();
         player.allIn();
+        clearPlayersInGameMadeMoveInStage();
         roundPlayers.addLast(player);
+    }
+
+    private void clearPlayersInGameMadeMoveInStage() {
+        roundPlayers.stream()
+                .filter(RoundPlayer::isInGame)
+                .forEach(player -> player.setMadeMoveInStage(false));
     }
 
     void fold() {
@@ -67,14 +75,18 @@ class RoundPlayerService {
         roundPlayers.addLast(player);
     }
 
-    void setNextPlayer() {
-        RoundPlayer player = roundPlayers.getFirst();
-        if (!player.isInGame()) {
-            roundPlayers.addLast(roundPlayers.pollFirst());
-            setNextPlayer();
-        } else {
-            player.setHasTurn(true);
+    boolean giveTurnToCurrentPlayer() {
+        if (isAnyPlayerInGame()) {
+            RoundPlayer player = roundPlayers.getFirst();
+            if (player.isInGame()) {
+                player.setHasTurn(true);
+            } else {
+                roundPlayers.addLast(roundPlayers.pollFirst());
+                giveTurnToCurrentPlayer();
+            }
+            return true;
         }
+        return false;
     }
 
     void putProperPlayerOnTop() {
@@ -88,10 +100,6 @@ class RoundPlayerService {
 
     boolean isPlayerOnSmallBlind() {
         return roundPlayers.getFirst().getPlayerPosition().equals(SMALL_BLIND);
-    }
-
-    boolean isPlayerOnDealer() {
-        return roundPlayers.getFirst().getPlayerPosition().equals(DEALER);
     }
 
     private void getFirstPlayerInGame() {
@@ -110,10 +118,9 @@ class RoundPlayerService {
                 .sum();
     }
 
-    int calculateTurnPot() {
+    boolean isAnyPlayerInGame() {
         return roundPlayers.stream()
-                .mapToInt(RoundPlayer::getTurnBid)
-                .sum();
+                .anyMatch(RoundPlayer::isInGame);
     }
 
     boolean playersBidsAreEqual() {
@@ -131,4 +138,15 @@ class RoundPlayerService {
     }
 
 
+    public boolean allHadTurnInStage() {
+        return roundPlayers.stream().allMatch(RoundPlayer::madeMoveInStage);
+    }
+
+    public void preparePlayersForNextStage() {
+        roundPlayers.forEach(RoundPlayer::prepareForNextStage);
+    }
+
+    public RoundPlayer getCurrentPlayer() {
+        return roundPlayers.getFirst();
+    }
 }

@@ -53,4 +53,9 @@ public class GameRestController {
     public void manualFinishRound(@RequestBody UpdatePlayerBalanceRequest updateBids) {
         gameService.manualFinishRound(updateBids);
     }
+
+    @PostMapping("/round/next")
+    public void manualNextRound() {
+        gameService.manualNextRound();
+    }
 }

@@ -25,9 +25,17 @@ export class BetDashboardComponent implements OnInit {
     this.currentBet = $event.target.value;
   }
 
-  onBetClick(amount: any) {
-    this.roundPlayerRestService.bid(amount);
-    this.currentBet = 0;
+  onBetClick(amount: number, balance: number) {
+    if (amount === balance) {
+      this.onAllInClick();
+    } else {
+      this.roundPlayerRestService.bid(amount);
+      this.currentBet = 0;
+    }
+  }
+
+  onAllInClick() {
+    this.roundPlayerRestService.allIn();
   }
 
   onFoldClick() {

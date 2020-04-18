@@ -107,5 +107,9 @@ public class GameService {
         publisher.publishEvent(new GamePlayersChanged(this, getPlayers()));
     }
 
+    public void manualNextRound() {
+        roundService.manualNextRound();
+    }
+
     //finishGame (gameSummary)
 }

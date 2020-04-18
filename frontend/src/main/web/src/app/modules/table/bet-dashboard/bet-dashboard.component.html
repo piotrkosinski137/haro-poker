@@ -17,14 +17,14 @@
         <div class="col-1 pr-1 pl-0">
           <button type="button" class="btn btn-success bet-button p-0"
                   [disabled]="notEnoughFundsToBet()"
-                  (click)="onBetClick(bet.value)">Bet
+                  (click)="onBetClick(+bet.value, sessionPlayer?.balance)">Bet
           </button>
         </div>
         <div class="col"></div>
         <div class="col-1 pr-1 pl-0">
           <button type="button" class="btn btn-primary action-button p-0"
                   [disabled]="cantCheck()"
-                  (click)="onBetClick(0)">Check
+                  (click)="onBetClick(0, sessionPlayer?.balance)">Check
           </button>
         </div>
         <div class="col-1 pr-1 pl-0">
@@ -33,7 +33,7 @@
         </div>
         <div class="col-1 pr-1 pl-0">
           <button type="button" class="btn btn-danger action-button p-0"
-                  (click)="onBetClick(sessionPlayer?.balance)">All-In</button>
+                  (click)="onAllInClick()">All-In</button>
         </div>
       </div>
     </div>

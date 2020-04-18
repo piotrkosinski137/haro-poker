@@ -17,6 +17,11 @@ export class RoundPlayerRestService {
       null, {params}).subscribe();
   }
 
+  allIn() {
+    return this.http.post(environment.PROXY_PATH + 'player/' + this.localStorageService.sessionId + '/all-in',
+      null).subscribe();
+  }
+
   fold() {
     return this.http.post(environment.PROXY_PATH + 'player/' + this.localStorageService.sessionId + '/fold',
       null).subscribe();

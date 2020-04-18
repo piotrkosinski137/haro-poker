@@ -29,6 +29,10 @@ export class GameRestService {
     return this.http.put(environment.PROXY_PATH + 'game/admin/round-bids/update', {playerMoney: money}).subscribe();
   }
 
+  manualNextRound() {
+    return this.http.post(environment.PROXY_PATH + 'game/round/next', null).subscribe();
+  }
+
   getPlayerCards(): Observable<Card[]> {
     return this.roundPlayerSocketService.getSessionPlayer().pipe(switchMap(
       roundPlayer => {
