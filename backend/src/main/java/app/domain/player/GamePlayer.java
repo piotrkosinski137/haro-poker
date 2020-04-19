@@ -53,7 +53,7 @@ public class GamePlayer {
         this.active = active;
     }
 
-    void deactivatePlayer(){ active = false;}
+    public void deactivatePlayer(){ active = false;}
 
     public void activatePlayer(){ active = true;}
 

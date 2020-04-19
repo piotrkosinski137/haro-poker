@@ -1,8 +1,8 @@
 package app.web.websocket;
 
+import app.domain.game.GameDto;
 import app.domain.game.GameService;
 import app.domain.round.RoundService;
-import app.web.websocket.dto.GameDto;
 import app.web.websocket.dto.GamePlayerDto;
 import app.web.websocket.dto.GamePlayerMapper;
 import app.web.websocket.dto.RoundDto;
@@ -48,6 +48,6 @@ public class GameSocketController {
 
     @SubscribeMapping("/topic/game")
     public GameDto subscribeToGame() {
-        return new GameDto(gameService.getBlinds(), gameService.getTimeStamp());
+        return gameService.getGameDto();
     }
 }

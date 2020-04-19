@@ -1,10 +1,9 @@
 package app.web.websocket;
 
-import app.domain.event.GameChanged;
 import app.domain.event.GamePlayersChanged;
 import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
-import app.web.websocket.dto.GameDto;
+import app.domain.game.GameChanged;
 import app.web.websocket.dto.GamePlayerMapper;
 import app.web.websocket.dto.RoundMapper;
 import app.web.websocket.dto.RoundPlayerMapper;
@@ -43,7 +42,7 @@ public class GameEventListener {
 
     @EventListener
     public void handleGameChange(GameChanged event) {
-        template.convertAndSend("/topic/game", new GameDto(event.getBlinds(), event.getGameTimeStamp()));
+        template.convertAndSend("/topic/game", event.getGameDto());
     }
 
     @EventListener

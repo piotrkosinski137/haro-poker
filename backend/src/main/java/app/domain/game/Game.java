@@ -31,19 +31,13 @@ class Game {
         if (gamePlayers.isEmpty()) {
             gamePlayers.add(gamePlayer);
         } else {
-            int firstTableNumber = gamePlayers.getFirst().getTableNumber();
+            int tableNumberOfCurrentPlayer = gamePlayers.getFirst().getTableNumber();
             int tableNumberAfterNewOne = getTableNumberAfter(gamePlayer.getTableNumber());
             movePlayersInReferenceTo(tableNumberAfterNewOne);
             gamePlayers.addFirst(gamePlayer);
-            movePlayersInReferenceTo(firstTableNumber);
+            movePlayersInReferenceTo(tableNumberOfCurrentPlayer);
         }
         return gamePlayer.getId();
-    }
-
-    private void movePlayersInReferenceTo(int tableNumberAfterNewOne) {
-        while (gamePlayers.getFirst().getTableNumber() != tableNumberAfterNewOne) {
-            gamePlayers.addLast(gamePlayers.pollFirst());
-        }
     }
 
     private int getTableNumberAfter(Integer tableNumber) {
@@ -60,8 +54,10 @@ class Game {
         }
     }
 
-    Blinds getBlinds() {
-        return blinds;
+    private void movePlayersInReferenceTo(int tableNumberAfterNewOne) {
+        while (gamePlayers.getFirst().getTableNumber() != tableNumberAfterNewOne) {
+            gamePlayers.addLast(gamePlayers.pollFirst());
+        }
     }
 
     Deque<GamePlayer> getActivePlayers() {
@@ -70,8 +66,33 @@ class Game {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
+    //todo
     Collection<GamePlayer> getGamePlayers() {
         return Collections.unmodifiableCollection(gamePlayers);
+    }
+
+    void updateBlinds(int small) {
+        blinds.setBlinds(small);
+    }
+
+    Blinds getBlinds() {
+        return blinds;
+    }
+
+    void setGameTimeStamp(long gameTimeStamp) {
+        this.gameTimeStamp = gameTimeStamp;
+    }
+
+    long getGameTimeStamp() {
+        return gameTimeStamp;
+    }
+
+    void setEntryFee(int entryFee) {
+        this.entryFee = entryFee;
+    }
+
+    int getEntryFee() {
+        return entryFee;
     }
 
     void rotatePlayers() {
@@ -87,10 +108,6 @@ class Game {
         gamePlayer.setActive(isActive);
     }
 
-    void updateBlinds(int small) {
-        blinds.setBlinds(small);
-    }
-
     int findEmptyTableNumber() {
         List<Integer> tableNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
         gamePlayers.forEach(player -> tableNumbers.remove(player.getTableNumber()));
@@ -101,29 +118,13 @@ class Game {
         return tableNumbers.get(0);
     }
 
-    long getGameTimeStamp() {
-        return gameTimeStamp;
-    }
-
-    void setGameTimeStamp(long gameTimeStamp) {
-        this.gameTimeStamp = gameTimeStamp;
-    }
-
-    int getEntryFee() {
-        return entryFee;
-    }
-
-    void setEntryFee(int entryFee) {
-        this.entryFee = entryFee;
-    }
-
-    public void removeGamePlayer(UUID id) {
+    void removeGamePlayer(UUID id) {
         gamePlayers = gamePlayers.stream()
                 .filter(player -> !player.getId().equals(id))
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    public void buyIn(UUID id) {
+    void buyIn(UUID id) {
         GamePlayer player = findPlayerById(id);
         player.buyIn();
     }

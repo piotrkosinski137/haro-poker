@@ -38,7 +38,6 @@ public class GameRestController {
         gameService.setEntryFee(entryFee);
     }
 
-
     @PostMapping("/round/finish/{id}")
     public void finishRound(@PathVariable String id) {
         gameService.finishRound(UUID.fromString(id));
