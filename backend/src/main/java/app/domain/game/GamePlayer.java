@@ -1,8 +1,8 @@
-package app.domain.player;
+package app.domain.game;
 
 import java.util.UUID;
 
-public class GamePlayer {
+public class GamePlayer { //todo make package scope
 
     private final UUID id;
     private final Integer tableNumber;

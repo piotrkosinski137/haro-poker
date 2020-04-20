@@ -1,9 +1,11 @@
 package app.web.rest;
 
-import app.domain.game.GameService;
+import app.domain.game.GamePlayerService;
 import app.domain.round.RoundService;
 import app.web.websocket.dto.CardDto;
 import app.web.websocket.dto.CardMapper;
+import java.util.Collection;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,37 +14,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/player")
 public class PlayerRestController {
 
-    private final GameService gameService;
+    private final GamePlayerService gamePlayerService;
     private final RoundService roundService;
     private final CardMapper cardMapper;
 
-    public PlayerRestController(GameService gameService, RoundService roundService, CardMapper cardMapper) {
-        this.gameService = gameService;
+    public PlayerRestController(GamePlayerService gamePlayerService, RoundService roundService, CardMapper cardMapper) {
+        this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
         this.cardMapper = cardMapper;
     }
 
     @PostMapping("/add")
     public AddPlayerResponse addPlayer(@RequestParam String playerName) {
-        UUID playerId = gameService.joinToGame(playerName);
+        UUID playerId = gamePlayerService.joinToGame(playerName);
         return new AddPlayerResponse(playerId.toString());
     }
 
     @GetMapping("/{id}/cards")
     public Collection<CardDto> getCards(@PathVariable String id) {
         return cardMapper.mapToDtos(roundService.getPlayerCards(id));
-    }
-
-    @PostMapping("/{id}/activation-status")
-    public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
-        gameService.changeActiveStatus(UUID.fromString(id), isActive);
     }
 
     @PostMapping("/{id}/all-in")
@@ -60,13 +54,19 @@ public class PlayerRestController {
         roundService.fold();
     }
 
+    //todo in next stage put to other controller
+    @PostMapping("/{id}/activation-status")
+    public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
+        gamePlayerService.changeActiveStatus(UUID.fromString(id), isActive);
+    }
+
     @PostMapping("/{id}/buy-in")
     public void buyIn(@PathVariable String id) {
-        gameService.buyIn(UUID.fromString(id));
+        gamePlayerService.buyIn(UUID.fromString(id));
     }
 
     @DeleteMapping("{id}/remove")
     public void removePlayer(@PathVariable String id) {
-        gameService.removePlayer(UUID.fromString(id));
+        gamePlayerService.removePlayer(UUID.fromString(id));
     }
 }

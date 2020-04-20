@@ -1,10 +1,10 @@
 package app.web.websocket;
 
 import app.domain.game.GameDto;
+import app.domain.game.GamePlayerDto;
+import app.domain.game.GamePlayerService;
 import app.domain.game.GameService;
 import app.domain.round.RoundService;
-import app.web.websocket.dto.GamePlayerDto;
-import app.web.websocket.dto.GamePlayerMapper;
 import app.web.websocket.dto.RoundDto;
 import app.web.websocket.dto.RoundMapper;
 import app.web.websocket.dto.RoundPlayerDto;
@@ -17,23 +17,23 @@ import org.springframework.stereotype.Controller;
 public class GameSocketController {
 
     private final GameService gameService;
+    private final GamePlayerService gamePlayerService;
     private final RoundService roundService;
-    private final GamePlayerMapper gamePlayerMapper;
     private final RoundPlayerMapper roundPlayerMapper;
     private final RoundMapper roundMapper;
 
-    public GameSocketController(GameService gameService, RoundService roundService, GamePlayerMapper gamePlayerMapper, RoundPlayerMapper roundPlayerMapper,
+    public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundService roundService, RoundPlayerMapper roundPlayerMapper,
             RoundMapper roundMapper) {
         this.gameService = gameService;
+        this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
-        this.gamePlayerMapper = gamePlayerMapper;
         this.roundPlayerMapper = roundPlayerMapper;
         this.roundMapper = roundMapper;
     }
 
     @SubscribeMapping("/topic/game-players")
     public Collection<GamePlayerDto> subscribeToGamePlayers() {
-        return gamePlayerMapper.mapToDtos(gameService.getPlayers());
+        return gamePlayerService.getPlayers();
     }
 
     @SubscribeMapping("/topic/round-players")
@@ -48,6 +48,6 @@ public class GameSocketController {
 
     @SubscribeMapping("/topic/game")
     public GameDto subscribeToGame() {
-        return gameService.getGameDto();
+        return gameService.getGame();
     }
 }

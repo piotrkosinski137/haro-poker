@@ -2,8 +2,6 @@ package app.domain.game;
 
 import app.domain.game.exceptions.GameIsFull;
 import app.domain.game.exceptions.GamePlayerNotFound;
-import app.domain.player.GamePlayer;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +12,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.springframework.stereotype.Component;
 
+@Component
 class Game {
 
     private Deque<GamePlayer> gamePlayers;

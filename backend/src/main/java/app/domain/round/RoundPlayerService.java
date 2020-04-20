@@ -1,16 +1,15 @@
 package app.domain.round;
 
-import app.domain.game.Blinds;
-import app.domain.player.GamePlayer;
+import static app.domain.round.Position.BIG_BLIND;
+import static app.domain.round.Position.DEALER;
+import static app.domain.round.Position.SMALL_BLIND;
 
+import app.domain.game.Blinds;
+import app.domain.game.GamePlayer;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static app.domain.round.Position.BIG_BLIND;
-import static app.domain.round.Position.DEALER;
-import static app.domain.round.Position.SMALL_BLIND;
 
 class RoundPlayerService {
 

@@ -5,7 +5,7 @@ import app.domain.card.CardDeckService;
 import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
 import app.domain.game.Blinds;
-import app.domain.player.GamePlayer;
+import app.domain.game.GamePlayer;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
@@ -36,7 +36,7 @@ public class RoundService {
         round = new Round();
     }
 
-    public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) {
+    public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) { //todo make gamePlayers package
         round.reset();
         roundPlayerService = new RoundPlayerService(gamePlayers);
         cardDeckService.shuffleNewDeck();

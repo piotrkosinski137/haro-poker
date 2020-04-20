@@ -1,10 +1,9 @@
 package app.web.websocket;
 
-import app.domain.event.GamePlayersChanged;
 import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
 import app.domain.game.GameChanged;
-import app.web.websocket.dto.GamePlayerMapper;
+import app.domain.game.GamePlayersChanged;
 import app.web.websocket.dto.RoundMapper;
 import app.web.websocket.dto.RoundPlayerMapper;
 import org.springframework.context.event.EventListener;
@@ -16,14 +15,22 @@ public class GameEventListener {
 
     private final SimpMessagingTemplate template;
     private final RoundPlayerMapper roundPlayerMapper;
-    private final GamePlayerMapper gamePlayerMapper;
     private final RoundMapper roundMapper;
 
-    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper, GamePlayerMapper gamePlayerMapper, RoundMapper roundMapper) {
+    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper, RoundMapper roundMapper) {
         this.template = template;
         this.roundPlayerMapper = roundPlayerMapper;
-        this.gamePlayerMapper = gamePlayerMapper;
         this.roundMapper = roundMapper;
+    }
+
+    @EventListener
+    public void handleGamePlayersChange(GamePlayersChanged event) {
+        template.convertAndSend("/topic/game-players", event.getGamePlayers());
+    }
+
+    @EventListener
+    public void handleGameChange(GameChanged event) {
+        template.convertAndSend("/topic/game", event.getGameDto());
     }
 
     @EventListener
@@ -33,16 +40,6 @@ public class GameEventListener {
         } else {
             template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(event.getRoundPlayers()));
         }
-    }
-
-    @EventListener
-    public void handleGamePlayersChange(GamePlayersChanged event) {
-        template.convertAndSend("/topic/game-players", gamePlayerMapper.mapToDtos(event.getGamePlayers()));
-    }
-
-    @EventListener
-    public void handleGameChange(GameChanged event) {
-        template.convertAndSend("/topic/game", event.getGameDto());
     }
 
     @EventListener

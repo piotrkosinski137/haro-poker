@@ -1,7 +1,6 @@
 package app.domain.game
 
 
-import app.domain.player.GamePlayer
 import spock.lang.Shared
 import spock.lang.Specification
 

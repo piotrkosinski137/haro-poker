@@ -1,7 +1,6 @@
 package app.web.websocket.dto;
 
 import app.domain.card.Card;
-import app.domain.player.GamePlayer;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

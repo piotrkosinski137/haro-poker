@@ -1,7 +1,5 @@
 package app.domain.game;
 
-import app.domain.event.GamePlayersChanged;
-import app.domain.player.GamePlayer;
 import java.util.Collection;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ class GameEventPublisher {
     }
 
     public void publishGamePlayerEvent(Collection<GamePlayer> players) {
-        publisher.publishEvent(new GamePlayersChanged(this, players));
+        final Collection<GamePlayerDto> gamePlayers = GamePlayerDto.fromGamePlayersCollection(players);
+        publisher.publishEvent(new GamePlayersChanged(this, gamePlayers));
     }
 }
