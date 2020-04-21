@@ -19,19 +19,19 @@ class GamePlayer {
         active = true;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 
-    public Integer getTableNumber() {
+    Integer getTableNumber() {
         return tableNumber;
     }
 
-    public int getBalance() {
+    int getBalance() {
         return balance;
     }
 
-    public boolean isActive() {
+    boolean isActive() {
         return active;
     }
 
@@ -40,24 +40,24 @@ class GamePlayer {
         checkIfPlayerIsActive();
     }
 
-    public void buyIn() {
+    void buyIn() {
         balance = INIT_BALANCE;
         activatePlayer();
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void changeState() {
+    void changeState() {
         this.active = !active;
     }
 
-    public void deactivatePlayer(){ active = false;} //todo too many methods to change state
+    void deactivatePlayer(){ active = false;} //todo too many methods to change state
 
-    public void activatePlayer(){ active = true;}
+    void activatePlayer(){ active = true;}
 
-    private void checkIfPlayerIsActive() {
+    void checkIfPlayerIsActive() {
         active = balance > 0;
     }
 

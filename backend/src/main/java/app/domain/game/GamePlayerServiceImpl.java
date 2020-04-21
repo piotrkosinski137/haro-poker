@@ -35,7 +35,7 @@ class GamePlayerServiceImpl implements GamePlayerService {
     }
 
     @Override
-    public void removePlayer(UUID id) { //todo remember about tests!
+    public void removePlayer(UUID id) { //todo remember about tests!, my idea is to move this to round service
         game.getGamePlayers().remove(findPlayerById(id));
         //roundService.removeRoundPlayer(id);
         publisher.publishGamePlayerEvent(getPlayers());
@@ -56,7 +56,7 @@ class GamePlayerServiceImpl implements GamePlayerService {
         publisher.publishGamePlayerEvent(getPlayers());
     }
 
-    GamePlayer createNewGamePlayer(final String playerName, int emptyTableNumber) {
+    private GamePlayer createNewGamePlayer(final String playerName, int emptyTableNumber) {
         return new GamePlayer(playerName, emptyTableNumber);
     }
 

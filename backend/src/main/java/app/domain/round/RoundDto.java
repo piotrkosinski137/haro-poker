@@ -8,7 +8,7 @@ public class RoundDto {
     private Collection<CardDto> cards;
     private String stage;
 
-    public RoundDto(String stage, Collection<CardDto> cards) {
+    RoundDto(String stage, Collection<CardDto> cards) {
         this.cards = cards;
         this.stage = stage;
     }

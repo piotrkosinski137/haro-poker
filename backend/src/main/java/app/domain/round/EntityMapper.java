@@ -1,6 +1,5 @@
-package app.web.websocket.dto;
+package app.domain.round;
 
-import app.domain.round.Position;
 import java.util.UUID;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;

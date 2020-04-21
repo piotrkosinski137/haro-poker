@@ -1,11 +1,10 @@
 package app.web.websocket;
 
-import app.domain.round.RoundChanged;
-import app.domain.round.RoundPlayersChanged;
 import app.domain.game.GameChanged;
 import app.domain.game.GamePlayersChanged;
-import app.web.websocket.dto.RoundMapper;
-import app.web.websocket.dto.RoundPlayerMapper;
+import app.domain.round.RoundChanged;
+import app.domain.round.RoundPlayersChanged;
+import app.domain.round.RoundPlayerMapper;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -15,12 +14,10 @@ public class GameEventListener {
 
     private final SimpMessagingTemplate template;
     private final RoundPlayerMapper roundPlayerMapper;
-    private final RoundMapper roundMapper;
 
-    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper, RoundMapper roundMapper) {
+    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper) {
         this.template = template;
         this.roundPlayerMapper = roundPlayerMapper;
-        this.roundMapper = roundMapper;
     }
 
     @EventListener
@@ -34,7 +31,7 @@ public class GameEventListener {
     }
 
     @EventListener
-    public void handleRoundPlayersChange(RoundPlayersChanged event) {
+    public void handleRoundPlayersChange(RoundPlayersChanged event) { //todo
         if (event.isWithCards()) {
             template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtosWithCards(event.getRoundPlayers()));
         } else {

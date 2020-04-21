@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Round {
+class Round {
 
     private Set<CardDto> tableCards;
     private RoundStage stage;
@@ -21,7 +21,7 @@ public class Round {
         stage = RoundStage.NOT_STARTED;
     }
 
-    public Set<CardDto> getTableCards() {
+    Set<CardDto> getTableCards() {
         return Collections.unmodifiableSet(tableCards);
     }
 
@@ -29,7 +29,7 @@ public class Round {
         tableCards.addAll(cards);
     }
 
-    public RoundStage getRoundStage() {
+    RoundStage getRoundStage() {
         return stage;
     }
 

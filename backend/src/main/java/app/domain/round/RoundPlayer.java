@@ -145,4 +145,18 @@ public class RoundPlayer {
     public void setMadeMoveInStage(boolean madeMoveInStage) {
         this.madeMoveInStage = madeMoveInStage;
     }
+
+    public boolean isHasFolded() {
+        return hasFolded;
+    }
+
+    public boolean isHasTurn() {
+        return hasTurn;
+    }
+
+    public Integer getTableNumber() {
+        return tableNumber;
+    }
+
+
 }
