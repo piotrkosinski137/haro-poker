@@ -1,7 +1,7 @@
 package app.domain.round;
 
-import app.domain.card.Card;
 import app.domain.card.CardDeckService;
+import app.domain.card.CardDto;
 import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
 import app.domain.game.Blinds;
@@ -10,9 +10,6 @@ import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
@@ -21,6 +18,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
 @Service
 public class RoundService {
@@ -83,7 +82,7 @@ public class RoundService {
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers(), true));
     }
 
-    public synchronized Set<Card> getPlayerCards(final String id) {
+    public synchronized Set<CardDto> getPlayerCards(final String id) {
         return roundPlayerService.getRoundPlayers().stream()
                 .filter(roundPlayer -> roundPlayer.getId().toString().equals(id))
                 .findFirst()

@@ -1,6 +1,6 @@
 package app.domain.card;
 
-public enum Suit {
+enum Suit {
     DIAMONDS("D"),
     CLUBS("C"),
     HEARTS("H"),
@@ -12,7 +12,7 @@ public enum Suit {
         this.value = value;
     }
 
-    public String getValue() {
+    String getValue() {
         return value;
     }
 }

@@ -1,7 +1,6 @@
 package app.domain.round;
 
-import app.domain.card.Card;
-
+import app.domain.card.CardDto;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -12,7 +11,7 @@ public class RoundPlayer {
 
     private final UUID id;
     private int balance;
-    private Set<Card> cardsInHand;
+    private Set<CardDto> cardsInHand;
     private int turnBid;
     private int roundBid;
     private boolean hasFolded;
@@ -37,11 +36,11 @@ public class RoundPlayer {
         return balance;
     }
 
-    public Set<Card> getCardsInHand() {
+    public Set<CardDto> getCardsInHand() {
         return Collections.unmodifiableSet(cardsInHand);
     }
 
-    void putCardsInHand(final Set<Card> cards) {
+    void putCardsInHand(final Set<CardDto> cards) {
         cardsInHand.addAll(cards);
     }
 

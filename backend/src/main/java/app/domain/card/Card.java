@@ -2,7 +2,7 @@ package app.domain.card;
 
 import java.util.Objects;
 
-public class Card implements Comparable<Card> {
+class Card implements Comparable<Card> {
 
     private final Rank rank;
     private final Suit suit;
@@ -12,11 +12,11 @@ public class Card implements Comparable<Card> {
         this.suit = suit;
     }
 
-    public Rank getRank() {
+    Rank getRank() {
         return this.rank;
     }
 
-    public Suit getSuit() {
+    Suit getSuit() {
         return this.suit;
     }
 

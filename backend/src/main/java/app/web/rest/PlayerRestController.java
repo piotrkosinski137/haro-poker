@@ -2,8 +2,7 @@ package app.web.rest;
 
 import app.domain.game.GamePlayerService;
 import app.domain.round.RoundService;
-import app.web.websocket.dto.CardDto;
-import app.web.websocket.dto.CardMapper;
+import app.domain.card.CardDto;
 import java.util.Collection;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,12 +19,10 @@ public class PlayerRestController {
 
     private final GamePlayerService gamePlayerService;
     private final RoundService roundService;
-    private final CardMapper cardMapper;
 
-    public PlayerRestController(GamePlayerService gamePlayerService, RoundService roundService, CardMapper cardMapper) {
+    public PlayerRestController(GamePlayerService gamePlayerService, RoundService roundService) {
         this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
-        this.cardMapper = cardMapper;
     }
 
     @PostMapping("/add")
@@ -36,7 +33,7 @@ public class PlayerRestController {
 
     @GetMapping("/{id}/cards")
     public Collection<CardDto> getCards(@PathVariable String id) {
-        return cardMapper.mapToDtos(roundService.getPlayerCards(id));
+        return roundService.getPlayerCards(id);
     }
 
     @PostMapping("/{id}/all-in")

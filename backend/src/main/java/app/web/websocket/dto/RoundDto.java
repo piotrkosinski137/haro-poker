@@ -1,5 +1,6 @@
 package app.web.websocket.dto;
 
+import app.domain.card.CardDto;
 import java.util.Collection;
 import java.util.List;
 

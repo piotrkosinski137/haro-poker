@@ -6,14 +6,14 @@ import static app.domain.round.RoundStage.INIT;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
-import app.domain.card.Card;
+import app.domain.card.CardDto;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Round {
 
-    private Set<Card> tableCards;
+    private Set<CardDto> tableCards;
     private RoundStage stage;
 
     Round() {
@@ -21,11 +21,11 @@ public class Round {
         stage = RoundStage.NOT_STARTED;
     }
 
-    public Set<Card> getTableCards() {
+    public Set<CardDto> getTableCards() {
         return Collections.unmodifiableSet(tableCards);
     }
 
-    void putCardsOnTable(final Set<Card> cards) {
+    void putCardsOnTable(final Set<CardDto> cards) {
         tableCards.addAll(cards);
     }
 
