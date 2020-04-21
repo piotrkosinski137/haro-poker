@@ -2,47 +2,49 @@ package app.domain.round;
 
 import app.domain.card.CardDeckService;
 import app.domain.round.exception.RoundNotStarted;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoundServiceImpl {
+class RoundServiceImpl implements RoundService {
 
     private final CardDeckService cardDeckService;
-    private final ApplicationEventPublisher publisherGlobal;
+    private final RoundEventPublisher publisher;
     private final Round round;
 
-    public RoundServiceImpl(final CardDeckService cardDeckService,
-            ApplicationEventPublisher publisherGlobal, Round round) {
+    public RoundServiceImpl(final CardDeckService cardDeckService, RoundEventPublisher publisher, Round round) {
         this.cardDeckService = cardDeckService;
-        this.publisherGlobal = publisherGlobal;
+        this.publisher = publisher;
         this.round = round;
     }
 
+    @Override
     public void startRound() {
         cardDeckService.shuffleNewDeck();
         round.start();
-        publisherGlobal.publishEvent(new RoundChanged(this, getRound()));
+        publisher.publishRoundEvent(getRound());
     }
 
-    void startNextStage() {
+    @Override
+    public void startNextStage() {
         changeRoundStage();
         putCardsOnTable();
-        publisherGlobal.publishEvent(new RoundChanged(this, getRound()));
+        publisher.publishRoundEvent(getRound());
     }
 
-    void changeRoundStage() {
+    @Override
+    public void changeRoundStage() {
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
         round.changeRoundStage();
     }
 
-    private void putCardsOnTable() {
-        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
-    }
-
+    @Override
     public RoundDto getRound() {
         return new RoundDto(round.getRoundStage().name(), round.getTableCards());
+    }
+
+    private void putCardsOnTable() {
+        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
     }
 }

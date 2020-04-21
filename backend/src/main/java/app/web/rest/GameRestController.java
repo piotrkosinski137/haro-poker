@@ -2,7 +2,7 @@ package app.web.rest;
 
 import app.domain.game.GameService;
 import app.domain.round.RoundPlayerServiceImpl;
-import app.domain.round.RoundServiceImpl;
+import app.domain.round.RoundService;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameRestController {
 
     private final GameService gameService;
-    private final RoundServiceImpl roundService;
+    private final RoundService roundService;
     private final RoundPlayerServiceImpl roundPlayerService;
 
-    public GameRestController(GameService gameService, RoundServiceImpl roundService, RoundPlayerServiceImpl roundPlayerService) {
+    public GameRestController(GameService gameService, RoundService roundService, RoundPlayerServiceImpl roundPlayerService) {
         this.gameService = gameService;
         this.roundService = roundService;
         this.roundPlayerService = roundPlayerService;

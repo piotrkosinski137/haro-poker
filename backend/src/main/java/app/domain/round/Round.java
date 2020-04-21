@@ -70,7 +70,7 @@ class Round {
         roundPlayers = players;
     }
 
-    public Deque<RoundPlayer> getRoundPlayers() {
+    Deque<RoundPlayer> getRoundPlayers() {
         return roundPlayers;
     }
 }

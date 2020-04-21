@@ -29,10 +29,10 @@ public class RoundPlayerServiceImpl {
     private final Round round;
     private final ApplicationEventPublisher publisherGlobal;
     private final GamePlayerService gamePlayerService;
-    private final RoundServiceImpl roundService;
+    private final RoundService roundService;
     private final CardDeckService cardDeckService;
 
-    public RoundPlayerServiceImpl(Round round, ApplicationEventPublisher publisherGlobal, GamePlayerService gamePlayerService, RoundServiceImpl roundService,
+    public RoundPlayerServiceImpl(Round round, ApplicationEventPublisher publisherGlobal, GamePlayerService gamePlayerService, RoundService roundService,
             CardDeckService cardDeckService) {
         this.round = round;
         this.publisherGlobal = publisherGlobal;
