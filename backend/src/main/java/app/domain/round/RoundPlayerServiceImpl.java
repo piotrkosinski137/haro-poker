@@ -4,14 +4,20 @@ import static app.domain.round.Position.BIG_BLIND;
 import static app.domain.round.Position.DEALER;
 import static app.domain.round.Position.SMALL_BLIND;
 
+import app.domain.card.CardDeckService;
+import app.domain.card.CardDto;
 import app.domain.game.Blinds;
 import app.domain.game.GamePlayerDto;
 import app.domain.game.GamePlayerService;
+import app.domain.round.exception.PlayerNotFound;
+import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,18 +29,25 @@ public class RoundPlayerServiceImpl {
     private final Round round;
     private final ApplicationEventPublisher publisherGlobal;
     private final GamePlayerService gamePlayerService;
+    private final RoundServiceImpl roundService;
+    private final CardDeckService cardDeckService;
 
-    public RoundPlayerServiceImpl(Round round, ApplicationEventPublisher publisherGlobal, GamePlayerService gamePlayerService) {
+    public RoundPlayerServiceImpl(Round round, ApplicationEventPublisher publisherGlobal, GamePlayerService gamePlayerService, RoundServiceImpl roundService,
+            CardDeckService cardDeckService) {
         this.round = round;
         this.publisherGlobal = publisherGlobal;
         this.gamePlayerService = gamePlayerService;
+        this.roundService = roundService;
+        this.cardDeckService = cardDeckService;
     }
 
-    void startRound(Deque<GamePlayerDto> gamePlayers, Blinds blinds) {
+    public void startRound(Deque<GamePlayerDto> gamePlayers, Blinds blinds) {
         if (gamePlayers.size() < 2) {
             //exception
         }
+        roundService.startRound();
         round.addPlayers(convertToRoundPlayers(gamePlayers));
+        giveCardsToPlayers();
         chargeBlinds(blinds);
         giveTurnToCurrentPlayer();
         publisherGlobal.publishEvent(new RoundPlayersChanged(this, getRoundPlayers()));
@@ -95,17 +108,26 @@ public class RoundPlayerServiceImpl {
         publisherGlobal.publishEvent(new RoundPlayersChanged(this, getRoundPlayers(), true));
     }
 
-    void bid(int amount) {
+    public void bid(int amount) {
         RoundPlayer player = round.getRoundPlayers().pollFirst();
         player.bid(amount);
         round.getRoundPlayers().addLast(player);
+        checkGameConditions();
     }
 
-    void allIn() {
+    public void allIn() {
         RoundPlayer player = round.getRoundPlayers().pollFirst();
         player.allIn();
         clearPlayersInGameMadeMoveInStage();
         round.getRoundPlayers().addLast(player);
+        checkGameConditions();
+    }
+
+    public void fold() {
+        RoundPlayer player = round.getRoundPlayers().pollFirst();
+        player.fold();
+        round.getRoundPlayers().addLast(player);
+        checkGameConditions();
     }
 
     private void clearPlayersInGameMadeMoveInStage() {
@@ -114,10 +136,68 @@ public class RoundPlayerServiceImpl {
                 .forEach(player -> player.setMadeMoveInStage(false));
     }
 
-    void fold() {
-        RoundPlayer player = round.getRoundPlayers().pollFirst();
-        player.fold();
-        round.getRoundPlayers().addLast(player);
+    private void checkGameConditions() {
+        if (isOnePlayerInGame()) {
+            handleLastPlayerAction();
+        } else {
+            handleMultiplePlayersAction();
+        }
+    }
+
+    private boolean isOnePlayerInGame() {
+        return round.getRoundPlayers().stream()
+                .filter(RoundPlayer::isInGame)
+                .collect(Collectors.toSet()).size() == 1;
+    }
+
+    private void handleLastPlayerAction() {
+        if (playerCalledAllIn()) {
+            showRoundPlayersSummary();
+        } else {
+            giveTurnToCurrentPlayer();
+        }
+    }
+
+    private void handleMultiplePlayersAction() {
+        if (isStageOver()) {
+            if (round.getRoundStage() == RoundStage.RIVER) {
+                showRoundPlayersSummary();
+            } else {
+                roundService.startNextStage();
+                preparePlayersForNextStage();
+            }
+        } else {
+            if (!giveTurnToCurrentPlayer()) {
+                showRoundPlayersSummary();
+            } else {
+                publisherGlobal.publishEvent(new RoundPlayersChanged(this, getRoundPlayers()));
+            }
+        }
+    }
+
+    private boolean playerCalledAllIn() {
+        RoundPlayer currentPlayer = getFirstPlayerInGame();
+        return currentPlayer.getBalance() == 0 || playerBidHighestAllIn(currentPlayer);
+    }
+
+    private boolean isStageOver() {
+        return playersBidsAreEqual() && allHadTurnInStage();
+    }
+
+    private boolean allHadTurnInStage() {
+        return round.getRoundPlayers().stream().allMatch(RoundPlayer::madeMoveInStage);
+    }
+
+
+    private boolean playerBidHighestAllIn(RoundPlayer currentPlayer) {
+        return getPlayersWithAllIn().stream()
+                .allMatch(player -> currentPlayer.getRoundBid() >= player.getRoundBid());
+    }
+
+    public List<RoundPlayer> getPlayersWithAllIn() {
+        return round.getRoundPlayers().stream()
+                .filter(RoundPlayer::hasAllIn)
+                .collect(Collectors.toList());
     }
 
     boolean giveTurnToCurrentPlayer() {
@@ -186,11 +266,30 @@ public class RoundPlayerServiceImpl {
         publisherGlobal.publishEvent(new RoundPlayersChanged(this, getRoundPlayers()));
     }
 
-    public boolean allHadTurnInStage() {
-        return round.getRoundPlayers().stream().allMatch(RoundPlayer::madeMoveInStage);
+    public synchronized Set<CardDto> getPlayerCards(final String id) {
+        return round.getRoundPlayers().stream()
+                .filter(roundPlayer -> roundPlayer.getId().toString().equals(id))
+                .findFirst()
+                .orElseThrow(PlayerNotFound::new)
+                .getCardsInHand();
     }
 
-    Deque<RoundPlayer> getRoundPlayers() {
+    public void finishRoundWithWinner(final UUID winnerPlayerId) { //todo move
+        if (round.getRoundStage() == RoundStage.NOT_STARTED) {
+            throw new RoundNotStarted();
+        }
+        pickWinner(winnerPlayerId);
+    }
+
+    public void manualFinishRound(UpdatePlayerBalanceRequest updateBalances) { //todo move
+        updatePlayersBalance(updateBalances);
+    }
+
+    private void giveCardsToPlayers() {
+        round.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
+    }
+
+    public Deque<RoundPlayer> getRoundPlayers() {
         return round.getRoundPlayers();
     }
 }

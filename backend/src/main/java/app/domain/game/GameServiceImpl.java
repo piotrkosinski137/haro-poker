@@ -1,6 +1,6 @@
 package app.domain.game;
 
-import app.domain.round.RoundServiceImpl;
+import app.domain.round.RoundPlayerServiceImpl;
 import java.time.Instant;
 import java.util.ArrayDeque;
 import org.springframework.stereotype.Service;
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 class GameServiceImpl implements GameService {
 
-    private final RoundServiceImpl roundService;
+    private final RoundPlayerServiceImpl roundPlayerService;
     private final GameEventPublisher publisher;
     private final Game game;
 
-    public GameServiceImpl(final RoundServiceImpl roundService, GameEventPublisher publisher, Game game) {
-        this.roundService = roundService;
+    public GameServiceImpl(final RoundPlayerServiceImpl roundPlayerService, GameEventPublisher publisher, Game game) {
+        this.roundPlayerService = roundPlayerService;
         this.publisher = publisher;
         this.game = game;
     }
@@ -28,7 +28,7 @@ class GameServiceImpl implements GameService {
 
     @Override
     public void startRound() {
-        roundService.startRound(new ArrayDeque<>(GamePlayerDto.fromGamePlayersCollection(game.getActivePlayers())), game.getBlinds());
+        roundPlayerService.startRound(new ArrayDeque<>(GamePlayerDto.fromGamePlayersCollection(game.getActivePlayers())), game.getBlinds());
     }
 
     @Override

@@ -3,7 +3,6 @@ package app.web.rest;
 import app.domain.card.CardDto;
 import app.domain.game.GamePlayerService;
 import app.domain.round.RoundPlayerServiceImpl;
-import app.domain.round.RoundServiceImpl;
 import java.util.Collection;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,12 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayerRestController {
 
     private final GamePlayerService gamePlayerService;
-    private final RoundServiceImpl roundService;
     private final RoundPlayerServiceImpl roundPlayerService;
 
-    public PlayerRestController(GamePlayerService gamePlayerService, RoundServiceImpl roundService, RoundPlayerServiceImpl roundPlayerService) {
+    public PlayerRestController(GamePlayerService gamePlayerService, RoundPlayerServiceImpl roundPlayerService) {
         this.gamePlayerService = gamePlayerService;
-        this.roundService = roundService;
         this.roundPlayerService = roundPlayerService;
     }
 
@@ -36,22 +33,22 @@ public class PlayerRestController {
 
     @GetMapping("/{id}/cards")
     public Collection<CardDto> getCards(@PathVariable String id) {
-        return roundService.getPlayerCards(id);
+        return roundPlayerService.getPlayerCards(id);
     }
 
     @PostMapping("/{id}/all-in")
     public void allIn(@PathVariable String id) {
-        roundService.allIn();
+        roundPlayerService.allIn();
     }
 
     @PostMapping("/{id}/bid")
     public void bid(@PathVariable String id, @RequestParam int amount) {
-        roundService.bid(amount);
+        roundPlayerService.bid(amount);
     }
 
     @PostMapping("/{id}/fold")
     public void fold(@PathVariable String id) {
-        roundService.fold();
+        roundPlayerService.fold();
     }
 
     @DeleteMapping("{id}/remove")

@@ -4,6 +4,7 @@ import app.domain.game.GameDto;
 import app.domain.game.GamePlayerDto;
 import app.domain.game.GamePlayerService;
 import app.domain.game.GameService;
+import app.domain.round.RoundPlayerServiceImpl;
 import app.domain.round.RoundServiceImpl;
 import app.domain.round.RoundDto;
 import app.domain.round.RoundPlayerDto;
@@ -18,12 +19,15 @@ public class GameSocketController {
     private final GameService gameService;
     private final GamePlayerService gamePlayerService;
     private final RoundServiceImpl roundService;
+    private final RoundPlayerServiceImpl roundPlayerService;
     private final RoundPlayerMapper roundPlayerMapper;
 
-    public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundServiceImpl roundService, RoundPlayerMapper roundPlayerMapper) {
+    public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundServiceImpl roundService,
+            RoundPlayerServiceImpl roundPlayerService, RoundPlayerMapper roundPlayerMapper) {
         this.gameService = gameService;
         this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
+        this.roundPlayerService = roundPlayerService;
         this.roundPlayerMapper = roundPlayerMapper;
     }
 
@@ -34,7 +38,7 @@ public class GameSocketController {
 
     @SubscribeMapping("/topic/round-players")
     public Collection<RoundPlayerDto> subscribeToRoundPlayers() {
-        return roundPlayerMapper.mapToDtos(roundService.getPlayers());
+        return roundPlayerMapper.mapToDtos(roundPlayerService.getRoundPlayers());
     } //todo
 
     @SubscribeMapping("/topic/round")
