@@ -1,4 +1,4 @@
-package app.web.websocket.dto;
+package app.domain.round;
 
 import app.domain.card.CardDto;
 import java.util.Collection;
@@ -8,7 +8,7 @@ public class RoundDto {
     private Collection<CardDto> cards;
     private String stage;
 
-    RoundDto(String stage, Collection<CardDto> cards) {
+    public RoundDto(String stage, Collection<CardDto> cards) {
         this.cards = cards;
         this.stage = stage;
     }

@@ -1,6 +1,7 @@
 package app.web.websocket.dto;
 
 import app.domain.round.Round;
+import app.domain.round.RoundDto;
 import org.springframework.stereotype.Component;
 
 @Component

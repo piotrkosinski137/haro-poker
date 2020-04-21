@@ -5,9 +5,9 @@ import app.domain.game.GamePlayerDto;
 import app.domain.game.GamePlayerService;
 import app.domain.game.GameService;
 import app.domain.round.RoundServiceImpl;
-import app.web.websocket.dto.RoundDto;
+import app.domain.round.RoundDto;
 import app.web.websocket.dto.RoundMapper;
-import app.web.websocket.dto.RoundPlayerDto;
+import app.domain.round.RoundPlayerDto;
 import app.web.websocket.dto.RoundPlayerMapper;
 import java.util.Collection;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -43,7 +43,7 @@ public class GameSocketController {
 
     @SubscribeMapping("/topic/round")
     public RoundDto subscribeToRound() {
-        return roundMapper.mapToDto(roundService.getRound());
+        return roundService.getRound();
     }
 
     @SubscribeMapping("/topic/game")

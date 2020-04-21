@@ -2,10 +2,8 @@ package app.domain.round;
 
 import app.domain.card.CardDeckService;
 import app.domain.card.CardDto;
-import app.domain.event.RoundChanged;
-import app.domain.event.RoundPlayersChanged;
 import app.domain.game.Blinds;
-import app.domain.game.GamePlayer;
+import app.domain.game.GamePlayerDto;
 import app.domain.game.GamePlayerService;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
@@ -26,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class RoundServiceImpl {
 
     private final CardDeckService cardDeckService;
-    private RoundPlayerService roundPlayerService;
+    private RoundPlayerServiceImpl roundPlayerService;
     private final GamePlayerService gamePlayerService;
     private final ApplicationEventPublisher publisher;
     private final Round round;
@@ -38,14 +36,14 @@ public class RoundServiceImpl {
         round = new Round();
     }
 
-    public void startRound(final Deque<GamePlayer> gamePlayers, final Blinds blinds) { //todo make gamePlayers package
-        round.reset();
-        roundPlayerService = new RoundPlayerService(gamePlayers);
+    public void startRound(final Deque<GamePlayerDto> gamePlayers, final Blinds blinds) { //todo make gamePlayers package
+        round.start();
+        roundPlayerService = new RoundPlayerServiceImpl(gamePlayers);
         cardDeckService.shuffleNewDeck();
         roundPlayerService.chargeBlinds(blinds);
         roundPlayerService.giveTurnToCurrentPlayer();
         giveCardsToPlayers();
-        publisher.publishEvent(new RoundChanged(this, round));
+        publisher.publishEvent(new RoundChanged(this, getRound()));
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
@@ -95,7 +93,7 @@ public class RoundServiceImpl {
         putCardsOnTable();
         roundPlayerService.preparePlayersForNextStage();
         roundPlayerService.putProperPlayerOnTop();
-        publisher.publishEvent(new RoundChanged(this, round));
+        publisher.publishEvent(new RoundChanged(this, getRound()));
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
@@ -111,8 +109,8 @@ public class RoundServiceImpl {
                 .getCardsInHand();
     }
 
-    public Round getRound() {
-        return round;
+    public RoundDto getRound() {
+        return new RoundDto(round.getRoundStage().name(), round.getTableCards());
     }
 
     public Collection<RoundPlayer> getPlayers() {
@@ -227,6 +225,6 @@ public class RoundServiceImpl {
     public void manualNextRound() {
         changeRoundStage();
         putCardsOnTable();
-        publisher.publishEvent(new RoundChanged(this, round));
+        publisher.publishEvent(new RoundChanged(this, getRound()));
     }
 }

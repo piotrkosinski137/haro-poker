@@ -33,7 +33,7 @@ public class Round {
         return stage;
     }
 
-    void reset() {
+    void start() {
       stage = INIT;
       tableCards = new HashSet<>();
     }

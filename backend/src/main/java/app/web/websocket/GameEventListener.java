@@ -1,7 +1,7 @@
 package app.web.websocket;
 
-import app.domain.event.RoundChanged;
-import app.domain.event.RoundPlayersChanged;
+import app.domain.round.RoundChanged;
+import app.domain.round.RoundPlayersChanged;
 import app.domain.game.GameChanged;
 import app.domain.game.GamePlayersChanged;
 import app.web.websocket.dto.RoundMapper;
@@ -44,6 +44,6 @@ public class GameEventListener {
 
     @EventListener
     public void handleRoundChanged(RoundChanged event) {
-        template.convertAndSend("/topic/round", roundMapper.mapToDto(event.getRound()));
+        template.convertAndSend("/topic/round", event.getRound());
     }
 }

@@ -1,6 +1,5 @@
-package app.domain.event;
+package app.domain.round;
 
-import app.domain.round.RoundPlayer;
 import java.util.Collection;
 import org.springframework.context.ApplicationEvent;
 

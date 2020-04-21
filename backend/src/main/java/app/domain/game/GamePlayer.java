@@ -2,7 +2,7 @@ package app.domain.game;
 
 import java.util.UUID;
 
-public class GamePlayer { //todo make package scope
+class GamePlayer {
 
     private final UUID id;
     private final Integer tableNumber;

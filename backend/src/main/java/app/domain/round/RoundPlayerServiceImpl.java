@@ -5,17 +5,17 @@ import static app.domain.round.Position.DEALER;
 import static app.domain.round.Position.SMALL_BLIND;
 
 import app.domain.game.Blinds;
-import app.domain.game.GamePlayer;
+import app.domain.game.GamePlayerDto;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class RoundPlayerService {
+class RoundPlayerServiceImpl {
 
     private Deque<RoundPlayer> roundPlayers;
 
-    RoundPlayerService(final Deque<GamePlayer> gamePlayers) {
+    RoundPlayerServiceImpl(final Deque<GamePlayerDto> gamePlayers) {
         this.roundPlayers = convertToRoundPlayers(gamePlayers);
     }
 
@@ -23,9 +23,9 @@ class RoundPlayerService {
         return new ArrayDeque<>(roundPlayers);
     }
 
-    private Deque<RoundPlayer> convertToRoundPlayers(final Deque<GamePlayer> gamePlayers) {
+    private Deque<RoundPlayer> convertToRoundPlayers(final Deque<GamePlayerDto> gamePlayers) {
         return gamePlayers.stream()
-                .map(player -> new RoundPlayer(player.getId(), player.getBalance(), player.getTableNumber()))
+                .map(player -> new RoundPlayer(UUID.fromString(player.getId()), player.getBalance(), player.getTableNumber()))
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 

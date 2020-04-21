@@ -2,6 +2,7 @@ package app.domain.game;
 
 import app.domain.round.RoundServiceImpl;
 import java.time.Instant;
+import java.util.ArrayDeque;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +28,7 @@ class GameServiceImpl implements GameService {
 
     @Override
     public void startRound() {
-        roundService.startRound(game.getActivePlayers(), game.getBlinds());
+        roundService.startRound(new ArrayDeque<>(GamePlayerDto.fromGamePlayersCollection(game.getActivePlayers())), game.getBlinds());
     }
 
     @Override

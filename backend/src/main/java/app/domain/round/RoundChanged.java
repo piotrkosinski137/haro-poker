@@ -1,18 +1,17 @@
-package app.domain.event;
+package app.domain.round;
 
-import app.domain.round.Round;
 import org.springframework.context.ApplicationEvent;
 
 public class RoundChanged extends ApplicationEvent {
 
-    private final Round round;
+    private final RoundDto round;
 
-    public RoundChanged(final Object source, final Round round) {
+    public RoundChanged(final Object source, final RoundDto round) {
         super(source);
         this.round = round;
     }
 
-    public Round getRound() {
+    public RoundDto getRound() {
         return round;
     }
 }
