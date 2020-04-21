@@ -10,12 +10,12 @@ public interface GamePlayerService {
 
     void buyIn(UUID playerId);
 
-    void changeActiveStatus(UUID id, boolean isActive);
+    void changeActiveStatus(UUID id);
 
     void removePlayer(UUID id);
 
     Collection<GamePlayerDto> getPlayers();
 
-    void updateBalance(final Collection<GamePlayer> gamePlayers, final Collection<RoundPlayer> roundPlayers);
+    void updateAfterRound(final Collection<RoundPlayer> roundPlayers);
 
 }

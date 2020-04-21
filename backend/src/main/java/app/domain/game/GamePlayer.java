@@ -2,7 +2,7 @@ package app.domain.game;
 
 import java.util.UUID;
 
-public class GamePlayer { //todo make package scope
+class GamePlayer {
 
     private final UUID id;
     private final Integer tableNumber;
@@ -19,19 +19,19 @@ public class GamePlayer { //todo make package scope
         active = true;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 
-    public Integer getTableNumber() {
+    Integer getTableNumber() {
         return tableNumber;
     }
 
-    public int getBalance() {
+    int getBalance() {
         return balance;
     }
 
-    public boolean isActive() {
+    boolean isActive() {
         return active;
     }
 
@@ -40,24 +40,61 @@ public class GamePlayer { //todo make package scope
         checkIfPlayerIsActive();
     }
 
-    public void buyIn() {
+    void buyIn() {
         balance = INIT_BALANCE;
         activatePlayer();
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    void changeState() {
+        this.active = !active;
     }
 
-    public void deactivatePlayer(){ active = false;}
+    void deactivatePlayer(){ active = false;} //todo too many methods to change state
 
-    public void activatePlayer(){ active = true;}
+    void activatePlayer(){ active = true;}
 
-    private void checkIfPlayerIsActive() {
+    void checkIfPlayerIsActive() {
         active = balance > 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        GamePlayer that = (GamePlayer) o;
+
+        if (balance != that.balance) {
+            return false;
+        }
+        if (active != that.active) {
+            return false;
+        }
+        if (!id.equals(that.id)) {
+            return false;
+        }
+        if (!tableNumber.equals(that.tableNumber)) {
+            return false;
+        }
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + tableNumber.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + balance;
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + INIT_BALANCE;
+        return result;
     }
 }

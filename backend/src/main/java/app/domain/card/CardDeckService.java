@@ -11,12 +11,12 @@ public class CardDeckService {
         CardDeck.getNewShuffledDeck();
     }
 
-    public Set<Card> getCards(final int amount) {
+    public Set<CardDto> getCards(final int amount) {
         Set<Card> cards = new HashSet<>();
         final CardDeck cardDeck = CardDeck.getExistingDeck();
         for (int i = 0; i < amount; i++) {
             cards.add(cardDeck.getDeck().pollFirst());
         }
-        return cards;
+        return (Set<CardDto>) CardDto.fromCardsCollection(cards);
     }
 }

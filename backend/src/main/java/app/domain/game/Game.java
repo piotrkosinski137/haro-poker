@@ -1,12 +1,9 @@
 package app.domain.game;
 
 import app.domain.game.exceptions.GameIsFull;
-import app.domain.game.exceptions.GamePlayerNotFound;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 class Game {
 
-    private Deque<GamePlayer> gamePlayers;
+    private final Deque<GamePlayer> gamePlayers;
     private final Blinds blinds;
     private long gameTimeStamp;
     private int entryFee;
@@ -38,7 +35,7 @@ class Game {
             movePlayersInReferenceTo(tableNumberOfCurrentPlayer);
         }
         return gamePlayer.getId();
-    }
+    } //todo think to move this method to gamePlayerService
 
     private int getTableNumberAfter(Integer tableNumber) {
         List<Integer> sortedTableNumbers = Stream.concat(Stream.of(tableNumber), gamePlayers.stream()
@@ -66,9 +63,8 @@ class Game {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
-    //todo
-    Collection<GamePlayer> getGamePlayers() {
-        return Collections.unmodifiableCollection(gamePlayers);
+    Deque<GamePlayer> getGamePlayers() {
+        return gamePlayers;
     }
 
     void updateBlinds(int small) {
@@ -103,11 +99,6 @@ class Game {
         return gamePlayers.size() == 7;
     }
 
-    void changeActiveStatus(UUID id, boolean isActive) { //TODO think about not use boolean here
-        GamePlayer gamePlayer = findPlayerById(id);
-        gamePlayer.setActive(isActive);
-    }
-
     int findEmptyTableNumber() {
         List<Integer> tableNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
         gamePlayers.forEach(player -> tableNumbers.remove(player.getTableNumber()));
@@ -116,22 +107,5 @@ class Game {
             throw new GameIsFull();
         }
         return tableNumbers.get(0);
-    }
-
-    void removeGamePlayer(UUID id) {
-        gamePlayers = gamePlayers.stream()
-                .filter(player -> !player.getId().equals(id))
-                .collect(Collectors.toCollection(ArrayDeque::new));
-    }
-
-    void buyIn(UUID id) {
-        GamePlayer player = findPlayerById(id);
-        player.buyIn();
-    }
-
-    private GamePlayer findPlayerById(UUID id) {
-        return gamePlayers.stream().filter(player -> player.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new GamePlayerNotFound(id));
     }
 }

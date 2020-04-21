@@ -1,6 +1,7 @@
 package app.domain.game;
 
-import java.util.Collection;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.stream.Collectors;
 
 public class GamePlayerDto {
@@ -24,9 +25,9 @@ public class GamePlayerDto {
         return gamePlayerDto;
     }
 
-    public static Collection<GamePlayerDto> fromGamePlayersCollection(final Collection<GamePlayer> gamePlayers) {
+    public static Deque<GamePlayerDto> fromGamePlayersCollection(final Deque<GamePlayer> gamePlayers) {
         return gamePlayers.stream().map(GamePlayerDto::fromGamePlayer)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     public String getId() {
