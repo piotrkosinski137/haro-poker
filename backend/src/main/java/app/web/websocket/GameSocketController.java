@@ -4,7 +4,7 @@ import app.domain.game.GameDto;
 import app.domain.game.GamePlayerDto;
 import app.domain.game.GamePlayerService;
 import app.domain.game.GameService;
-import app.domain.round.RoundService;
+import app.domain.round.RoundServiceImpl;
 import app.web.websocket.dto.RoundDto;
 import app.web.websocket.dto.RoundMapper;
 import app.web.websocket.dto.RoundPlayerDto;
@@ -18,11 +18,11 @@ public class GameSocketController {
 
     private final GameService gameService;
     private final GamePlayerService gamePlayerService;
-    private final RoundService roundService;
+    private final RoundServiceImpl roundService;
     private final RoundPlayerMapper roundPlayerMapper;
     private final RoundMapper roundMapper;
 
-    public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundService roundService, RoundPlayerMapper roundPlayerMapper,
+    public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundServiceImpl roundService, RoundPlayerMapper roundPlayerMapper,
             RoundMapper roundMapper) {
         this.gameService = gameService;
         this.gamePlayerService = gamePlayerService;

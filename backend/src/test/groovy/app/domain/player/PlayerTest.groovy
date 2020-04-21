@@ -19,7 +19,7 @@ class PlayerTest extends Specification {
 
     def 'should deactivate player'() {
         when: 'when balance is lower or equals 0'
-        player.updateBalance(0)
+        player.updateAfterRound(0)
 
         then:
         !player.isActive()
@@ -35,8 +35,8 @@ class PlayerTest extends Specification {
 
     def 'should activate player'() {
         when:
-        player.updateBalance(0)
-        player.updateBalance(500)
+        player.updateAfterRound(0)
+        player.updateAfterRound(500)
 
         then:
         player.isActive()

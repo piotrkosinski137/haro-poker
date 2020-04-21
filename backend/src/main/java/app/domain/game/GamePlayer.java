@@ -49,15 +49,52 @@ public class GamePlayer { //todo make package scope
         return name;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void changeState() {
+        this.active = !active;
     }
 
-    public void deactivatePlayer(){ active = false;}
+    public void deactivatePlayer(){ active = false;} //todo too many methods to change state
 
     public void activatePlayer(){ active = true;}
 
     private void checkIfPlayerIsActive() {
         active = balance > 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        GamePlayer that = (GamePlayer) o;
+
+        if (balance != that.balance) {
+            return false;
+        }
+        if (active != that.active) {
+            return false;
+        }
+        if (!id.equals(that.id)) {
+            return false;
+        }
+        if (!tableNumber.equals(that.tableNumber)) {
+            return false;
+        }
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + tableNumber.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + balance;
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + INIT_BALANCE;
+        return result;
     }
 }

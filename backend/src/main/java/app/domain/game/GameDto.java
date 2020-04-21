@@ -5,7 +5,7 @@ public class GameDto {
     private int bigBlind;
     private long gameTimeStamp;
 
-    public GameDto(Blinds blinds, long gameTimeStamp) {
+    GameDto(Blinds blinds, long gameTimeStamp) {
         this.gameTimeStamp = gameTimeStamp;
         this.smallBlind = blinds.getSmall();
         this.bigBlind = blinds.getBig();

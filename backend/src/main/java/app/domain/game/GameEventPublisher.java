@@ -13,13 +13,11 @@ class GameEventPublisher {
         this.publisher = publisher;
     }
 
-    public void publishGameEvent(Game game) {
-        final GameDto gameDto = new GameDto(game.getBlinds(), game.getGameTimeStamp());
+    public void publishGameEvent(GameDto gameDto) {
         publisher.publishEvent(new GameChanged(this, gameDto));
     }
 
-    public void publishGamePlayerEvent(Collection<GamePlayer> players) {
-        final Collection<GamePlayerDto> gamePlayers = GamePlayerDto.fromGamePlayersCollection(players);
-        publisher.publishEvent(new GamePlayersChanged(this, gamePlayers));
+    public void publishGamePlayerEvent(Collection<GamePlayerDto> players) {
+        publisher.publishEvent(new GamePlayersChanged(this, players));
     }
 }

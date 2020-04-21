@@ -1,7 +1,7 @@
 package app.web.rest;
 
 import app.domain.game.GamePlayerService;
-import app.domain.round.RoundService;
+import app.domain.round.RoundServiceImpl;
 import app.domain.card.CardDto;
 import java.util.Collection;
 import java.util.UUID;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayerRestController {
 
     private final GamePlayerService gamePlayerService;
-    private final RoundService roundService;
+    private final RoundServiceImpl roundService;
 
-    public PlayerRestController(GamePlayerService gamePlayerService, RoundService roundService) {
+    public PlayerRestController(GamePlayerService gamePlayerService, RoundServiceImpl roundService) {
         this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
     }
@@ -54,7 +54,7 @@ public class PlayerRestController {
     //todo in next stage put to other controller
     @PostMapping("/{id}/activation-status")
     public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
-        gamePlayerService.changeActiveStatus(UUID.fromString(id), isActive);
+        gamePlayerService.changeActiveStatus(UUID.fromString(id));
     }
 
     @PostMapping("/{id}/buy-in")

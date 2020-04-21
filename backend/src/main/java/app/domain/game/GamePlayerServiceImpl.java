@@ -1,27 +1,21 @@
 package app.domain.game;
 
-import app.domain.event.RoundPlayersChanged;
 import app.domain.game.exceptions.GameIsFull;
+import app.domain.game.exceptions.GamePlayerNotFound;
 import app.domain.round.RoundPlayer;
-import app.domain.round.RoundService;
 import java.util.Collection;
 import java.util.UUID;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
-class GamePlayerServiceImpl implements GamePlayerService{
+class GamePlayerServiceImpl implements GamePlayerService {
 
     private final Game game;
-    private final RoundService roundService;
     private final GameEventPublisher publisher;
-    private final ApplicationEventPublisher publisherGlobal; //todo remove in next step refactor
 
-    public GamePlayerServiceImpl(Game game, RoundService roundService, GameEventPublisher publisher, ApplicationEventPublisher publisherGlobal) {
+    public GamePlayerServiceImpl(Game game, GameEventPublisher publisher) {
         this.game = game;
-        this.roundService = roundService;
         this.publisher = publisher;
-        this.publisherGlobal = publisherGlobal;
     }
 
     @Override
@@ -30,39 +24,46 @@ class GamePlayerServiceImpl implements GamePlayerService{
             throw new GameIsFull();
         }
         UUID playerId = game.addPlayer(createNewGamePlayer(playerName, game.findEmptyTableNumber()));
-        publisher.publishGamePlayerEvent(game.getGamePlayers());
+        publisher.publishGamePlayerEvent(getPlayers());
         return playerId;
     }
 
     @Override
-    public void buyIn(UUID playerId) {
-        game.buyIn(playerId);
-        publisher.publishGamePlayerEvent(game.getGamePlayers());
+    public void buyIn(UUID id) {
+        findPlayerById(id).buyIn();
+        publisher.publishGamePlayerEvent(getPlayers());
     }
 
     @Override
-    public void removePlayer(UUID id) {
-        game.removeGamePlayer(id);
-        roundService.removeRoundPlayer(id);
-        publisher.publishGamePlayerEvent(game.getGamePlayers());
-        publisherGlobal.publishEvent(new RoundPlayersChanged(this, roundService.getPlayers())); //todo move it in next stage
+    public void removePlayer(UUID id) { //todo remember about tests!
+        game.getGamePlayers().remove(findPlayerById(id));
+        //roundService.removeRoundPlayer(id);
+        publisher.publishGamePlayerEvent(getPlayers());
     }
 
     @Override
-    public void changeActiveStatus(UUID id, boolean isActive) {
-        game.changeActiveStatus(id, isActive);
+    public void changeActiveStatus(UUID id) {
+        findPlayerById(id).changeState();
     }
 
     @Override
-    public void updateBalance(final Collection<GamePlayer> gamePlayers, final Collection<RoundPlayer> roundPlayers) {
-        roundPlayers.forEach(roundPlayer -> gamePlayers.stream()
+    public void updateAfterRound(final Collection<RoundPlayer> roundPlayers) {
+        roundPlayers.forEach(roundPlayer -> game.getActivePlayers().stream()
                 .filter(gamePlayer -> gamePlayer.getId().equals(roundPlayer.getId()))
                 .findFirst()
                 .ifPresent(playerToUpdate -> playerToUpdate.updateBalance(roundPlayer.getBalance())));
+        game.rotatePlayers();
+        publisher.publishGamePlayerEvent(getPlayers());
     }
 
     GamePlayer createNewGamePlayer(final String playerName, int emptyTableNumber) {
         return new GamePlayer(playerName, emptyTableNumber);
+    }
+
+    private GamePlayer findPlayerById(UUID id) {
+        return game.getGamePlayers().stream().filter(player -> player.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new GamePlayerNotFound(id));
     }
 
     @Override

@@ -2,6 +2,7 @@ package app.web.rest;
 
 import app.domain.game.GameService;
 
+import app.domain.round.RoundServiceImpl;
 import java.util.UUID;
 
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameRestController {
 
     private final GameService gameService;
+    private final RoundServiceImpl roundService;
 
-    public GameRestController(GameService gameService) {
+    public GameRestController(GameService gameService, RoundServiceImpl roundService) {
         this.gameService = gameService;
+        this.roundService = roundService;
     }
 
     @PostMapping("/start")
@@ -40,7 +43,7 @@ public class GameRestController {
 
     @PostMapping("/round/finish/{id}")
     public void finishRound(@PathVariable String id) {
-        gameService.finishRound(UUID.fromString(id));
+        roundService.finishRoundWithWinner(UUID.fromString(id));
     }
 
     @PutMapping("/blinds/update")
@@ -50,11 +53,11 @@ public class GameRestController {
 
     @PutMapping("/admin/round-bids/update")
     public void manualFinishRound(@RequestBody UpdatePlayerBalanceRequest updateBids) {
-        gameService.manualFinishRound(updateBids);
+        roundService.manualFinishRound(updateBids);
     }
 
     @PostMapping("/round/next")
     public void manualNextRound() {
-        gameService.manualNextRound();
+        roundService.manualNextRound();
     }
 }

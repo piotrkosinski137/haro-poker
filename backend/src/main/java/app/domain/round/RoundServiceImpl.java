@@ -6,6 +6,7 @@ import app.domain.event.RoundChanged;
 import app.domain.event.RoundPlayersChanged;
 import app.domain.game.Blinds;
 import app.domain.game.GamePlayer;
+import app.domain.game.GamePlayerService;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
@@ -22,15 +23,17 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoundService {
+public class RoundServiceImpl {
 
     private final CardDeckService cardDeckService;
     private RoundPlayerService roundPlayerService;
+    private final GamePlayerService gamePlayerService;
     private final ApplicationEventPublisher publisher;
     private final Round round;
 
-    public RoundService(final CardDeckService cardDeckService, ApplicationEventPublisher publisher) {
+    public RoundServiceImpl(final CardDeckService cardDeckService, GamePlayerService gamePlayerService, ApplicationEventPublisher publisher) {
         this.cardDeckService = cardDeckService;
+        this.gamePlayerService = gamePlayerService;
         this.publisher = publisher;
         round = new Round();
     }
@@ -46,13 +49,31 @@ public class RoundService {
         publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
-    public Deque<RoundPlayer> finishRound(final UUID winnerPlayerId) {
+    public void finishRoundWithWinner(final UUID winnerPlayerId) {
+        pickWinner(winnerPlayerId);
+        finishRound();
+    }
+
+    public void manualFinishRound(UpdatePlayerBalanceRequest updateBalances) {
+        updatePlayersBalance(updateBalances);
+        finishRound();
+    }
+
+    private void finishRound() {
+        final Collection<RoundPlayer> players = getPlayers();
+        gamePlayerService.updateAfterRound(players);
+        players.forEach(RoundPlayer::clearBids);
+        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+    }
+
+    public Deque<RoundPlayer> pickWinner(final UUID winnerPlayerId) {
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
         roundPlayerService.pickWinner(winnerPlayerId);
         return roundPlayerService.getRoundPlayers();
     }
+
 
     public void startNextStage() {
         changeRoundStage();
@@ -190,6 +211,7 @@ public class RoundService {
 
     public void removeRoundPlayer(UUID id) {
         roundPlayerService.removeRoundPlayer(id);
+        //publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
     }
 
     public void updatePlayersBalance(UpdatePlayerBalanceRequest updateBalances) {
