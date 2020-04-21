@@ -4,10 +4,8 @@ import app.domain.card.CardDeckService;
 import app.domain.card.CardDto;
 import app.domain.game.Blinds;
 import app.domain.game.GamePlayerDto;
-import app.domain.game.GamePlayerService;
 import app.domain.round.exception.PlayerNotFound;
 import app.domain.round.exception.RoundNotStarted;
-import app.web.rest.dto.PlayerMoney;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
 import java.util.Collection;
 import java.util.Deque;
@@ -24,65 +22,36 @@ import org.springframework.stereotype.Service;
 public class RoundServiceImpl {
 
     private final CardDeckService cardDeckService;
-    private RoundPlayerServiceImpl roundPlayerService;
-    private final GamePlayerService gamePlayerService;
-    private final ApplicationEventPublisher publisher;
+    private final RoundPlayerServiceImpl roundPlayerService;
+    private final ApplicationEventPublisher publisherGlobal;
     private final Round round;
 
-    public RoundServiceImpl(final CardDeckService cardDeckService, GamePlayerService gamePlayerService, ApplicationEventPublisher publisher) {
+    public RoundServiceImpl(final CardDeckService cardDeckService, RoundPlayerServiceImpl roundPlayerService,
+            ApplicationEventPublisher publisherGlobal, Round round) {
         this.cardDeckService = cardDeckService;
-        this.gamePlayerService = gamePlayerService;
-        this.publisher = publisher;
-        round = new Round();
+        this.roundPlayerService = roundPlayerService;
+        this.publisherGlobal = publisherGlobal;
+        this.round = round;
     }
 
-    public void startRound(final Deque<GamePlayerDto> gamePlayers, final Blinds blinds) { //todo make gamePlayers package
-        round.start();
-        roundPlayerService = new RoundPlayerServiceImpl(gamePlayers);
+    public void startRound(final Deque<GamePlayerDto> gamePlayers, final Blinds blinds) {
         cardDeckService.shuffleNewDeck();
-        roundPlayerService.chargeBlinds(blinds);
-        roundPlayerService.giveTurnToCurrentPlayer();
+        round.start();
+        roundPlayerService.startRound(gamePlayers, blinds);
         giveCardsToPlayers();
-        publisher.publishEvent(new RoundChanged(this, getRound()));
-        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        publisherGlobal.publishEvent(new RoundChanged(this, getRound()));
     }
 
-    public void finishRoundWithWinner(final UUID winnerPlayerId) {
-        pickWinner(winnerPlayerId);
-        finishRound();
-    }
-
-    public void manualFinishRound(UpdatePlayerBalanceRequest updateBalances) {
-        updatePlayersBalance(updateBalances);
-        finishRound();
-    }
-
-    private void finishRound() {
-        final Collection<RoundPlayer> players = getPlayers();
-        gamePlayerService.updateAfterRound(players);
-        players.forEach(RoundPlayer::clearBids);
-        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-    }
-
-    public Deque<RoundPlayer> pickWinner(final UUID winnerPlayerId) {
-        if (round.getRoundStage() == RoundStage.NOT_STARTED) {
-            throw new RoundNotStarted();
-        }
-        roundPlayerService.pickWinner(winnerPlayerId);
-        return roundPlayerService.getRoundPlayers();
-    }
-
-
-    public void startNextStage() {
+    private void startNextStage() {
         changeRoundStage();
         if (round.getRoundStage() == RoundStage.FINISHED) {
-            showRoundSummary();
+            roundPlayerService.showRoundPlayersSummary();
         } else {
             proceedNewStage();
         }
     }
 
-    public void changeRoundStage() {
+    private void changeRoundStage() {
         if (round.getRoundStage() == RoundStage.NOT_STARTED) {
             throw new RoundNotStarted();
         }
@@ -92,33 +61,36 @@ public class RoundServiceImpl {
     private void proceedNewStage() {
         putCardsOnTable();
         roundPlayerService.preparePlayersForNextStage();
-        roundPlayerService.putProperPlayerOnTop();
-        publisher.publishEvent(new RoundChanged(this, getRound()));
-        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+        publisherGlobal.publishEvent(new RoundChanged(this, getRound()));
     }
 
-    private void showRoundSummary() {
-        publisher.publishEvent(new RoundPlayersChanged(this, getPlayers(), true));
+    private void putCardsOnTable() {
+        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
     }
 
-    public synchronized Set<CardDto> getPlayerCards(final String id) {
+    public void manualNextRound() {
+        changeRoundStage();
+        putCardsOnTable();
+        publisherGlobal.publishEvent(new RoundChanged(this, getRound()));
+    }
+
+    public void finishRoundWithWinner(final UUID winnerPlayerId) { //todo move
+        if (round.getRoundStage() == RoundStage.NOT_STARTED) {
+            throw new RoundNotStarted();
+        }
+        roundPlayerService.pickWinner(winnerPlayerId);
+    }
+
+    public void manualFinishRound(UpdatePlayerBalanceRequest updateBalances) { //todo move
+        roundPlayerService.updatePlayersBalance(updateBalances);
+    }
+
+    public synchronized Set<CardDto> getPlayerCards(final String id) {  //todo move
         return roundPlayerService.getRoundPlayers().stream()
                 .filter(roundPlayer -> roundPlayer.getId().toString().equals(id))
                 .findFirst()
                 .orElseThrow(PlayerNotFound::new)
                 .getCardsInHand();
-    }
-
-    public RoundDto getRound() {
-        return new RoundDto(round.getRoundStage().name(), round.getTableCards());
-    }
-
-    public Collection<RoundPlayer> getPlayers() {
-        if (Objects.isNull(roundPlayerService)) {
-            return new HashSet<>();
-        } else {
-            return roundPlayerService.getRoundPlayers();
-        }
     }
 
     public void allIn() {
@@ -152,36 +124,35 @@ public class RoundServiceImpl {
 
     private void handleLastPlayerAction() {
         if (playerCalledAllIn()) {
-            showRoundSummary();
+            roundPlayerService.showRoundPlayersSummary();
         } else {
             roundPlayerService.giveTurnToCurrentPlayer();
-            publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
         }
+    }
+
+    private boolean playerCalledAllIn() {
+        RoundPlayer currentPlayer = roundPlayerService.getFirstPlayerInGame();
+        return currentPlayer.getBalance() == 0 || playerBidHighestAllIn(currentPlayer);
     }
 
     private void handleMultiplePlayersAction() {
         if (isStageOver()) {
             if (round.getRoundStage() == RoundStage.RIVER) {
-                showRoundSummary();
+                roundPlayerService.showRoundPlayersSummary();
             } else {
                 startNextStage();
             }
         } else {
             if (!roundPlayerService.giveTurnToCurrentPlayer()) {
-                showRoundSummary();
+                roundPlayerService.showRoundPlayersSummary();
             } else {
-                publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
+                publisherGlobal.publishEvent(new RoundPlayersChanged(this, getPlayers()));
             }
         }
     }
 
     private boolean isStageOver() {
         return roundPlayerService.playersBidsAreEqual() && allHadTurn();
-    }
-
-    private boolean playerCalledAllIn() {
-        RoundPlayer currentPlayer = roundPlayerService.getFirstPlayerInGame();
-        return currentPlayer.getBalance() == 0 || playerBidHighestAllIn(currentPlayer);
     }
 
     private boolean playerBidHighestAllIn(RoundPlayer currentPlayer) {
@@ -203,28 +174,15 @@ public class RoundServiceImpl {
         roundPlayerService.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
     }
 
-    private void putCardsOnTable() {
-        round.putCardsOnTable(cardDeckService.getCards(round.getRoundStage().getCardAmount()));
+    public RoundDto getRound() {
+        return new RoundDto(round.getRoundStage().name(), round.getTableCards());
     }
 
-    public void removeRoundPlayer(UUID id) {
-        roundPlayerService.removeRoundPlayer(id);
-        //publisher.publishEvent(new RoundPlayersChanged(this, getPlayers()));
-    }
-
-    public void updatePlayersBalance(UpdatePlayerBalanceRequest updateBalances) {
-        roundPlayerService.getRoundPlayers().forEach(player -> player.winMoney(
-                updateBalances.getPlayerMoney().stream()
-                        .filter(updateBalance -> updateBalance.getPlayerId().equals(player.getId().toString()))
-                        .findFirst()
-                        .orElse(new PlayerMoney())
-                        .getMoney()
-        ));
-    }
-
-    public void manualNextRound() {
-        changeRoundStage();
-        putCardsOnTable();
-        publisher.publishEvent(new RoundChanged(this, getRound()));
+    public Collection<RoundPlayer> getPlayers() {
+        if (Objects.isNull(roundPlayerService)) {
+            return new HashSet<>();
+        } else {
+            return roundPlayerService.getRoundPlayers();
+        }
     }
 }

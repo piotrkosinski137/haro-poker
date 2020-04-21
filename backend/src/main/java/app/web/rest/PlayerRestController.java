@@ -1,8 +1,9 @@
 package app.web.rest;
 
-import app.domain.game.GamePlayerService;
-import app.domain.round.RoundServiceImpl;
 import app.domain.card.CardDto;
+import app.domain.game.GamePlayerService;
+import app.domain.round.RoundPlayerServiceImpl;
+import app.domain.round.RoundServiceImpl;
 import java.util.Collection;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +20,12 @@ public class PlayerRestController {
 
     private final GamePlayerService gamePlayerService;
     private final RoundServiceImpl roundService;
+    private final RoundPlayerServiceImpl roundPlayerService;
 
-    public PlayerRestController(GamePlayerService gamePlayerService, RoundServiceImpl roundService) {
+    public PlayerRestController(GamePlayerService gamePlayerService, RoundServiceImpl roundService, RoundPlayerServiceImpl roundPlayerService) {
         this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
+        this.roundPlayerService = roundPlayerService;
     }
 
     @PostMapping("/add")
@@ -51,6 +54,11 @@ public class PlayerRestController {
         roundService.fold();
     }
 
+    @DeleteMapping("{id}/remove")
+    public void removePlayer(@PathVariable String id) {
+        roundPlayerService.removeRoundPlayer(UUID.fromString(id));
+    }
+
     //todo in next stage put to other controller
     @PostMapping("/{id}/activation-status")
     public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
@@ -60,10 +68,5 @@ public class PlayerRestController {
     @PostMapping("/{id}/buy-in")
     public void buyIn(@PathVariable String id) {
         gamePlayerService.buyIn(UUID.fromString(id));
-    }
-
-    @DeleteMapping("{id}/remove")
-    public void removePlayer(@PathVariable String id) {
-        gamePlayerService.removePlayer(UUID.fromString(id));
     }
 }
