@@ -1,5 +1,6 @@
-package app.web.websocket.dto;
+package app.domain.round;
 
+import app.domain.card.CardDto;
 import java.util.Set;
 
 public class RoundPlayerDto {

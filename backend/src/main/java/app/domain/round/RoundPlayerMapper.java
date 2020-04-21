@@ -1,6 +1,5 @@
-package app.web.websocket.dto;
+package app.domain.round;
 
-import app.domain.round.RoundPlayer;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;

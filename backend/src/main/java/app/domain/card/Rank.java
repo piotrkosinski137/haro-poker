@@ -1,6 +1,6 @@
 package app.domain.card;
 
-public enum Rank {
+enum Rank {
     TWO("2"),
     THREE("3"),
     FOUR("4"),
@@ -21,7 +21,7 @@ public enum Rank {
         this.value = value;
     }
 
-    public String getValue() {
+    String getValue() {
         return value;
     }
 }

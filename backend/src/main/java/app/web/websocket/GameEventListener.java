@@ -1,13 +1,10 @@
 package app.web.websocket;
 
-import app.domain.event.GameChanged;
-import app.domain.event.GamePlayersChanged;
-import app.domain.event.RoundChanged;
-import app.domain.event.RoundPlayersChanged;
-import app.web.websocket.dto.GameDto;
-import app.web.websocket.dto.GamePlayerMapper;
-import app.web.websocket.dto.RoundMapper;
-import app.web.websocket.dto.RoundPlayerMapper;
+import app.domain.game.GameChanged;
+import app.domain.game.GamePlayersChanged;
+import app.domain.round.RoundChanged;
+import app.domain.round.RoundPlayersChanged;
+import app.domain.round.RoundPlayerMapper;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -17,18 +14,24 @@ public class GameEventListener {
 
     private final SimpMessagingTemplate template;
     private final RoundPlayerMapper roundPlayerMapper;
-    private final GamePlayerMapper gamePlayerMapper;
-    private final RoundMapper roundMapper;
 
-    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper, GamePlayerMapper gamePlayerMapper, RoundMapper roundMapper) {
+    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper) {
         this.template = template;
         this.roundPlayerMapper = roundPlayerMapper;
-        this.gamePlayerMapper = gamePlayerMapper;
-        this.roundMapper = roundMapper;
     }
 
     @EventListener
-    public void handleRoundPlayersChange(RoundPlayersChanged event) {
+    public void handleGamePlayersChange(GamePlayersChanged event) {
+        template.convertAndSend("/topic/game-players", event.getGamePlayers());
+    }
+
+    @EventListener
+    public void handleGameChange(GameChanged event) {
+        template.convertAndSend("/topic/game", event.getGameDto());
+    }
+
+    @EventListener
+    public void handleRoundPlayersChange(RoundPlayersChanged event) { //todo
         if (event.isWithCards()) {
             template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtosWithCards(event.getRoundPlayers()));
         } else {
@@ -37,17 +40,7 @@ public class GameEventListener {
     }
 
     @EventListener
-    public void handleGamePlayersChange(GamePlayersChanged event) {
-        template.convertAndSend("/topic/game-players", gamePlayerMapper.mapToDtos(event.getGamePlayers()));
-    }
-
-    @EventListener
-    public void handleGameChange(GameChanged event) {
-        template.convertAndSend("/topic/game", new GameDto(event.getBlinds(), event.getGameTimeStamp()));
-    }
-
-    @EventListener
     public void handleRoundChanged(RoundChanged event) {
-        template.convertAndSend("/topic/round", roundMapper.mapToDto(event.getRound()));
+        template.convertAndSend("/topic/round", event.getRound());
     }
 }

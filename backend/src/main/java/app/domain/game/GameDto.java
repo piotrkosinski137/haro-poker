@@ -1,16 +1,11 @@
-package app.web.websocket.dto;
-
-import app.domain.game.Blinds;
+package app.domain.game;
 
 public class GameDto {
     private int smallBlind;
     private int bigBlind;
     private long gameTimeStamp;
 
-    private GameDto() { //??? to avoid initialize dto in invalid state
-    }
-
-    public GameDto(Blinds blinds, long gameTimeStamp) {
+    GameDto(Blinds blinds, long gameTimeStamp) {
         this.gameTimeStamp = gameTimeStamp;
         this.smallBlind = blinds.getSmall();
         this.bigBlind = blinds.getBig();
@@ -22,7 +17,7 @@ public class GameDto {
 
     public void setSmallBlind(int smallBlind) {
         this.smallBlind = smallBlind;
-    }
+    } //todo setters can be removed?
 
     public int getBigBlind() {
         return bigBlind;

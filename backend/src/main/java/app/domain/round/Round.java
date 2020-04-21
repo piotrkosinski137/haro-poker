@@ -6,34 +6,40 @@ import static app.domain.round.RoundStage.INIT;
 import static app.domain.round.RoundStage.RIVER;
 import static app.domain.round.RoundStage.TURN;
 
-import app.domain.card.Card;
+import app.domain.card.CardDto;
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.stereotype.Component;
 
-public class Round {
+@Component
+class Round {
 
-    private Set<Card> tableCards;
+    private Set<CardDto> tableCards;
     private RoundStage stage;
+    private Deque<RoundPlayer> roundPlayers;
 
     Round() {
         tableCards = new HashSet<>();
         stage = RoundStage.NOT_STARTED;
+        roundPlayers = new ArrayDeque<>();
     }
 
-    public Set<Card> getTableCards() {
+    Set<CardDto> getTableCards() {
         return Collections.unmodifiableSet(tableCards);
     }
 
-    void putCardsOnTable(final Set<Card> cards) {
+    void putCardsOnTable(final Set<CardDto> cards) {
         tableCards.addAll(cards);
     }
 
-    public RoundStage getRoundStage() {
+    RoundStage getRoundStage() {
         return stage;
     }
 
-    void reset() {
+    void start() {
       stage = INIT;
       tableCards = new HashSet<>();
     }
@@ -58,5 +64,13 @@ public class Round {
             default:
                 break;
         }
+    }
+
+    void addPlayers(Deque<RoundPlayer> players) {
+        roundPlayers = players;
+    }
+
+    Deque<RoundPlayer> getRoundPlayers() {
+        return roundPlayers;
     }
 }

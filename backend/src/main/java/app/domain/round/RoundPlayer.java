@@ -1,18 +1,17 @@
 package app.domain.round;
 
-import app.domain.card.Card;
-
+import app.domain.card.CardDto;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class RoundPlayer {
+class RoundPlayer {
 
     private final UUID id;
     private int balance;
-    private Set<Card> cardsInHand;
+    private Set<CardDto> cardsInHand;
     private int turnBid;
     private int roundBid;
     private boolean hasFolded;
@@ -29,19 +28,19 @@ public class RoundPlayer {
         this.tableNumber = tableNumber;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 
-    public int getBalance() {
+    int getBalance() {
         return balance;
     }
 
-    public Set<Card> getCardsInHand() {
+    Set<CardDto> getCardsInHand() {
         return Collections.unmodifiableSet(cardsInHand);
     }
 
-    void putCardsInHand(final Set<Card> cards) {
+    void putCardsInHand(final Set<CardDto> cards) {
         cardsInHand.addAll(cards);
     }
 
@@ -126,6 +125,22 @@ public class RoundPlayer {
         return madeMoveInStage;
     }
 
+    public void setMadeMoveInStage(boolean madeMoveInStage) {
+        this.madeMoveInStage = madeMoveInStage;
+    }
+
+    public boolean isHasFolded() {
+        return hasFolded;
+    }
+
+    public boolean isHasTurn() {
+        return hasTurn;
+    }
+
+    public Integer getTableNumber() {
+        return tableNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -143,7 +158,4 @@ public class RoundPlayer {
         return Objects.hash(id);
     }
 
-    public void setMadeMoveInStage(boolean madeMoveInStage) {
-        this.madeMoveInStage = madeMoveInStage;
-    }
 }

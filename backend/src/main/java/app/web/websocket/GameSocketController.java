@@ -1,14 +1,14 @@
 package app.web.websocket;
 
+import app.domain.game.GameDto;
+import app.domain.game.GamePlayerDto;
+import app.domain.game.GamePlayerService;
 import app.domain.game.GameService;
+import app.domain.round.RoundDto;
+import app.domain.round.RoundPlayerDto;
+import app.domain.round.RoundPlayerMapper;
+import app.domain.round.RoundPlayerServiceImpl;
 import app.domain.round.RoundService;
-import app.web.websocket.dto.GameDto;
-import app.web.websocket.dto.GamePlayerDto;
-import app.web.websocket.dto.GamePlayerMapper;
-import app.web.websocket.dto.RoundDto;
-import app.web.websocket.dto.RoundMapper;
-import app.web.websocket.dto.RoundPlayerDto;
-import app.web.websocket.dto.RoundPlayerMapper;
 import java.util.Collection;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
@@ -17,37 +17,37 @@ import org.springframework.stereotype.Controller;
 public class GameSocketController {
 
     private final GameService gameService;
+    private final GamePlayerService gamePlayerService;
     private final RoundService roundService;
-    private final GamePlayerMapper gamePlayerMapper;
+    private final RoundPlayerServiceImpl roundPlayerService;
     private final RoundPlayerMapper roundPlayerMapper;
-    private final RoundMapper roundMapper;
 
-    public GameSocketController(GameService gameService, RoundService roundService, GamePlayerMapper gamePlayerMapper, RoundPlayerMapper roundPlayerMapper,
-            RoundMapper roundMapper) {
+    public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundService roundService,
+            RoundPlayerServiceImpl roundPlayerService, RoundPlayerMapper roundPlayerMapper) {
         this.gameService = gameService;
+        this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
-        this.gamePlayerMapper = gamePlayerMapper;
+        this.roundPlayerService = roundPlayerService;
         this.roundPlayerMapper = roundPlayerMapper;
-        this.roundMapper = roundMapper;
     }
 
     @SubscribeMapping("/topic/game-players")
     public Collection<GamePlayerDto> subscribeToGamePlayers() {
-        return gamePlayerMapper.mapToDtos(gameService.getPlayers());
+        return gamePlayerService.getPlayers();
     }
 
     @SubscribeMapping("/topic/round-players")
     public Collection<RoundPlayerDto> subscribeToRoundPlayers() {
-        return roundPlayerMapper.mapToDtos(roundService.getPlayers());
-    }
+        return roundPlayerMapper.mapToDtos(roundPlayerService.getRoundPlayers());
+    } //todo
 
     @SubscribeMapping("/topic/round")
     public RoundDto subscribeToRound() {
-        return roundMapper.mapToDto(roundService.getRound());
+        return roundService.getRound();
     }
 
     @SubscribeMapping("/topic/game")
     public GameDto subscribeToGame() {
-        return new GameDto(gameService.getBlinds(), gameService.getTimeStamp());
+        return gameService.getGame();
     }
 }
