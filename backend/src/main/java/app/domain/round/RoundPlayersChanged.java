@@ -1,30 +1,18 @@
 package app.domain.round;
 
-import java.util.Collection;
+import java.util.Deque;
 import org.springframework.context.ApplicationEvent;
 
 public class RoundPlayersChanged extends ApplicationEvent {
 
-    private final Collection<RoundPlayer> roundPlayers;
-    private final boolean isWithCards;
+    private final Deque<RoundPlayerDto> roundPlayers;
 
-    public RoundPlayersChanged(final Object source, final Collection<RoundPlayer> roundPlayers) {
+    public RoundPlayersChanged(final Object source, final Deque<RoundPlayerDto> roundPlayers) {
         super(source);
-        this.isWithCards = false;
         this.roundPlayers = roundPlayers;
     }
 
-    public RoundPlayersChanged(final Object source, final Collection<RoundPlayer> roundPlayers, boolean isWithCards) {
-        super(source);
-        this.isWithCards = isWithCards;
-        this.roundPlayers = roundPlayers;
-    }
-
-    public Collection<RoundPlayer> getRoundPlayers() {
+    public Deque<RoundPlayerDto> getRoundPlayers() {
         return roundPlayers;
-    }
-
-    public boolean isWithCards() {
-        return isWithCards;
     }
 }

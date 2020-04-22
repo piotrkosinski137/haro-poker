@@ -1,7 +1,11 @@
 package app.domain.round;
 
 import app.domain.card.CardDto;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RoundPlayerDto {
     private String id;
@@ -15,6 +19,36 @@ public class RoundPlayerDto {
     private String playerPosition;
 
     private RoundPlayerDto() {
+    }
+
+    public static RoundPlayerDto fromRoundPlayer(final RoundPlayer roundPlayer) {
+        final RoundPlayerDto roundPlayerDto = new RoundPlayerDto();
+        roundPlayerDto.setId(roundPlayer.getId().toString());
+        roundPlayerDto.setTableNumber(roundPlayer.getTableNumber());
+        roundPlayerDto.setCardsInHand(new HashSet<>());
+        roundPlayerDto.setBalance(roundPlayer.getBalance());
+        roundPlayerDto.setTurnBid(roundPlayer.getTurnBid());
+        roundPlayerDto.setRoundBid(roundPlayer.getRoundBid());
+        roundPlayerDto.setHasTurn(roundPlayer.isHasTurn());
+        roundPlayerDto.setHasFolded(roundPlayer.isHasFolded());
+        roundPlayerDto.setPlayerPosition(roundPlayer.getPlayerPosition().toString());
+        return roundPlayerDto;
+    }
+
+    public static RoundPlayerDto fromRoundPlayerWithCards(final RoundPlayer roundPlayer) {
+        final RoundPlayerDto roundPlayerDto = fromRoundPlayer(roundPlayer);
+        roundPlayerDto.setCardsInHand(roundPlayer.getCardsInHand());
+        return roundPlayerDto;
+    }
+
+    public static Deque<RoundPlayerDto> fromRoundPlayersCollection(final Deque<RoundPlayer> gamePlayers) {
+        return gamePlayers.stream().map(RoundPlayerDto::fromRoundPlayer)
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    public static Deque<RoundPlayerDto> fromRoundPlayersCollectionWithCards(final Deque<RoundPlayer> gamePlayers) {
+        return gamePlayers.stream().map(RoundPlayerDto::fromRoundPlayerWithCards)
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     public String getId() {

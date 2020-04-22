@@ -6,10 +6,10 @@ import app.domain.game.GamePlayerService;
 import app.domain.game.GameService;
 import app.domain.round.RoundDto;
 import app.domain.round.RoundPlayerDto;
-import app.domain.round.RoundPlayerMapper;
 import app.domain.round.RoundPlayerServiceImpl;
 import app.domain.round.RoundService;
 import java.util.Collection;
+import java.util.Deque;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
@@ -20,15 +20,13 @@ public class GameSocketController {
     private final GamePlayerService gamePlayerService;
     private final RoundService roundService;
     private final RoundPlayerServiceImpl roundPlayerService;
-    private final RoundPlayerMapper roundPlayerMapper;
 
     public GameSocketController(GameService gameService, GamePlayerService gamePlayerService, RoundService roundService,
-            RoundPlayerServiceImpl roundPlayerService, RoundPlayerMapper roundPlayerMapper) {
+            RoundPlayerServiceImpl roundPlayerService) {
         this.gameService = gameService;
         this.gamePlayerService = gamePlayerService;
         this.roundService = roundService;
         this.roundPlayerService = roundPlayerService;
-        this.roundPlayerMapper = roundPlayerMapper;
     }
 
     @SubscribeMapping("/topic/game-players")
@@ -37,9 +35,9 @@ public class GameSocketController {
     }
 
     @SubscribeMapping("/topic/round-players")
-    public Collection<RoundPlayerDto> subscribeToRoundPlayers() {
-        return roundPlayerMapper.mapToDtos(roundPlayerService.getRoundPlayers());
-    } //todo
+    public Deque<RoundPlayerDto> subscribeToRoundPlayers() {
+        return roundPlayerService.getRoundPlayers();
+    }
 
     @SubscribeMapping("/topic/round")
     public RoundDto subscribeToRound() {

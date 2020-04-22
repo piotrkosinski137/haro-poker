@@ -4,7 +4,6 @@ import app.domain.game.GameChanged;
 import app.domain.game.GamePlayersChanged;
 import app.domain.round.RoundChanged;
 import app.domain.round.RoundPlayersChanged;
-import app.domain.round.RoundPlayerMapper;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -13,11 +12,9 @@ import org.springframework.stereotype.Component;
 public class GameEventListener {
 
     private final SimpMessagingTemplate template;
-    private final RoundPlayerMapper roundPlayerMapper;
 
-    public GameEventListener(SimpMessagingTemplate template, RoundPlayerMapper roundPlayerMapper) {
+    public GameEventListener(SimpMessagingTemplate template) {
         this.template = template;
-        this.roundPlayerMapper = roundPlayerMapper;
     }
 
     @EventListener
@@ -31,12 +28,8 @@ public class GameEventListener {
     }
 
     @EventListener
-    public void handleRoundPlayersChange(RoundPlayersChanged event) { //todo
-        if (event.isWithCards()) {
-            template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtosWithCards(event.getRoundPlayers()));
-        } else {
-            template.convertAndSend("/topic/round-players", roundPlayerMapper.mapToDtos(event.getRoundPlayers()));
-        }
+    public void handleRoundPlayersChange(RoundPlayersChanged event) {
+            template.convertAndSend("/topic/round-players", event.getRoundPlayers());
     }
 
     @EventListener

@@ -25,12 +25,6 @@ public class PlayerRestController {
         this.roundPlayerService = roundPlayerService;
     }
 
-    @PostMapping("/add")
-    public AddPlayerResponse addPlayer(@RequestParam String playerName) {
-        UUID playerId = gamePlayerService.joinToGame(playerName);
-        return new AddPlayerResponse(playerId.toString());
-    }
-
     @GetMapping("/{id}/cards")
     public Collection<CardDto> getCards(@PathVariable String id) {
         return roundPlayerService.getPlayerCards(id);
@@ -60,6 +54,12 @@ public class PlayerRestController {
     @PostMapping("/{id}/activation-status")
     public void changePlayerActiveStatus(@PathVariable String id, @RequestParam boolean isActive) {
         gamePlayerService.changeActiveStatus(UUID.fromString(id));
+    }
+
+    @PostMapping("/add")
+    public AddPlayerResponse addPlayer(@RequestParam String playerName) {
+        UUID playerId = gamePlayerService.joinToGame(playerName);
+        return new AddPlayerResponse(playerId.toString());
     }
 
     @PostMapping("/{id}/buy-in")

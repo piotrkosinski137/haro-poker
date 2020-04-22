@@ -14,7 +14,6 @@ import app.domain.round.exception.RoundNotStarted;
 import app.web.rest.dto.PlayerMoney;
 import app.web.rest.dto.UpdatePlayerBalanceRequest;
 import java.util.ArrayDeque;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
@@ -92,7 +91,7 @@ public class RoundPlayerServiceImpl {
     }
 
     void finishRound() {
-        final Collection<RoundPlayer> players = round.getRoundPlayers();
+        final Deque<RoundPlayer> players = round.getRoundPlayers();
         gamePlayerService.updateAfterRound(players);
         players.forEach(RoundPlayer::clearBids);
         publisherGlobal.publishEvent(new RoundPlayersChanged(this, getRoundPlayers()));
@@ -105,7 +104,7 @@ public class RoundPlayerServiceImpl {
     }
 
     void showRoundPlayersSummary() {
-        publisherGlobal.publishEvent(new RoundPlayersChanged(this, getRoundPlayers(), true));
+        publisherGlobal.publishEvent(new RoundPlayersChanged(this, RoundPlayerDto.fromRoundPlayersCollectionWithCards(round.getRoundPlayers())));
     }
 
     public void bid(int amount) {
@@ -289,7 +288,7 @@ public class RoundPlayerServiceImpl {
         round.getRoundPlayers().forEach(player -> player.putCardsInHand(cardDeckService.getCards(2)));
     }
 
-    public Deque<RoundPlayer> getRoundPlayers() {
-        return round.getRoundPlayers();
+    public Deque<RoundPlayerDto> getRoundPlayers() {
+        return RoundPlayerDto.fromRoundPlayersCollection(round.getRoundPlayers());
     }
 }
