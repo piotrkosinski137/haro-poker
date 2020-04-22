@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-class RoundPlayer {
+public class RoundPlayer {
 
     private final UUID id;
     private int balance;
@@ -28,15 +28,15 @@ class RoundPlayer {
         this.tableNumber = tableNumber;
     }
 
-    UUID getId() {
+    public UUID getId() {
         return id;
     }
 
-    int getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    Set<CardDto> getCardsInHand() {
+    public Set<CardDto> getCardsInHand() {
         return Collections.unmodifiableSet(cardsInHand);
     }
 
@@ -125,22 +125,6 @@ class RoundPlayer {
         return madeMoveInStage;
     }
 
-    public void setMadeMoveInStage(boolean madeMoveInStage) {
-        this.madeMoveInStage = madeMoveInStage;
-    }
-
-    public boolean isHasFolded() {
-        return hasFolded;
-    }
-
-    public boolean isHasTurn() {
-        return hasTurn;
-    }
-
-    public Integer getTableNumber() {
-        return tableNumber;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -157,5 +141,22 @@ class RoundPlayer {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public void setMadeMoveInStage(boolean madeMoveInStage) {
+        this.madeMoveInStage = madeMoveInStage;
+    }
+
+    public boolean isHasFolded() {
+        return hasFolded;
+    }
+
+    public boolean isHasTurn() {
+        return hasTurn;
+    }
+
+    public Integer getTableNumber() {
+        return tableNumber;
+    }
+
 
 }
