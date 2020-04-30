@@ -21,7 +21,7 @@
     "@ng-bootstrap/ng-bootstrap": "~5.2.2",
     "@stomp/ng2-stompjs": "^7.2.0",
     "bootstrap": "^4.4.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "rxjs": "~6.4.0",
     "stompjs": "^2.3.3",
     "tslib": "^1.10.0",
